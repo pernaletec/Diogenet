@@ -1,0 +1,94 @@
+---
+#title: "Diogenet"
+#author: "Jacobo Myerston"
+output: html_document
+runtime: shiny
+---
+
+<style>
+body {
+text-align: justify}
+</style>
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r libraries, echo=FALSE, include=FALSE}
+library(rmarkdown)
+library(knitr)
+library(shiny)
+library(rsconnect)
+library(igraph)
+library(stringi)
+library(tidyverse)
+library(visNetwork)
+```
+## Diogenet: Intellectual Networks of Ancient Greece
+
+Diogenet is a research project of the Classics program at the University of California, San Diego. It is currently lead by Professors Jacobo Myerston and Monte Johnson and is being implemented by students of the Classics major.  The project is part of a larger investigation about the impact of social ties on the construction and diffusion of knowledge in ancient Greece.  In Diogenet we use Diogenes Lërtius'  *Lives and Opinions of Eminent Philosophers* as a starting point, but we will add more sources in the future.  The main theoretical approach at the foundations of Diogenet is formal social network analysis, a branch of graph theory and sociology. Accordingly, we use the concept of nodes and ties to build a dataset of intellectuals and the relations between them. Conceptualizing social actors in this manner allows to approach problems of knowledge dissemination, brokerage, and  bottlenecks as well as the building of symbolic and social capital in a way that  traditional history of ideas cannot.
+
+### Network of Intellectuals
+
+Currently we offer an interactive visualization of the network of philosophers, their friends, and family as it was described by Diogenes Laërtius. The ancient historian of philosophy had access to many sources now unaccessible to us. However, his view of the network is a partial one and will need to be completed in the future with the addition to Diogenet of other ancient author who wrote about the lives of people engaged in the generation and transmission of ideas.
+
+With the help of the interactive application that you find below, you can visualize  a global view of the network in different ways. You can choose three different types of ties that connect the actors in the network. For now these ties are teacher-disciple, friends, and family. In the future, we will add others types of ties as **letters sent** as well as **citations made**.  In a future phase, we plan to explore the role of geography in dynamics of ideas dissemination and appropriation by adding **ties to places** in order to identify intellectual hubs. To improve the visualization you can scroll with the mouse to zoom in and out the network view; changing the size of the label can improve readability.
+
+***
+#### Global Network View
+***
+
+```{r network_vnw, echo=FALSE}
+library(shiny)
+shinyAppFile(
+  "network_vnw/app.R",
+  options = list(
+    width = "100%", height = 850
+  )
+)
+
+```
+
+### Egonets
+
+In this site, you can access the Diogenet Network from different perspectives or views.  While the **Global View** of the network is important to gain a perspective of the overall extension of the structure, the **Egocentric View**  allows to focus on one specific node (currenly only human actors) and their neighbors.  The variable **Order** of the **Egocentric View** determines the distance between **Ego** and its neighbors. Setting **Order** to 1 will return only the node choosen in the pop-up menu **Node**; setting it to 2 will return **Ego** and its neighbors at 2 steps from **Ego**.
+
+***
+#### Egocentric View
+***
+
+```{r egoGraph_vnw, echo=FALSE}
+library(shiny)
+shinyAppFile(
+  "egograph_vnw/app.R",
+  options = list(
+    width = "100%", height = 950
+  )
+)
+```
+
+### Intellectual Communities
+
+With the help of different algorithms and the use of the library igraph, it is possible to identify **communities** in Diogenet. A community is a cohesive group of social actors. We offer here three different algorithms you can choose from. Some of them, for example, the **Cluster Louvain** algorithm not only identifies communities but the bridges that establish a path of communication between them.  In social network analysis,  a **bridge** is a tie that connects two components or communities. In the present visualization of communities bridges are highlighted with red ties.
+
+At the end of each bridge, there are nodes that control the flow of ideas and information in general between communities. Those nodes are brokers of special importance for understanding the structure of the network. A broker can act as a facilitator between two or more communities of intellectuals but can also capitalize such a position by restricting the flow of communication between communities and thus claiming a special social status as a consequence of his/her mediation.  Brokers can act then both as mediators and bottlenecks, and because they are connected to different sources of knowledge they  can synthesize divergent intellectual positions and capitalize their syntheses as innovations. 
+
+***
+#### Communities View
+***
+
+```{r community, echo=FALSE}
+library(shiny)
+shinyAppFile(
+  "community/app.R",
+  options = list(
+    width = "100%", height = 1050
+  )
+)
+```
+
+***
+Principals investigors Asst. Prof. Jacobo Myerston and Prof. Monte Johnson. Source annotation by the Clasics majors Sydney Preston, Andrew Tracy, and Luca Vallino. R programming by César Pernalete and Jacobo Myerston.
+
+More information available at [UC San Diego Classics](http://caesar.ucsd.edu/classical/index.html).<p>
+<img src="uc_sd_logo.png" alt="drawing" width="200"/>
