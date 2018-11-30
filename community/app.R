@@ -41,11 +41,7 @@ table(edges_ %in% nodes$Name)
 
 # Define ----
 ui <- fluidPage(
-  
-  # title = textOutput(outputId = "title"),
-  # h3("Using igraph...",align="left"),
-  # p("Here you are with this amazing network..."),
-  
+ 
   uiOutput('networkUI'),
   
   hr(),
@@ -101,7 +97,7 @@ server <- function(input, output) {
   	  			 		  
 	    if(is.null(input$edges_select)) stop("Please select at least 1 edge") 
   	    
-  	  g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
+  	  	g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
 	    
   		## 'Male', 'Female' y 'Geography' deben tener colores distintos
   		V(g)$color <- case_when(
@@ -175,7 +171,7 @@ server <- function(input, output) {
   		if (input$cmnt_dtc_alg == "Cluster Louvain") cluster = cluster_louvain(g_)
   		
   		mod <- round(modularity(cluster),3)
-  		subTitle = paste0(subTitle, ", modularity ", mod)
+  		subTitle = paste0("MODULARITY: ", mod)
   				
   		plot(cluster,
   		     g_,
