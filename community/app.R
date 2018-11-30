@@ -42,7 +42,6 @@ table(edges_ %in% nodes$Name)
 
 # Define ----
 ui <- fluidPage(
-  
   uiOutput('networkUI'),
   
   hr(),
@@ -84,9 +83,32 @@ ui <- fluidPage(
 
 # Define server logic ----
 server <- function(input, output) {
-  
+ 
   # function to rescale node degree
   rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
+=======
+	 # function to rescale node degree
+	rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
+	
+	heightVal <- reactive({
+	  return(as.numeric(input$plot_height))
+	})
+	
+	network <- reactive({
+	
+  	  output$network = renderPlot({
+  	  			 		  
+	    if(is.null(input$edges_select)) stop("Please select at least 1 edge") 
+  	    
+  	  	g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
+	    
+  		## 'Male', 'Female' y 'Geography' deben tener colores distintos
+  		V(g)$color <- case_when(
+  		  V(g)$Group == "Male" ~ 'red',
+  		  V(g)$Group == "Female" ~ 'orange',
+  		  V(g)$Group ==  "Place" ~ 'blue'
+  		)
+
   
   heightVal <- reactive({
     return(as.numeric(input$plot_height))
@@ -187,6 +209,75 @@ server <- function(input, output) {
     network()
   })
   
+  		if (length(input$edges_select) == 1){
+  		  if (input$edges_select[1] == 1){
+  			g_ <- subgraph.edges(g,
+  							   which(E(g)$Relation == "is teacher of"))
+  			subTitle = "Type of ties: Teacher"
+  		  }
+  		  if (input$edges_select[1] == 2){
+  			g_ <- subgraph.edges(g,
+  								 which(E(g)$Relation=="is friend of"))
+  			subTitle = "Type of ties: Friends"
+  		  }  
+  		  if (input$edges_select[1] == 3){
+  		  g_ <- subgraph.edges(g,
+  							   which(E(g)$Relation=="is family of"))
+  		  subTitle = "Type of ties: Family"
+  		  }
+  		}
+  		if (length(input$edges_select) == 2){
+  		  if (input$edges_select[1] == 1 & input$edges_select[2] == 2){
+  			g_ <- subgraph.edges(g,
+  							   which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is friend of"))
+  			subTitle = "Type of ties: Teacher, Friend"
+  		  }  
+  		  if (input$edges_select[1] == 2 & input$edges_select[2] == 3){
+  			g_ <- subgraph.edges(g,
+  								 which(E(g)$Relation=="is friend of" | E(g)$Relation=="is family of"))
+  			subTitle = "Type of ties: Friends, Family"
+  		  }
+  		  if (input$edges_select[1] == 1 & input$edges_select[2] == 3){
+  			g_ <- subgraph.edges(g,
+  								 which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is family of"))
+  			subTitle = "Type of ties: Teacher, Family"
+  		  }  
+  		}
+  		if (length(input$edges_select) == 3){
+  		  if (input$edges_select[1] == 1 & input$edges_select[2] == 2 & input$edges_select[3] == 3){
+  			g_ <- subgraph.edges(g,
+  								 which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is friend of" | E(g)$Relation=="is family of"))
+  			subTitle = "Type of ties: Teacher, Friends, Family"
+  		  }  
+  		}
+  		
+  		# Community detection
+  		# HERE THE USER SHOULD BE ABLE TO CHOOSE BETWEEN RELATIONS
+  		# AT THE TIME OF RUNNING THE COMMUNITY DETECTION ALGORITHM
+  		### ALGORITHM TO BE CHOSEN BY THE USER: cluster leading eigen, cluster fast greedy, cluster louvain
+  		## Teachers, friends and family
+  		### Modularity should be shown in the subtitle of the graph
+  		
+  		if (input$cmnt_dtc_alg == "Cluster Leading Eigen") cluster = cluster_leading_eigen(g_)
+  		if (input$cmnt_dtc_alg == "Cluster Fast Greedy") cluster = cluster_fast_greedy(g_)
+  		if (input$cmnt_dtc_alg == "Cluster Louvain") cluster = cluster_louvain(g_)
+  		
+  		mod <- round(modularity(cluster),3)
+  		subTitle = paste0("MODULARITY: ", mod)
+  				
+  		plot(cluster,
+  		     g_,
+  		     main = subTitle)
+  		})
+  	  
+  	  plotOutput('network', height = heightVal())
+	
+	})
+	
+	output$networkUI <- renderUI({
+	  network()
+	})
+
 }
 
 shinyApp(ui = ui, server = server)
