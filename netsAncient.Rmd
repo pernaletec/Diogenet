@@ -23,11 +23,10 @@ library(igraph)
 library(stringi)
 library(tidyverse)
 library(visNetwork)
-library(profvis)
 ```
-## Diogenet: Intellectual Networks of Ancient Greece
+## Intellectual Networks of Ancient Greece
 
-Diogenet is a research project of the Classics program at the University of California, San Diego. It is currently lead by Professors Jacobo Myerston and Monte Johnson and is being implemented by students of the Classics major.  The project is part of a larger investigation about the impact of social ties on the construction and diffusion of knowledge in ancient Greece.  In Diogenet we use Diogenes Laërtius'  *Lives and Opinions of Eminent Philosophers* as a starting point, but we will add more sources in the future.  The main theoretical approach at the foundations of Diogenet is formal social network analysis, a branch of graph theory and sociology. Accordingly, we use the concept of nodes and ties to build a dataset of intellectuals and the relations between them. Conceptualizing social actors in this manner allows to approach problems of knowledge dissemination, brokerage, and  bottlenecks as well as the building of symbolic and social capital in a way that  traditional history of ideas cannot.
+Diogenet is a research project of the Classics program at the University of California, San Diego. It is currently lead by Professors Jacobo Myerston and Monte Johnson and is being implemented by students of the Classics major.  The project is part of a larger investigation about the impact of social ties on the construction and diffusion of knowledge in ancient Greece.  In Diogenet we use Diogenes Lërtius'  *Lives and Opinions of Eminent Philosophers* as a starting point, but we will add more sources in the future.  The main theoretical approach at the foundations of Diogenet is formal social network analysis, a branch of graph theory and sociology. Accordingly, we use the concept of nodes and ties to build a dataset of intellectuals and the relations between them. Conceptualizing social actors in this manner allows to approach problems of knowledge dissemination, brokerage, and  bottlenecks as well as the building of symbolic and social capital in a way that traditional history of ideas cannot.
 
 ### Network of Intellectuals
 
@@ -47,14 +46,15 @@ shinyAppFile(
     width = "100%", height = 850
   )
 )
+
 ```
 
-### Egonets
+### Local Network View
 
-In this site, you can access the Diogenet Network from different perspectives or views.  While the **Global View** of the network is important to gain a perspective of the overall extension of the structure, the **Egocentric View**  allows to focus on one specific node (currenly only human actors) and their neighbors.  The variable **Order** of the **Egocentric View** determines the distance between **Ego** and its neighbors. Setting **Order** to 1 will return only the node choosen in the pop-up menu **Node**; setting it to 2 will return **Ego** and its neighbors at 2 steps from **Ego**.
+In this site, you can access the Diogenet Network from different perspectives or views.  While the **Global View** of the network is important to gain a perspective of the overall extension of the structure, the **Local View**  allows to focus on one specific node (currenly only human actors) and their neighbors.  The variable **Order** of the **Local View** determines the distance between **Ego** and its neighbors. Setting **Order** to 1 will return only the node choosen in the pop-up menu **Node**; setting it to 2 will return **Ego** and its neighbors at 2 steps from **Ego**.
 
 ***
-#### Egocentric View
+#### Local View
 ***
 
 ```{r egoGraph_vnw, echo=FALSE}
