@@ -1,5 +1,5 @@
 ---
-#title: "Diogenet"
+title: "Diogenet"
 #author: "Jacobo Myerston"
 output: html_document
 runtime: shiny
@@ -23,10 +23,11 @@ library(igraph)
 library(stringi)
 library(tidyverse)
 library(visNetwork)
+library(profvis)
 ```
 ## Diogenet: Intellectual Networks of Ancient Greece
 
-Diogenet is a research project of the Classics program at the University of California, San Diego. It is currently lead by Professors Jacobo Myerston and Monte Johnson and is being implemented by students of the Classics major.  The project is part of a larger investigation about the impact of social ties on the construction and diffusion of knowledge in ancient Greece.  In Diogenet we use Diogenes Lërtius'  *Lives and Opinions of Eminent Philosophers* as a starting point, but we will add more sources in the future.  The main theoretical approach at the foundations of Diogenet is formal social network analysis, a branch of graph theory and sociology. Accordingly, we use the concept of nodes and ties to build a dataset of intellectuals and the relations between them. Conceptualizing social actors in this manner allows to approach problems of knowledge dissemination, brokerage, and  bottlenecks as well as the building of symbolic and social capital in a way that  traditional history of ideas cannot.
+Diogenet is a research project of the Classics program at the University of California, San Diego. It is currently lead by Professors Jacobo Myerston and Monte Johnson and is being implemented by students of the Classics major.  The project is part of a larger investigation about the impact of social ties on the construction and diffusion of knowledge in ancient Greece.  In Diogenet we use Diogenes Laërtius'  *Lives and Opinions of Eminent Philosophers* as a starting point, but we will add more sources in the future.  The main theoretical approach at the foundations of Diogenet is formal social network analysis, a branch of graph theory and sociology. Accordingly, we use the concept of nodes and ties to build a dataset of intellectuals and the relations between them. Conceptualizing social actors in this manner allows to approach problems of knowledge dissemination, brokerage, and  bottlenecks as well as the building of symbolic and social capital in a way that  traditional history of ideas cannot.
 
 ### Network of Intellectuals
 
@@ -46,7 +47,6 @@ shinyAppFile(
     width = "100%", height = 850
   )
 )
-
 ```
 
 ### Egonets
@@ -82,7 +82,7 @@ library(shiny)
 shinyAppFile(
   "community/app.R",
   options = list(
-    width = "100%", height = 1050
+    width = "100%", height = 950
   )
 )
 ```
