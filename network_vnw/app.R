@@ -64,7 +64,8 @@ ui <- fluidPage(
            # Plot Height
            h4("Appearence"),
            br(),
-           sliderInput(inputId = "label_size", label = "Label Size", min = 0.2, max = 2.0, value = c(0.4, 1.6),ticks = FALSE)
+           sliderInput(inputId = "label_size", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE),
+           sliderInput(inputId = "node_size", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
     )
   )
 )
@@ -140,11 +141,28 @@ server <- function(input, output) {
 	  }
 	  
 	  
+	  #Set label size
+	  if (is.null(input$label_size[1])) min_label = 0.0
+	  else min_label = input$label_size[1]
+	  
+	  if (is.null(input$label_size[2])) max_label = 5.0
+	  else max_label = input$label_size[2]
+	  
 	  # Scaling labels
 	  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size[1], input$label_size[2])
 	  V(g_)$label.cex <- labsize
 	  
 	  data <- toVisNetworkData(g_)
+	  
+	  # Set node size
+	  if (is.null(input$node_size[1])) min_node = 10.0
+	  else min_node = input$node_size[1]
+	  
+	  if (is.null(input$node_size[2])) max_node = 50.0
+	  else max_node = input$node_size[2]
+	  
+	  nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+	  data$nodes$size = nodesize
 	  
 	  data$nodes$color.background = case_when(
 	    data$nodes$Group == "Male" ~ '#FF6347',
@@ -159,7 +177,7 @@ server <- function(input, output) {
 	  )
 	  
 	  visNetwork(nodes = data$nodes, edges = data$edges)%>%
-	    visNodes(shape = "circle") %>%
+	    visNodes(shape = "dot") %>%
 	    visEdges(arrows =list(to = list(enabled = directed)),
 	             color = list(color = "gray",
 	                          highlight = "red")) %>%
