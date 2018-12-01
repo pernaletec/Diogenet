@@ -1,5 +1,3 @@
-
-
 library(shiny)
 library(rmarkdown)
 library(knitr)
@@ -86,7 +84,7 @@ server <- function(input, output) {
  
   # function to rescale node degree
   rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
-=======
+	
 	 # function to rescale node degree
 	rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 	
