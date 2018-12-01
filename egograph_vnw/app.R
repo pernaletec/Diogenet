@@ -195,14 +195,21 @@ server <- function(input, output) {
 	      data$nodes$Group == "Female" ~ '#005aff'
 	    )
 	    
-	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
-	      visNodes(shape = "dot") %>%
-	      visEdges(arrows =list(to = list(enabled = directed)),
-	               color = list(color = "gray",
-	                            highlight = "red")) %>%
-	      visLegend(enabled = TRUE)%>%
-	      visIgraphLayout()%>%
-	      visOptions(highlightNearest = TRUE)
+	    
+	    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+	      Sys.sleep(0.25)
+	      
+	      incProgress(1, detail = paste("Running visnetwork"))
+	    
+  	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  	      visNodes(shape = "dot") %>%
+  	      visEdges(arrows =list(to = list(enabled = directed)),
+  	               color = list(color = "gray",
+  	                            highlight = "red")) %>%
+  	      visLegend(enabled = TRUE)%>%
+  	      visIgraphLayout()%>%
+  	      visOptions(highlightNearest = TRUE)
+  	    })
 	  }
 	})
 	
