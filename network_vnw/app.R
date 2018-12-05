@@ -44,17 +44,15 @@ table(edges_ %in% nodes$Name)
 
 ui <- fluidPage(
   
-  # Setting seed is important so that teh graph is always the same configuration at starts
+  # Setting seed is important so the graph is always with the same configuration when starts
   set.seed(123),
-  # Important to use the visnetworkOutput function for visnetwork objects
+  # Use the visnetworkOutput function for visnetwork objects
   visNetworkOutput(outputId="network", height = 550),
   
-  
-  # Space
+  # Horizontal line
   hr(),
-  
-  
-  # Configuration 1row x 3columns
+ 
+  # Configuration 1row (fluid row) x 3columns (column)
   fluidRow(
     # Just space
     column(1,offset=1
@@ -63,6 +61,7 @@ ui <- fluidPage(
     column(3, offset=1,
            # HTML title
            h4("Network Ties"),
+	   # Space
            br(),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
@@ -72,9 +71,10 @@ ui <- fluidPage(
                               inline = FALSE)
     ),
     column(6,
-           # Plot Height
+           # Title of the appereance block
            h4("Appearence"),
            br(),
+	   # Sliders for label size and node size
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE),
            sliderInput(inputId = "node_size", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
     )
@@ -84,15 +84,16 @@ ui <- fluidPage(
 # Define server logic ----
 server <- function(input, output) {
   
-	 # function to rescale node degree
+	 # Function to rescale node degree
 	rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
-
+	
+	# network stores an object rendered by renderVisnetwork 
 	output$network = renderVisNetwork({
-	  
+	# First validate if there are edges (Ties) selected
 	  validate(
 	    need(try(!is.null(input$edges_select)), "Please select at least one Tie Type")
 	  )
-
+	  # If there is only one edge selected and this edge is the number 1, use directed edges
 	  if(length(input$edges_select) == 1 & input$edges_select[1] == 1) {
 	    g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
 	    directed = TRUE
@@ -101,56 +102,64 @@ server <- function(input, output) {
 	    directed = FALSE
 	  }
 		
-	  # id en nodos es necesario para exportar al formato Pajek
+	  # ids in nodes are es required to export to Pajek format. Just in case!
 	  V(g)$id = V(g)$name
 	  
-	  # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges 
+	  # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges 
 	  E(g)$id = seq(1:length(E(g)))
 	  
 	  # Who is the subset g_ ?
-
+	  # Just one option selected and...
 	  if (length(input$edges_select) == 1){
+	    # ...just Teacher selected
 	    if (input$edges_select[1] == 1){
 	      g_ <- subgraph.edges(g,
 	                           which(E(g)$Relation == "is teacher of"))
 	      subTitle = "Ties: teacher-student "
 	    }
+	    # # ...just Friend selected 
 	    if (input$edges_select[1] == 2){
 	      g_ <- subgraph.edges(g,
-	                           which(E(g)$Relation=="is friend of"))
+	                    which(E(g)$Relation=="is friend of"))
 	      subTitle = "Ties: friends"
 	    }
+ 	    # Just Family selected
 	    if (input$edges_select[1] == 3){
 	      g_ <- subgraph.edges(g,
 	                           which(E(g)$Relation=="is family of"))
 	      subTitle = "ties family"
 	    }
 	  }
+	  # Now there are two options selected and the possible combinations are: 
 	  if (length(input$edges_select) == 2){
+	    # Teacher and Friends
 	    if (input$edges_select[1] == 1 & input$edges_select[2] == 2){
 	      g_ <- subgraph.edges(g,
 	                           which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is friend of"))
 	      subTitle = "Ties: teachers and friends"
 	    }
+            # Friends and Family	  
 	    if (input$edges_select[1] == 2 & input$edges_select[2] == 3){
 	      g_ <- subgraph.edges(g,
 	                           which(E(g)$Relation=="is friend of" | E(g)$Relation=="is family of"))
 	      subTitle = "Ties: friends and family"
 	    }
+            # Teachers and Familiy
 	    if (input$edges_select[1] == 1 & input$edges_select[2] == 3){
 	      g_ <- subgraph.edges(g,
 	                           which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is family of"))
 	      subTitle = "Ties: teachers and Family"
 	    }
 	  }
+	  # All selected
 	  if (length(input$edges_select) == 3){
+	    # Just check that everything is in order
 	    if (input$edges_select[1] == 1 & input$edges_select[2] == 2 & input$edges_select[3] == 3){
 	      g_ <- subgraph.edges(g,
 	                           which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is friend of" | E(g)$Relation=="is family of"))
 	      subTitle = "Ties: teachers, friends, and family"
 	    }
 	  }
-	  
 	  
 	  #Set label size
 	  if (is.null(input$label_size[1])) min_label = 0.0
@@ -163,6 +172,7 @@ server <- function(input, output) {
 	  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size[1], input$label_size[2])
 	  V(g_)$label.cex <- labsize
 	  
+	  # Funtion to convert igraph format to visNetwork format
 	  data <- toVisNetworkData(g_)
 	  
 	  # Set node size
@@ -172,9 +182,11 @@ server <- function(input, output) {
 	  if (is.null(input$node_size[2])) max_node = 50.0
 	  else max_node = input$node_size[2]
 	  
+	  # Scaling nodes
 	  nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
 	  data$nodes$size = nodesize
 	  
+	  # Setting parameters straight in the data frame for visNetwork
 	  data$nodes$color.background = case_when(
 	    data$nodes$Group == "Male" ~ '#FF6347',
 	    data$nodes$Group == "Female" ~ '#ffa500'
@@ -187,21 +199,23 @@ server <- function(input, output) {
 	    data$nodes$Group == "Female" ~ '#005aff'
 	  )
 	  
+	  # Progress indicator
 	  withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
 	    Sys.sleep(0.25)
 	    
 	    incProgress(1, detail = paste("Running visnetwork"))
 	  
-  	  visNetwork(nodes = data$nodes, edges = data$edges)%>%
-  	    visNodes(shape = "dot") %>%
-  	    visEdges(arrows =list(to = list(enabled = directed)),
+            # Visnetwork graph creation
+  	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  	      visNodes(shape = "dot") %>%
+  	      visEdges(arrows =list(to = list(enabled = directed)),
   	             color = list(color = "gray",
   	                          highlight = "red")) %>%
-  	    visLegend(enabled = TRUE)%>%
-  	    visIgraphLayout()%>%
-  	    visOptions(highlightNearest = TRUE)
-  	  })
-  })
+  	      visLegend(enabled = TRUE)%>%
+  	      visIgraphLayout()%>%
+  	      visOptions(highlightNearest = TRUE)
+	  })
+	})
 }
 
 shinyApp(ui = ui, server = server)
