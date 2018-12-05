@@ -39,7 +39,6 @@ With the help of the interactive application that you find below, you can visual
 ***
 
 ```{r network_vnw, echo=FALSE}
-library(shiny)
 shinyAppFile(
   "network_vnw/app.R",
   options = list(
@@ -58,7 +57,6 @@ In this site, you can access the Diogenet Network from different perspectives or
 ***
 
 ```{r egoGraph_vnw, echo=FALSE}
-library(shiny)
 shinyAppFile(
   "egograph_vnw/app.R",
   options = list(
@@ -78,7 +76,6 @@ At the end of each bridge, there are nodes that control the flow of ideas and in
 ***
 
 ```{r community, echo=FALSE}
-library(shiny)
 shinyAppFile(
   "community/app.R",
   options = list(
