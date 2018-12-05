@@ -10,13 +10,15 @@ library(visNetwork)
 # Network visnetwork
 
 # Import node list: contains nodes$Name, nodes$Group
+# It is important to encode with UTF-8 to preserve special characters. 
+
 nodes <- read.csv('new_Nodes.csv', 
                   sep=",", 
                   header = TRUE, 
                   col.names = c("Name","Group"),
                   encoding = "UTF-8")
 
-# Import edge list: contains edges$Source, edges$Target, edges$Weight, edges$Relation
+# Import edge list: contains edges$Source, edges$Target, edges$Relation
 edges <- read.csv('new_Edges.csv',
                   header = TRUE, 
                   sep=",",
@@ -30,7 +32,7 @@ edges$Source <- stri_trim(edges$Source)
 edges$Target <- stri_trim(edges$Target)
 edges$Relation <- stri_trim(edges$Relation)
 
-# Verifica consistencia vertices - ejes
+# Check if all names that appears in edges are in nodes
 edges_ = c(edges$Source,edges$Target)
 length(edges_)
 missing = edges_ %in% nodes$Name
@@ -38,19 +40,28 @@ missing_indx = which(missing == FALSE)
 edges_[missing_indx]
 table(edges_ %in% nodes$Name)
 
-# Define ----
+# ui stores the user interface of the Shiny application.
+
 ui <- fluidPage(
   
+  # Setting seed is important so that teh graph is always the same configuration at starts
   set.seed(123),
+  # Important to use the visnetworkOutput function for visnetwork objects
   visNetworkOutput(outputId="network", height = 550),
   
+  
+  # Space
   hr(),
   
+  
+  # Configuration 1row x 3columns
   fluidRow(
+    # Just space
     column(1,offset=1
            
     ),
     column(3, offset=1,
+           # HTML title
            h4("Network Ties"),
            br(),
            # Selection of the edges that will appear in the relation network 
