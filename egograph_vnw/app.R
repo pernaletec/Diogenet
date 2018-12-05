@@ -213,6 +213,8 @@ server <- function(input, output) {
 	  }
 	})
 	
+	# This function creates the selectInput object dynamically. 
+	# The options for nodes in the list depends on the edges selected
 	output$node_sel <- renderUI({
 	  
 	  validate(
