@@ -192,12 +192,43 @@ server <- function(input, output) {
 	    data$nodes$Group == "Female" ~ '#ffa500'
 	  )
 	  
+	  # Setting group in visnetwork format
+	  data$nodes$group = data$nodes$Group
+	  
 	  data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
 	  
 	  data$nodes$color.highlight = case_when(
 	    data$nodes$Group == "Male" ~ '#47e3ff',
 	    data$nodes$Group == "Female" ~ '#005aff'
 	  )
+	  
+	  # Setting parameters straight in the data frame for visNetwork
+	  data$edges$color.color = case_when(
+	    data$edges$Relation == "is teacher of" ~ '#0000FF',
+	    data$edges$Relation == "is friend of" ~ '#228B22',
+	    data$edges$Relation == "is family of" ~ '#FF0000'
+	  )
+	  
+	  data$edges$color.highlight = case_when(
+	    data$edges$Relation == "is teacher of" ~ '#00ffff',
+	    data$edges$Relation == "is friend of" ~ '#568b22',
+	    data$edges$Relation == "is family of" ~ '#ff4000'
+	  )
+	  
+	  
+	  # nodes data.frame for legend
+	  lnodes <- data.frame(label = c("Male", "Female"),
+	                       shape = c( "dot"), 
+	                       color = c("#FF6347", "#ffa500"),color.border = c("#000000"), 
+	                       title = "Informations", 
+	                       id = 1:2)
+	  
+	  # edges data.frame for legend
+	  ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
+	                       label = c("is teacher of", "is friend of", "is family of"), 
+	                       arrows =c("to", FALSE, FALSE),
+	                       title = "Informations")
+	  
 	  
 	  # Progress indicator
 	  withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
@@ -208,10 +239,8 @@ server <- function(input, output) {
             # Visnetwork graph creation
   	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
   	      visNodes(shape = "dot") %>%
-  	      visEdges(arrows =list(to = list(enabled = directed)),
-  	             color = list(color = "gray",
-  	                          highlight = "red")) %>%
-  	      visLegend(enabled = TRUE)%>%
+  	      visEdges(arrows =list(to = list(enabled = directed))) %>%
+  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE)%>%
   	      visIgraphLayout()%>%
   	      visOptions(highlightNearest = TRUE)
 	  })
