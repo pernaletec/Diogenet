@@ -219,15 +219,13 @@ server <- function(input, output) {
 	  # nodes data.frame for legend
 	  lnodes <- data.frame(label = c("Male", "Female"),
 	                       shape = c( "dot"), 
-	                       color = c("#FF6347", "#ffa500"),color.border = c("#000000"), 
-	                       title = "Informations", 
+	                       color = c("#FF6347", "#ffa500"),
 	                       id = 1:2)
 	  
 	  # edges data.frame for legend
 	  ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
 	                       label = c("is teacher of", "is friend of", "is family of"), 
-	                       arrows =c("to", FALSE, FALSE),
-	                       title = "Informations")
+	                       arrows =c("to", FALSE, FALSE))
 	  
 	  
 	  # Progress indicator
@@ -240,7 +238,7 @@ server <- function(input, output) {
   	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
   	      visNodes(shape = "dot") %>%
   	      visEdges(arrows =list(to = list(enabled = directed))) %>%
-  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE)%>%
+  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15)%>%
   	      visIgraphLayout()%>%
   	      visOptions(highlightNearest = TRUE)
 	  })
