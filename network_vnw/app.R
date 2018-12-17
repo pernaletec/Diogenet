@@ -6,6 +6,7 @@ library(igraph)
 library(stringi)
 library(tidyverse)
 library(visNetwork)
+library(shinythemes)
 
 # Network visnetwork
 
@@ -42,7 +43,7 @@ table(edges_ %in% nodes$Name)
 
 # ui stores the user interface of the Shiny application.
 
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("sandstone"),
   
   # Setting seed is important so the graph is always with the same configuration when starts
   set.seed(123),
@@ -62,7 +63,7 @@ ui <- fluidPage(
            # HTML title
            h4("Network Ties"),
 	   # Space
-           br(),
+ #          br(),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
                               label = "Tie Type",
@@ -73,7 +74,7 @@ ui <- fluidPage(
     column(6,
            # Title of the appereance block
            h4("Appearence"),
-           br(),
+ #          br(),
 	   # Sliders for label size and node size
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE),
            sliderInput(inputId = "node_size", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
@@ -238,7 +239,7 @@ server <- function(input, output) {
   	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
   	      visNodes(shape = "dot") %>%
   	      visEdges(arrows =list(to = list(enabled = directed))) %>%
-  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15)%>%
+  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
   	      visIgraphLayout()%>%
   	      visOptions(highlightNearest = TRUE)
 	  })

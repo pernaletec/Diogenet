@@ -62,7 +62,7 @@ library(shiny)
 shinyAppFile(
   "egograph_vnw/app.R",
   options = list(
-    width = "100%", height = 950
+    width = "100%", height = 850
   )
 )
 ```
