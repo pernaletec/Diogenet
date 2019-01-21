@@ -226,7 +226,8 @@ server <- function(input, output) {
 	  # edges data.frame for legend
 	  ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
 	                       label = c("is teacher of", "is friend of", "is family of"), 
-	                       arrows =c("to", FALSE, FALSE))
+	                       arrows =c("to", FALSE, FALSE), 
+	                       font.align = "bottom")
 	  
 	  
 	  # Progress indicator
