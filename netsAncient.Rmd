@@ -5,11 +5,6 @@ output: html_document
 runtime: shiny
 ---
 
-<style>
-body {
-text-align: justify}
-</style>
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
@@ -60,7 +55,7 @@ In this site, you can access the Diogenet Network from different perspectives or
 shinyAppFile(
   "egograph_vnw/app.R",
   options = list(
-    width = "100%", height = 950
+    width = "100%", height = 850
   )
 )
 ```

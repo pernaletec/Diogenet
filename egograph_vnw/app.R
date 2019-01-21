@@ -6,6 +6,7 @@ library(igraph)
 library(stringi)
 library(tidyverse)
 library(visNetwork)
+library(shinythemes)
 
 # Egograph visnetwork
 
@@ -40,7 +41,7 @@ table(edges_ %in% nodes$Name)
 
 
 # Define ----
-ui <- fluidPage(
+ui <- fluidPage(theme = shinytheme("sandstone"),
   
   set.seed(123),
   visNetworkOutput(outputId="network", height = 550),
@@ -50,7 +51,7 @@ ui <- fluidPage(
   fluidRow(
     column(3,offset = 1,
            h4("Network Ties"),
-           br(),
+ #          br(),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
                               label = "Tie Type:",
@@ -61,7 +62,7 @@ ui <- fluidPage(
     column(4,
            # Egonet configuration
            h4("Egos"),
-           br(),
+#           br(),
            # Node selection
            uiOutput(outputId = "node_sel"),
            # Order
@@ -70,12 +71,12 @@ ui <- fluidPage(
     column(4,
            # Node and Label Size
            h4("Appearance"),
-           br(),
+#           br(),
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE),
-           br(),
+#           br(),
            sliderInput(inputId = "node_size", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE),
-           hr(),
-           helpText("These sliders set the range for node sizes and label sizes according to the degree of each node")
+           hr()
+#           helpText("These sliders set the range for node sizes and label sizes according to the degree of each node")
     )
   )
 )
@@ -183,10 +184,14 @@ server <- function(input, output) {
 	    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
 	    data$nodes$size = nodesize
 	    
+	    # Setting parameters straight in the data frame for visNetwork
 	    data$nodes$color.background = case_when(
 	      data$nodes$Group == "Male" ~ '#FF6347',
 	      data$nodes$Group == "Female" ~ '#ffa500'
 	    )
+	    
+	    # Setting group in visnetwork format
+	    data$nodes$group = data$nodes$Group
 	    
 	    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
 	    
@@ -195,6 +200,29 @@ server <- function(input, output) {
 	      data$nodes$Group == "Female" ~ '#005aff'
 	    )
 	    
+	    # Setting parameters straight in the data frame for visNetwork
+	    data$edges$color.color = case_when(
+	      data$edges$Relation == "is teacher of" ~ '#0000FF',
+	      data$edges$Relation == "is friend of" ~ '#228B22',
+	      data$edges$Relation == "is family of" ~ '#FF0000'
+	    )
+	    
+	    data$edges$color.highlight = case_when(
+	      data$edges$Relation == "is teacher of" ~ '#00ffff',
+	      data$edges$Relation == "is friend of" ~ '#568b22',
+	      data$edges$Relation == "is family of" ~ '#ff4000'
+	    )
+	    
+	    # nodes data.frame for legend
+	    lnodes <- data.frame(label = c("Male", "Female"),
+	                         shape = c( "dot"), 
+	                         color = c("#FF6347", "#ffa500"),
+	                         id = 1:2)
+	    
+	    # edges data.frame for legend
+	    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
+	                         label = c("is teacher of", "is friend of", "is family of"), 
+	                         arrows =c("to", FALSE, FALSE))
 	    
 	    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
 	      Sys.sleep(0.25)
@@ -206,7 +234,7 @@ server <- function(input, output) {
   	      visEdges(arrows =list(to = list(enabled = directed)),
   	               color = list(color = "gray",
   	                            highlight = "red")) %>%
-  	      visLegend(enabled = TRUE)%>%
+  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
   	      visIgraphLayout()%>%
   	      visOptions(highlightNearest = TRUE)
   	    })
