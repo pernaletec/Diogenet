@@ -1,0 +1,38 @@
+---
+title: "Diogenet"
+output: 
+  flexdashboard::flex_dashboard:
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(rmarkdown)
+library(knitr)
+library(rsconnect)
+library(igraph)
+library(stringi)
+library(tidyverse)
+library(visNetwork)
+```
+
+Global Network 
+=======================================================================
+
+Column 
+-----------------------------------------------------------------------
+
+```{r network, echo=FALSE}
+source("global_network.R")
+# call the module
+networkUI("ntw")
+callModule(network, "ntw")
+```
+
+Local Network 
+=======================================================================
+
+Communities 
+=======================================================================
+
