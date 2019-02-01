@@ -10,37 +10,38 @@ networkUI = function(id){
   
   #Object returned by xxxUI function
   
-  fluidPage(
-    
-    sidebarLayout(sidebarPanel(
-
-      selectInput(inputId = ns("pck_sel"), label = "Package selection", choices = c("visNetwork" = "visNetwork","igraph" = "igraph"), selected = "visNetwork"),
-      h4("Network Ties"),
-      br(),
-      # Selection of the edges that will appear in the relation network 
-      checkboxGroupInput(ns("edges_select"),
-                         label = "Tie Type",
-                         choices = list("Is teacher of" = 1, "Is friend of" = 2, "Is family of" = 3),
-                         selected = 1,
-                         inline = FALSE),
-      
-      # Plot Height
-      h4("Appearence"),
-      br(),
-      # Nodes/Label sizes
-      uiOutput(outputId=ns("nodeUI_vnw")),
-      uiOutput(outputId=ns("nodeUI_igp")),
-      uiOutput(outputId=ns("labelUI_vnw")),
-      uiOutput(outputId=ns("labelUI_igp")),
-      # Plot height (igraph case)
-      sliderInput(inputId = ns("heightUI"), label = "Plot Height (px)",min =  600,max =  1500,value =  900, step = 30,ticks = FALSE,post = "px")
-    
-    ),
-    mainPanel(
-      uiOutput(outputId=ns("graph_vnw")),
-      uiOutput(outputId=ns("graph_igp"))
+  fillPage(
+    fillRow(flex = c(2,8),
+      fillCol(width = 300,
+              inputPanel(
+                 selectInput(inputId = ns("pck_sel"), label = "Package selection", choices = c("visNetwork" = "visNetwork","igraph" = "igraph"), selected = "visNetwork"),
+                 h4("Network Ties"),
+                 br(),
+                 # Selection of the edges that will appear in the relation network 
+                 checkboxGroupInput(ns("edges_select"),
+                                    label = "Tie Type",
+                                    choices = list("Is teacher of" = 1, "Is friend of" = 2, "Is family of" = 3),
+                                    selected = 1,
+                                    inline = FALSE),
+                 
+                 # Plot Height
+                 h4("Appearence"),
+                 br(),
+                 # Nodes/Label sizes
+                 uiOutput(outputId=ns("nodeUI_vnw")),
+                 uiOutput(outputId=ns("nodeUI_igp")),
+                 uiOutput(outputId=ns("labelUI_vnw")),
+                 uiOutput(outputId=ns("labelUI_igp")),
+                 # Plot height (igraph case)
+                 sliderInput(inputId = ns("heightUI"), label = "Plot Height (px)",min =  600,max =  1500,value =  900, step = 30,ticks = FALSE,post = "px")
+                 )
+          ),
+      fillCol(flex = c(NA,NA), 
+              uiOutput(outputId=ns("graph_vnw")),
+              uiOutput(outputId=ns("graph_igp"))
+              )
     )
-    )
+    
   )
 }
 
