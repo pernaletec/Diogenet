@@ -72,7 +72,7 @@ At the end of each bridge, there are nodes that control the flow of ideas and in
 
 ```{r community, echo=FALSE}
 shinyAppFile(
-  "community/app.R",
+  "community_vnw/app.R",
   options = list(
     width = "100%", height = 950
   )
