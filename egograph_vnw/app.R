@@ -51,7 +51,6 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
   fluidRow(
     column(3,offset = 1,
            h4("Network Ties"),
- #          br(),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
                               label = "Tie Type:",
@@ -62,7 +61,6 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
     column(4,
            # Egonet configuration
            h4("Egos"),
-#           br(),
            # Node selection
            uiOutput(outputId = "node_sel"),
            # Order
@@ -71,9 +69,7 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
     column(4,
            # Node and Label Size
            h4("Appearance"),
-#           br(),
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE),
-#           br(),
            sliderInput(inputId = "node_size", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE),
            hr(),
            helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
