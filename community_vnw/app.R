@@ -50,8 +50,7 @@ ui <- fluidPage(
   
   fluidRow(
     column(3,offset = 1,
-           h4("Network relations"),
-           br(),
+           h4("Network ties"),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
                               label = "Select the Edges",
@@ -62,7 +61,6 @@ ui <- fluidPage(
     column(4,
            # Plot Height
            h4("Community detection"),
-           br(),
            # Algorithm for community detection
            selectInput("cmnt_dtc_alg", "Algorithm:", 
                        choices=c("Cluster Leading Eigen", "Cluster Fast Greedy", "Cluster Louvain")),
@@ -72,7 +70,6 @@ ui <- fluidPage(
     column(4,
            # Plot Height
            h4("Appearance"),
-           br(),
            # Label Size
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE),
            # Node Size
@@ -216,7 +213,7 @@ server <- function(input, output) {
       		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
       		  visNodes(shape = "dot") %>%
       		  visEdges(arrows =list(to = list(enabled = FALSE))) %>%
-      		  visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+      		  visLegend(addEdges = ledges, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
       		  visIgraphLayout()%>%
       		  visOptions(highlightNearest = TRUE)
       		
