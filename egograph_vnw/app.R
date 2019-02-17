@@ -75,8 +75,9 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE),
 #           br(),
            sliderInput(inputId = "node_size", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE),
-           hr()
-#           helpText("These sliders set the range for node sizes and label sizes according to the degree of each node")
+           hr(),
+           helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
     )
   )
 )
@@ -230,6 +231,8 @@ server <- function(input, output) {
 	    
 	    # Shows the relation when hovering over the edge
 	    data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+	    
+	    set.seed(123)
 	    
 	    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
 	      Sys.sleep(0.25)
