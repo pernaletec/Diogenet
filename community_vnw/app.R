@@ -191,6 +191,11 @@ server <- function(input, output) {
           data$edges$Relation == "studied the work of" ~ '#ff4000'
         )
         
+        # Shows the name when hovering over the node
+        data$nodes$title = paste0("<b>",data$nodes$id,"</b>","<br/>" , "Community N°: ", "<b>",data$nodes$community,"</b>")
+        
+        # Shows the relation when hovering over the edge
+        data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
         
         # # nodes data.frame for legend
         # lnodes <- data.frame(label = c("Male", "Female"),

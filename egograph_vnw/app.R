@@ -225,6 +225,12 @@ server <- function(input, output) {
 	                         arrows =c("to", FALSE, FALSE), 
 	                         font.align = "bottom")
 	    
+	    # Shows the name when hovering over the node
+	    data$nodes$title = paste0("<b>",data$nodes$id,"</b>")
+	    
+	    # Shows the relation when hovering over the edge
+	    data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+	    
 	    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
 	      Sys.sleep(0.25)
 	      
