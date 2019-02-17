@@ -62,8 +62,6 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
     column(3, offset=1,
            # HTML title
            h4("Network Ties"),
-	   # Space
- #          br(),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
                               label = "Tie Type",
@@ -74,8 +72,7 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
     column(6,
            # Title of the appereance block
            h4("Appearence"),
- #          br(),
-	   # Sliders for label size and node size
+	         # Sliders for label size and node size
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE),
            sliderInput(inputId = "node_size", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE),
            hr(),
