@@ -63,9 +63,6 @@ helpText("These parameters control de size range of nodes and labels. The minimu
 
 ```
 
-These parameters control de *size range* of *nodes* and *labels*. The minimum size is set to the **nodes** with the **lowest degree**, while the maximum size is set to **nodes** with the **highest degree**. The same applies for its **labels** 
-
-
 Row
 -------------------------------------
 
