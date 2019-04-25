@@ -125,7 +125,7 @@ ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
                      font.align = "bottom")
 
 # Visnetwork graph creation
-vnw_global = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+global_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
   visNodes(shape = "dot") %>%
   visEdges(arrows =list(to = list(enabled = directed))) %>%
   visLegend(addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
@@ -133,4 +133,4 @@ vnw_global = visNetwork(nodes = data$nodes, edges = data$edges)%>%
   visOptions(highlightNearest = TRUE)
 
 # Save graph as html
-vnw_global %>% visSave(file = "vnw_global.html", background = "white", )
+global_vnw %>% visSave(file = "global_vnw.html", background = "white")
