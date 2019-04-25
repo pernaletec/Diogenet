@@ -1,0 +1,655 @@
+---
+title: "Diogenet"
+subtitle: "Intellectual Networks from Ancient Greece"
+output: 
+  flexdashboard::flex_dashboard:
+        favicon: iah_classicalstudies_logo_fv_pq.png
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+library(flexdashboard)
+library(shiny)
+library(rmarkdown)
+library(knitr)
+library(rsconnect)
+library(igraph)
+library(stringi)
+library(tidyverse)
+library(visNetwork)
+```
+
+About
+===================================== 
+
+Diogenet is a research project of the Classics program at the University of California, San Diego. It is currently lead by Professors Jacobo Myerston and Monte Johnson and is being implemented by students of the Classics major.  The project is part of a larger investigation about the impact of social ties on the construction and diffusion of knowledge in ancient Greece.  In Diogenet we use Diogenes Lërtius'  *Lives and Opinions of Eminent Philosophers* as a starting point, but we will add more sources in the future.  The main theoretical approach at the foundations of Diogenet is formal social network analysis, a branch of graph theory and sociology. Accordingly, we use the concept of nodes and ties to build a dataset of intellectuals and the relations between them. Conceptualizing social actors in this manner allows to approach problems of knowledge dissemination, brokerage, and  bottlenecks as well as the building of symbolic and social capital in a way that traditional history of ideas cannot.
+
+In this site, you can access the Diogenet Network from different perspectives or views.  While the [Global View](#network-of-intellectuals) of the network is important to gain a perspective of the overall extension of the structure, the [Local View](#local-network-view) allows to focus on one specific node (currenly only human actors) and their neighbors.  The variable **Order** of the **Local View** determines the distance between **Ego** and its neighbors. Setting **Order** to 1 will return only the node choosen in the pop-up menu **Node**; setting it to 2 will return **Ego** and its neighbors at 2 steps from **Ego**.
+
+With the help of different algorithms and the use of the library igraph, it is possible to identify [communities](#communities-view) in Diogenet. A community is a cohesive group of social actors. We offer here three different algorithms you can choose from. Some of them, for example, the **Cluster Louvain** algorithm not only identifies communities but the bridges that establish a path of communication between them.  In social network analysis,  a **bridge** is a tie that connects two components or communities. In the present visualization of communities bridges are highlighted with red ties.
+
+Principals investigors Asst. Prof. Jacobo Myerston and Prof. Monte Johnson. Source annotation by the Clasics majors Sydney Preston, Andrew Tracy, and Luca Vallino. R programming by César Pernalete and Jacobo Myerston.
+
+More information available at [UC San Diego Classics](http://caesar.ucsd.edu/classical/index.html)<br/>
+<br/>
+<img src="uc_sd_logo.png" alt="drawing" width="200">
+
+Network of Intellectuals
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+source("source_data.R")
+
+br()
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network 
+checkboxGroupInput("edges_select_global",
+                   label = "Tie Type",
+                   choices = list("Is teacher of" = 1, "Is friend of" = 2, "Is family of" = 3),
+                   selected = 1,
+                   inline = FALSE)
+br()
+# Plot Height
+h4("Appearence")
+# Nodes/Label sizes
+sliderInput(inputId = "label_size_global", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE)
+sliderInput(inputId = "node_size_global", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
+hr()
+helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+```
+
+Row
+-------------------------------------
+
+### Global Network
+
+```{r network, echo=FALSE}
+
+# function to rescale node degree
+rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
+
+subset_graph  = function(edges_selected, g){
+  
+  # Who is the subset g_ ?
+  
+  if (length(edges_selected) == 1){
+    if (edges_selected[1] == 1){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation == "is teacher of"))
+      subTitle = "Ties: teacher-student "
+    }
+    if (edges_selected[1] == 2){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation=="is friend of"))
+      subTitle = "Ties: friends"
+    }
+    if (edges_selected[1] == 3){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation=="is family of"))
+      subTitle = "ties family"
+    }
+  }
+  if (length(edges_selected) == 2){
+    if (edges_selected[1] == 1 & edges_selected[2] == 2){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is friend of"))
+      subTitle = "Ties: teachers and friends"
+    }
+    if (edges_selected[1] == 2 & edges_selected[2] == 3){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation=="is friend of" | E(g)$Relation=="is family of"))
+      subTitle = "Ties: friends and family"
+    }
+    if (edges_selected[1] == 1 & edges_selected[2] == 3){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is family of"))
+      subTitle = "Ties: teachers and Family"
+    }
+  }
+  if (length(edges_selected) == 3){
+    if (edges_selected[1] == 1 & edges_selected[2] == 2 & edges_selected[3] == 3){
+      g_ <- subgraph.edges(g,
+                           which(E(g)$Relation=="is teacher of" | E(g)$Relation=="is friend of" | E(g)$Relation=="is family of"))
+      subTitle = "Ties: teachers, friends, and family"
+    }
+  }
+  
+  return(g_)
+} 
+
+# network stores an object rendered by renderVisnetwork 
+output$network = renderVisNetwork({
+  # First validate if there are edges (Ties) selected
+  validate(
+    need(try(!is.null(input$edges_select_global)), "Please select at least one Tie Type")
+  )
+  # If there is only one edge selected and this edge is the number 1, use directed edges
+  if(length(input$edges_select_global) == 1 & input$edges_select_global[1] == 1) {
+    g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
+    directed = TRUE
+  }else {
+    g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
+    directed = FALSE
+  }
+	
+  # ids in nodes are es required to export to Pajek format. Just in case!
+  V(g)$id = V(g)$name
+  
+  # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges 
+  E(g)$id = seq(1:length(E(g)))
+  
+  # Subsetting according to edges selected
+  g_ = subset_graph(input$edges_select_global, g)
+  
+  #Set label size
+  if (is.null(input$label_size_global[1])) min_label = 0.0
+  else min_label = input$label_size_global[1]
+  
+  if (is.null(input$label_size_global[2])) max_label = 5.0
+  else max_label = input$label_size_global[2]
+  
+  # Scaling labels
+  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size_global[1], input$label_size_global[2])
+  V(g_)$label.cex <- labsize
+  
+  # Funtion to convert igraph format to visNetwork format
+  data <- toVisNetworkData(g_)
+  
+  # Set node size
+  if (is.null(input$node_size_global[1])) min_node = 10.0
+  else min_node = input$node_size_global[1]
+  
+  if (is.null(input$node_size_global[2])) max_node = 50.0
+  else max_node = input$node_size_global[2]
+  
+  # Scaling nodes
+  nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+  data$nodes$size = nodesize
+  
+  # Setting parameters straight in the data frame for visNetwork
+  data$nodes$color.background = case_when(
+    data$nodes$Group == "Male" ~ '#FF6347',
+    data$nodes$Group == "Female" ~ '#ffa500'
+  )
+  
+  # Setting group in visnetwork format
+  data$nodes$group = data$nodes$Group
+  
+  data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+  
+  data$nodes$color.highlight = case_when(
+    data$nodes$Group == "Male" ~ '#47e3ff',
+    data$nodes$Group == "Female" ~ '#005aff'
+  )
+  
+  # Setting parameters straight in the data frame for visNetwork
+  data$edges$color.color = case_when(
+    data$edges$Relation == "is teacher of" ~ '#0000FF',
+    data$edges$Relation == "is friend of" ~ '#228B22',
+    data$edges$Relation == "is family of" ~ '#FF0000'
+  )
+  
+  data$edges$color.highlight = case_when(
+    data$edges$Relation == "is teacher of" ~ '#00ffff',
+    data$edges$Relation == "is friend of" ~ '#568b22',
+    data$edges$Relation == "is family of" ~ '#ff4000'
+  )
+  
+  
+  # nodes data.frame for legend
+  lnodes <- data.frame(label = c("Male", "Female"),
+                       shape = c( "dot"), 
+                       color = c("#FF6347", "#ffa500"),
+                       id = 1:2)
+  
+  # edges data.frame for legend
+  ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
+                       label = c("is teacher of", "is friend of", "is family of"), 
+                       arrows =c("to", FALSE, FALSE), 
+                       font.align = "bottom")
+  
+	# Shows the name when hovering over the node
+  data$nodes$title = paste0("<b>",data$nodes$id,"</b>")
+  
+  # Shows the relation when hovering over the edge
+  data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+  
+  
+  # Progress indicator
+  withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+    
+    Sys.sleep(0.25)
+    
+    incProgress(1, detail = paste("Running visnetwork"))
+    
+    # Setting seed is important so the graph is always with the same configuration when starts
+    set.seed(123)
+  
+    # Visnetwork graph creation
+    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+    visNodes(shape = "dot") %>%
+    visEdges(arrows =list(to = list(enabled = directed))) %>%
+    visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, zoom = FALSE)%>%
+    visIgraphLayout()%>%
+    visOptions(highlightNearest = TRUE)
+  })
+})
+
+# Use the visnetworkOutput function for visnetwork objects
+visNetworkOutput(outputId="network")
+
+```
+
+Local Network View
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network
+checkboxGroupInput("edges_select_local",
+                  label = "Tie Type:",
+                  choices = list("Is teacher of" = 1, "Is friend of" = 2, "Is family of" = 3),
+                  selected = 1,
+                  inline = FALSE)
+br()
+# Egonet configuration
+h4("Egos")
+# Node selection
+uiOutput(outputId = "node_sel")
+br()
+# Order
+sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
+# Node and Label Size
+br()
+h4("Appearance")
+sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE)
+sliderInput(inputId = "node_size_local", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE)
+hr()
+helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+```
+
+Row
+-------------------------------------
+
+### Local View
+
+```{r}
+
+output$local = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel) && !is.null(input$order)) {
+
+    if(length(input$edges_select_local) == 1 & input$edges_select_local[1] == 1) {
+      g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
+      directed = TRUE
+    }else {
+      g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
+      directed = FALSE
+    }
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order,
+                        nodes = input$node_sel,
+                        mode = c("all"),
+                        mindist = 0)
+
+    #Set label size
+    if (is.null(input$label_size_local[1])) min_label = 0.3
+    else min_label = input$label_size_local[1]
+
+    if (is.null(input$label_size_local[2])) max_label = 1.0
+    else max_label = input$label_size_local[2]
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local[1])) min_node = 3.0
+    else min_node = input$node_size_local[1]
+
+    if (is.null(input$node_size_local[2])) max_node = 30.0
+    else max_node = input$node_size_local[2]
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = case_when(
+      data$nodes$Group == "Male" ~ '#FF6347',
+      data$nodes$Group == "Female" ~ '#ffa500'
+    )
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#005aff'
+    )
+
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = case_when(
+      data$edges$Relation == "is teacher of" ~ '#0000FF',
+      data$edges$Relation == "is friend of" ~ '#228B22',
+      data$edges$Relation == "is family of" ~ '#FF0000'
+    )
+
+    data$edges$color.highlight = case_when(
+      data$edges$Relation == "is teacher of" ~ '#00ffff',
+      data$edges$Relation == "is friend of" ~ '#568b22',
+      data$edges$Relation == "is family of" ~ '#ff4000'
+    )
+
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"),
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
+                         label = c("is teacher of", "is friend of", "is family of"),
+                         arrows =c("to", FALSE, FALSE),
+                         font.align = "bottom")
+    
+  	# Shows the name when hovering over the node
+    data$nodes$title = paste0("<b>",data$nodes$id,"</b>")
+    
+    # Shows the relation when hovering over the edge
+    data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+
+    set.seed(123)
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, zoom = FALSE)%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)
+	    })
+  }
+})
+
+# This function creates the selectInput object dynamically.
+# The options for nodes in the list depends on the edges selected
+output$node_sel <- renderUI({
+
+  validate(
+    need(try(!is.null(input$edges_select_local)), "Select at least one Tie")
+  )
+
+  if (length(input$edges_select_local) == 1){
+    if (input$edges_select_local[1] == 1){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is teacher of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+    if (input$edges_select_local[1] == 2){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is friend of")]),
+                    as.character(edges$Target[which(edges$Relation == "is friend of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+    if (input$edges_select_local[1] == 3){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is family of")]),
+                    as.character(edges$Target[which(edges$Relation == "is family of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+  }
+  if (length(input$edges_select_local) == 2){
+    if (input$edges_select_local[1] == 1 & input$edges_select_local[2] == 2){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is friend of" | edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is friend of" | edges$Relation == "is teacher of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+    if (input$edges_select_local[1] == 2 & input$edges_select_local[2] == 3){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is friend of" | edges$Relation == "is family of")]),
+                    as.character(edges$Target[which(edges$Relation == "is friend of" | edges$Relation == "is family of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+    if (input$edges_select_local[1] == 1 & input$edges_select_local[2] == 3){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is family of" | edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is family of" | edges$Relation == "is teacher of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+  }
+  if (length(input$edges_select_local) == 3){
+    if (input$edges_select_local[1] == 1 & input$edges_select_local[2] == 2 & input$edges_select_local[3] == 3){
+      all_nodes = c(as.character(edges$Source[which(edges$Relation == "is friend of" | edges$Relation == "is family of" | edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is friend of" | edges$Relation == "is family of" | edges$Relation == "is teacher of")])
+      )
+      all_nodes = sort(unique(all_nodes))
+    }
+  }
+  if (!is.null(input$node_sel)) selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = input$node_sel)
+  else selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = "Plato")
+})
+
+visNetworkOutput(outputId="local")
+
+```
+
+Communities View
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+br()
+h4("Network relations")
+# Selection of the edges that will appear in the relation network 
+checkboxGroupInput("edges_select_comm",
+                label = "Select the Edges",
+                choices = list("Is teacher of" = 1, "Is friend of" = 2, "Is family of" = 3, "Studied the work of" = 3),
+                selected = 1,
+                inline = FALSE)
+br()
+# Plot Height
+h4("Community detection")
+# Algorithm for community detection
+selectInput("cmnt_dtc_alg", "Algorithm:", choices=c("Cluster Leading Eigen", "Cluster Fast Greedy", "Cluster Louvain"))
+hr()
+helpText("Different algorithms for community detection are available")
+br()
+# Plot Height
+h4("Appearance")
+# Label Size
+sliderInput(inputId = "label_size_comm", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE)
+# Node Size
+sliderInput(inputId = "node_size_comm", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
+hr()
+helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+```
+
+Row
+-------------------------------------
+
+### Communities
+
+```{r}
+
+output$comm_network = renderVisNetwork({
+
+  # First validate if there are edges (Ties) selected
+  validate(
+    need(try(!is.null(input$edges_select_comm)), "Please select at least one Tie Type")
+  )
+
+  g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
+
+
+  # ids in nodes are es required to export to Pajek format. Just in case!
+  V(g)$id = V(g)$name
+  
+  # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges 
+  E(g)$id = seq(1:length(E(g)))
+  
+  # Who is the subset g_ ?
+  # Depending on how many edges are selected...
+  num_edge_sel = length(input$edges_select_comm)
+  
+  for (k in 1:num_edge_sel){
+    #... and in the number of each selection
+    if (input$edges_select_comm[k] == 1) edge = "is teacher of"
+    if (input$edges_select_comm[k] == 2) edge = "is friend of"
+    if (input$edges_select_comm[k] == 3) edge = "is family of"
+    if (input$edges_select_comm[k] == 4) edge = "studied the work of"
+    
+    #...then the subsetting rule is created dynamically
+    if (num_edge_sel == 1)  edge_rule = paste0('which(E(g)$Relation == ', '\'', edge,'\'',')')
+    if (num_edge_sel > 1  & k == 1) edge_rule = paste0('which(E(g)$Relation == ', '\'', edge, '\'', ' | ')
+    if (num_edge_sel > 1  & k > 1 & k < num_edge_sel) edge_rule = paste0(edge_rule, 'E(g)$Relation == ', '\'', edge,'\'', ' | ')
+    if (num_edge_sel > 1  & k == num_edge_sel) edge_rule = paste0(edge_rule, 'E(g)$Relation == ', '\'',edge,'\'',')')
+  }
+  
+  # ...and the subgraph is finally created
+  g_ <- subgraph.edges(g,eval(parse(text=edge_rule)))
+  
+	# Community detection
+	
+	if (input$cmnt_dtc_alg == "Cluster Leading Eigen") cluster = cluster_leading_eigen(g_)
+	if (input$cmnt_dtc_alg == "Cluster Fast Greedy") cluster = cluster_fast_greedy(g_)
+	if (input$cmnt_dtc_alg == "Cluster Louvain") cluster = cluster_louvain(g_)
+  
+  #Set label size
+  if (is.null(input$label_size_comm[1])) min_label = 0.0
+  else min_label = input$label_size_comm[1]
+  
+  if (is.null(input$label_size_comm[2])) max_label = 5.0
+  else max_label = input$label_size_comm[2]
+  
+  # Scaling labels
+  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size_comm[1], input$label_size_comm[2])
+  V(g_)$label.cex <- labsize
+  
+  # Assign membership ids to vertex
+  V(g_)$community  <- cluster$membership
+  
+  data <- toVisNetworkData(g_)
+  
+  # Set node size
+  if (is.null(input$node_size_comm[1])) min_node = 10.0
+  else min_node = input$node_size_comm[1]
+  
+  if (is.null(input$node_size_comm[2])) max_node = 50.0
+  else max_node = input$node_size_comm[2]
+  
+  # Scaling nodes
+  nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+  data$nodes$size = nodesize
+  
+  # A try for controling the colours of each group
+  node_colours = rainbow(summary(cluster$membership)[6])
+  setColour = function(x) {node_colours[x]}
+  
+  # Setting parameters straight in the data frame for visNetwork
+  #data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
+    
+  # Setting group in visnetwork format
+  data$nodes$group = data$nodes$community
+  
+  data$nodes$color.border = rep("#000000",length(data$nodes$group))
+  
+  #data$nodes$color.highlight = sapply(data$nodes$community, FUN = setColour)
+  
+  # Setting parameters straight in the data frame for visNetwork
+  data$edges$color.color = case_when(
+    data$edges$Relation == "is teacher of" ~ '#0000FF',
+    data$edges$Relation == "is friend of" ~ '#228B22',
+    data$edges$Relation == "is family of" ~ '#FF0000',
+    data$edges$Relation == "studied the work of" ~ '#ff8c00'
+  )
+  
+  data$edges$color.highlight = case_when(
+    data$edges$Relation == "is teacher of" ~ '#00ffff',
+    data$edges$Relation == "is friend of" ~ '#568b22',
+    data$edges$Relation == "is family of" ~ '#00ff00',
+    data$edges$Relation == "studied the work of" ~ '#1a00ff'
+  )
+  
+  
+  # # nodes data.frame for legend
+  # lnodes <- data.frame(label = c("Male", "Female"),
+  #                      shape = c( "dot"), 
+  #                      color = c("#FF6347", "#ffa500"),
+  #                      id = 1:2)
+  # 
+  
+  # edges data.frame for legend
+  ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", "#ff8c00"),
+                       label = c("is teacher of", "is friend of", "is family of", "studied the work of"),
+                       arrows =c("to", FALSE, FALSE, FALSE),
+                       font.align = "bottom")
+  
+  # Shows the name when hovering over the node
+  data$nodes$title = paste0("<b>",data$nodes$id,"</b>","<br/>" , "Community N°: ", "<b>",data$nodes$community,"</b>")
+  
+  # Shows the relation when hovering over the edge
+  data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+        
+
+  withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+    Sys.sleep(0.25)
+    incProgress(0.6, detail = paste("Running VisNetwork"))
+		mod <- round(modularity(cluster),3)
+		subTitle = paste0("MODULARITY: ", mod)
+		
+		# Visnetwork graph creation
+		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
+		  visNodes(shape = "dot") %>%
+		  visEdges(arrows =list(to = list(enabled = FALSE))) %>%
+		  visLegend(addEdges = ledges, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+		  visIgraphLayout()%>%
+		  visOptions(highlightNearest = TRUE)
+		
+  })
+})
+
+visNetworkOutput(outputId="comm_network")
+
+```

@@ -62,8 +62,6 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
     column(3, offset=1,
            # HTML title
            h4("Network Ties"),
-	   # Space
- #          br(),
            # Selection of the edges that will appear in the relation network 
            checkboxGroupInput("edges_select",
                               label = "Tie Type",
@@ -74,10 +72,11 @@ ui <- fluidPage(theme = shinytheme("sandstone"),
     column(6,
            # Title of the appereance block
            h4("Appearence"),
- #          br(),
-	   # Sliders for label size and node size
+	         # Sliders for label size and node size
            sliderInput(inputId = "label_size", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE),
-           sliderInput(inputId = "node_size", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
+           sliderInput(inputId = "node_size", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE),
+           hr(),
+           helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
     )
   )
 )
@@ -216,6 +215,11 @@ server <- function(input, output) {
 	    data$edges$Relation == "is family of" ~ '#ff4000'
 	  )
 	  
+	  # Shows the name when hovering over the node
+	  data$nodes$title = paste0("<b>",data$nodes$id,"</b>")
+	  
+	  # Shows the relation when hovering over the edge
+	  data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
 	  
 	  # nodes data.frame for legend
 	  lnodes <- data.frame(label = c("Male", "Female"),
@@ -236,13 +240,13 @@ server <- function(input, output) {
 	    
 	    incProgress(1, detail = paste("Running visnetwork"))
 	  
-            # Visnetwork graph creation
-  	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
-  	      visNodes(shape = "dot") %>%
-  	      visEdges(arrows =list(to = list(enabled = directed))) %>%
-  	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
-  	      visIgraphLayout()%>%
-  	      visOptions(highlightNearest = TRUE)
+      # Visnetwork graph creation
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed))) %>%
+	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)
 	  })
 	})
 }
