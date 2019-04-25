@@ -50,7 +50,6 @@ rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 #############################################################################
 
 g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
-directed = TRUE
 
 # ids in nodes are es required to export to Pajek format. Just in case!
 V(g)$id = V(g)$name
@@ -97,15 +96,17 @@ data$nodes$color.highlight = case_when(
 
 # Setting parameters straight in the data frame for visNetwork
 data$edges$color.color = case_when(
-  data$edges$Relation == "is teacher of" ~ '#0000FF',
-  data$edges$Relation == "is friend of" ~ '#228B22',
-  data$edges$Relation == "is family of" ~ '#FF0000'
+  data$edges$Relation == "is teacher of" ~ '#0000FF'
+  #,
+  #data$edges$Relation == "is friend of" ~ '#228B22',
+  #data$edges$Relation == "is family of" ~ '#FF0000'
 )
 
 data$edges$color.highlight = case_when(
-  data$edges$Relation == "is teacher of" ~ '#00ffff',
-  data$edges$Relation == "is friend of" ~ '#568b22',
-  data$edges$Relation == "is family of" ~ '#ff4000'
+  data$edges$Relation == "is teacher of" ~ '#00ffff'
+  #,
+  #data$edges$Relation == "is friend of" ~ '#568b22',
+  #data$edges$Relation == "is family of" ~ '#ff4000'
 )
 
 # Shows the name when hovering over the node
@@ -121,16 +122,22 @@ lnodes <- data.frame(label = c("Male", "Female"),
                      id = 1:2)
 
 # edges data.frame for legend
-ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
-                     label = c("is teacher of", "is friend of", "is family of"), 
-                     arrows =c("to", FALSE, FALSE), 
+ledges <- data.frame(color = c("#0000FF"
+                               #, "#228B22", "#FF0000"
+                               ),
+                     label = c("is teacher of"
+                               #, "is friend of", "is family of"
+                               ), 
+                     arrows =c("to"
+                               #, FALSE, FALSE
+                               ), 
                      font.align = "bottom")
 
 # Visnetwork graph creation
 global_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
   visNodes(shape = "dot") %>%
-  visEdges(arrows =list(to = list(enabled = directed))) %>%
-  visLegend(addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+  visEdges(arrows =list(to = list(enabled = TRUE))) %>%
+  visLegend(addNodes = lnodes, addEdges = ledges, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
   visIgraphLayout()%>%
   visOptions(highlightNearest = TRUE)
 
@@ -143,7 +150,6 @@ global_vnw %>% visSave(file = "global_vnw.html", selfcontained = TRUE, backgroun
 #############################################################################
 
 g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
-directed = TRUE
 
 # id en nodos es necesario para exportar al formato Pajek
 V(g)$id = V(g)$name
@@ -196,15 +202,17 @@ data$nodes$color.highlight = case_when(
 
 # Setting parameters straight in the data frame for visNetwork
 data$edges$color.color = case_when(
-  data$edges$Relation == "is teacher of" ~ '#0000FF',
-  data$edges$Relation == "is friend of" ~ '#228B22',
-  data$edges$Relation == "is family of" ~ '#FF0000'
+  data$edges$Relation == "is teacher of" ~ '#0000FF'
+  #,
+  #data$edges$Relation == "is friend of" ~ '#228B22',
+  #data$edges$Relation == "is family of" ~ '#FF0000'
 )
 
 data$edges$color.highlight = case_when(
-  data$edges$Relation == "is teacher of" ~ '#00ffff',
-  data$edges$Relation == "is friend of" ~ '#568b22',
-  data$edges$Relation == "is family of" ~ '#ff4000'
+  data$edges$Relation == "is teacher of" ~ '#00ffff'
+  #,
+  #data$edges$Relation == "is friend of" ~ '#568b22',
+  #data$edges$Relation == "is family of" ~ '#ff4000'
 )
 
 # nodes data.frame for legend
@@ -214,9 +222,15 @@ lnodes <- data.frame(label = c("Male", "Female"),
                      id = 1:2)
 
 # edges data.frame for legend
-ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000"),
-                     label = c("is teacher of", "is friend of", "is family of"), 
-                     arrows =c("to", FALSE, FALSE), 
+ledges <- data.frame(color = c("#0000FF"
+                               #, "#228B22", "#FF0000"
+                               ),
+                     label = c("is teacher of"
+                               #, "is friend of", "is family of"
+                               ), 
+                     arrows =c("to"
+                               #, FALSE, FALSE
+                               ), 
                      font.align = "bottom")
 
 # Shows the name when hovering over the node
@@ -227,10 +241,10 @@ data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
 
 egonet_vnw_html = visNetwork(nodes = data$nodes, edges = data$edges)%>%
   visNodes(shape = "dot") %>%
-  visEdges(arrows =list(to = list(enabled = directed)),
+  visEdges(arrows =list(to = list(enabled = TRUE)),
            color = list(color = "gray",
                         highlight = "red")) %>%
-  visLegend(addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+  visLegend(addNodes = lnodes, addEdges = ledges, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
   visIgraphLayout()%>%
   visOptions(highlightNearest = TRUE)
 
@@ -240,7 +254,7 @@ egonet_vnw_html %>% visSave(file = "egonet_vnw.html", selfcontained = TRUE, back
 ######################     communitygraph     ###############################
 #############################################################################
 
-g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
+g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
 
 # ids in nodes are es required to export to Pajek format. Just in case!
 V(g)$id = V(g)$name
@@ -287,34 +301,45 @@ data$nodes$group = data$nodes$community
 
 data$nodes$color.border = rep("#000000",length(data$nodes$group))
 
-#data$nodes$color.highlight = sapply(data$nodes$community, FUN = setColour)
+data$nodes$color.highlight = case_when(
+  data$nodes$Group == "Male" ~ '#FF6347',
+  data$nodes$Group == "Female" ~ '#ffa500'
+)
 
 # Setting parameters straight in the data frame for visNetwork
 data$edges$color.color = case_when(
-  data$edges$Relation == "is teacher of" ~ '#0000FF',
-  data$edges$Relation == "is friend of" ~ '#228B22',
-  data$edges$Relation == "is family of" ~ '#FF0000',
-  data$edges$Relation == "studied the work of" ~ '#ff8c00'
+  data$edges$Relation == "is teacher of" ~ '#0000FF'
+  #,
+  #data$edges$Relation == "is friend of" ~ '#228B22',
+  #data$edges$Relation == "is family of" ~ '#FF0000',
+  #data$edges$Relation == "studied the work of" ~ '#ff8c00'
 )
 
 data$edges$color.highlight = case_when(
-  data$edges$Relation == "is teacher of" ~ '#00ffff',
-  data$edges$Relation == "is friend of" ~ '#568b22',
-  data$edges$Relation == "is family of" ~ '#00ff00',
-  data$edges$Relation == "studied the work of" ~ '#1a00ff'
+  data$edges$Relation == "is teacher of" ~ '#00ffff'
+  #,
+  #data$edges$Relation == "is friend of" ~ '#568b22',
+  #data$edges$Relation == "is family of" ~ '#00ff00',
+  #data$edges$Relation == "studied the work of" ~ '#1a00ff'
 )
 
-# # nodes data.frame for legend
-# lnodes <- data.frame(label = c("Male", "Female"),
-#                      shape = c( "dot"), 
-#                      color = c("#FF6347", "#ffa500"),
-#                      id = 1:2)
-# 
+# nodes data.frame for legend
+lnodes <- data.frame(label = c("Male", "Female"),
+                     shape = c( "dot"),
+                     color = c("#FF6347", "#ffa500"),
+                     id = 1:2)
 
 # edges data.frame for legend
-ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", "#ff8c00"),
-                     label = c("is teacher of", "is friend of", "is family of", "studied the work of"),
-                     arrows =c("to", FALSE, FALSE, FALSE),
+ledges <- data.frame(color = c("#0000FF"
+                               #, 
+                               #"#228B22", "#FF0000", "#ff8c00"
+                               ),
+                     label = c("is teacher of"
+                               #, "is friend of", "is family of", "studied the work of"
+                               ),
+                     arrows =c("to"
+                               #, FALSE, FALSE, FALSE
+                               ),
                      font.align = "bottom")
 
 # Shows the name when hovering over the node
@@ -327,10 +352,11 @@ mod <- round(modularity(cluster),3)
 subTitle = paste0("MODULARITY: ", mod)
 
 # Visnetwork graph creation
-comnty_vnw = visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
-visNodes(shape = "dot") %>%
-visEdges(arrows =list(to = list(enabled = FALSE))) %>%
-visIgraphLayout()%>%
-visOptions(highlightNearest = TRUE)
+comnty_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  visNodes(shape = "dot") %>%
+  visEdges(arrows =list(to = list(enabled = TRUE))) %>%
+  visLegend(addNodes = lnodes, addEdges = ledges, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+  visIgraphLayout()%>%
+  visOptions(highlightNearest = TRUE)
 
 comnty_vnw %>% visSave(file = "comnty_vnw.html", selfcontained = TRUE, background = "white")
