@@ -1,4 +1,3 @@
-library(shiny)
 library(rmarkdown)
 library(knitr)
 library(rsconnect)
