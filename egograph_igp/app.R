@@ -1,7 +1,8 @@
 
 library(shiny)
-
-setwd('..')
+library(stringi)
+library(igraph)
+library(dplyr)
 
 # Egograph igraph
 
