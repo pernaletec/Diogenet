@@ -1,4 +1,3 @@
-library(shiny)
 library(rmarkdown)
 library(knitr)
 library(rsconnect)
@@ -6,7 +5,6 @@ library(igraph)
 library(stringi)
 library(tidyverse)
 library(visNetwork)
-library(shinythemes)
 
 # Egograph visnetwork
 
