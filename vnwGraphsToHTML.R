@@ -97,16 +97,10 @@ data$nodes$color.highlight = case_when(
 # Setting parameters straight in the data frame for visNetwork
 data$edges$color.color = case_when(
   data$edges$Relation == "is teacher of" ~ '#0000FF'
-  #,
-  #data$edges$Relation == "is friend of" ~ '#228B22',
-  #data$edges$Relation == "is family of" ~ '#FF0000'
 )
 
 data$edges$color.highlight = case_when(
   data$edges$Relation == "is teacher of" ~ '#00ffff'
-  #,
-  #data$edges$Relation == "is friend of" ~ '#568b22',
-  #data$edges$Relation == "is family of" ~ '#ff4000'
 )
 
 # Shows the name when hovering over the node
@@ -122,15 +116,9 @@ lnodes <- data.frame(label = c("Male", "Female"),
                      id = 1:2)
 
 # edges data.frame for legend
-ledges <- data.frame(color = c("#0000FF"
-                               #, "#228B22", "#FF0000"
-                               ),
-                     label = c("is teacher of"
-                               #, "is friend of", "is family of"
-                               ), 
-                     arrows =c("to"
-                               #, FALSE, FALSE
-                               ), 
+ledges <- data.frame(color = c("#0000FF"),
+                     label = c("is teacher of"), 
+                     arrows =c("to"), 
                      font.align = "bottom")
 
 # Visnetwork graph creation
@@ -143,7 +131,6 @@ global_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
 
 # Save global vnw graph as html
 global_vnw %>% visSave(file = "global_vnw.html", selfcontained = TRUE, background = "white")
-
 
 #############################################################################
 ######################     egograph      ####################################
@@ -173,8 +160,6 @@ max_label = 0.9
 labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
 V(d[[1]])$label.cex <- labsize
 
-#subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
-
 data <- toVisNetworkData(d[[1]])
 
 # Set node size
@@ -203,16 +188,10 @@ data$nodes$color.highlight = case_when(
 # Setting parameters straight in the data frame for visNetwork
 data$edges$color.color = case_when(
   data$edges$Relation == "is teacher of" ~ '#0000FF'
-  #,
-  #data$edges$Relation == "is friend of" ~ '#228B22',
-  #data$edges$Relation == "is family of" ~ '#FF0000'
-)
+  )
 
 data$edges$color.highlight = case_when(
   data$edges$Relation == "is teacher of" ~ '#00ffff'
-  #,
-  #data$edges$Relation == "is friend of" ~ '#568b22',
-  #data$edges$Relation == "is family of" ~ '#ff4000'
 )
 
 # nodes data.frame for legend
@@ -222,15 +201,9 @@ lnodes <- data.frame(label = c("Male", "Female"),
                      id = 1:2)
 
 # edges data.frame for legend
-ledges <- data.frame(color = c("#0000FF"
-                               #, "#228B22", "#FF0000"
-                               ),
-                     label = c("is teacher of"
-                               #, "is friend of", "is family of"
-                               ), 
-                     arrows =c("to"
-                               #, FALSE, FALSE
-                               ), 
+ledges <- data.frame(color = c("#0000FF"),
+                     label = c("is teacher of"), 
+                     arrows =c("to"), 
                      font.align = "bottom")
 
 # Shows the name when hovering over the node
@@ -293,9 +266,6 @@ data$nodes$size = nodesize
 node_colours = rainbow(summary(cluster$membership)[6])
 setColour = function(x) {node_colours[x]}
 
-# Setting parameters straight in the data frame for visNetwork
-#data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
-
 # Setting group in visnetwork format
 data$nodes$group = data$nodes$community
 
@@ -308,20 +278,10 @@ data$nodes$color.highlight = case_when(
 
 # Setting parameters straight in the data frame for visNetwork
 data$edges$color.color = case_when(
-  data$edges$Relation == "is teacher of" ~ '#0000FF'
-  #,
-  #data$edges$Relation == "is friend of" ~ '#228B22',
-  #data$edges$Relation == "is family of" ~ '#FF0000',
-  #data$edges$Relation == "studied the work of" ~ '#ff8c00'
-)
+  data$edges$Relation == "is teacher of" ~ '#0000FF')
 
 data$edges$color.highlight = case_when(
-  data$edges$Relation == "is teacher of" ~ '#00ffff'
-  #,
-  #data$edges$Relation == "is friend of" ~ '#568b22',
-  #data$edges$Relation == "is family of" ~ '#00ff00',
-  #data$edges$Relation == "studied the work of" ~ '#1a00ff'
-)
+  data$edges$Relation == "is teacher of" ~ '#00ffff')
 
 # nodes data.frame for legend
 lnodes <- data.frame(label = c("Male", "Female"),
@@ -330,16 +290,9 @@ lnodes <- data.frame(label = c("Male", "Female"),
                      id = 1:2)
 
 # edges data.frame for legend
-ledges <- data.frame(color = c("#0000FF"
-                               #, 
-                               #"#228B22", "#FF0000", "#ff8c00"
-                               ),
-                     label = c("is teacher of"
-                               #, "is friend of", "is family of", "studied the work of"
-                               ),
-                     arrows =c("to"
-                               #, FALSE, FALSE, FALSE
-                               ),
+ledges <- data.frame(color = c("#0000FF"),
+                     label = c("is teacher of"),
+                     arrows =c("to"),
                      font.align = "bottom")
 
 # Shows the name when hovering over the node
@@ -347,9 +300,6 @@ data$nodes$title = paste0("<b>",data$nodes$id,"</b>","<br/>" , "Community N°: "
 
 # Shows the relation when hovering over the edge
 data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
-
-mod <- round(modularity(cluster),3)
-subTitle = paste0("MODULARITY: ", mod)
 
 # Visnetwork graph creation
 comnty_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
