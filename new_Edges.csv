@@ -1,214 +1,270 @@
 Source,Target,Relation
-Alexandria,Egypt,is associated with
-Athens,Tyrtaeus,is associated with
-Athens,Astydamas,is benefactor of
-Athens,Aeschylus,is associated with
-Athens,Meletus,is adversary of
+Alexandria,Egypt,refers to
 Athens,Homer,is associated with
 Athens,The Thirty,is associated with
+Athens,Astydamas,is friend of
+Athens,Meletus,is adversary of
+Athens,Aeschylus,is associated with
+Athens,Tyrtaeus,is associated with
 Boeotia,Menedemus,is associated with
+Elis,Pyrrho,is from
 Elis,Scillus,is associated with
 Hyele,Elea,is associated with
 Phocaean,Elea,is associated with
+Selinus,Ephesus,is associated with
+Sparta,Xenophon,is friend of
 Sparta,Athens,is associated with
-Sparta,Xenophon,is benefactor of
-A Magician,Athens,traveled to
-A Magician,Syria,is from
 A Magician,Socrates,is adversary of
-Acron,Agrigentum,is from
+A Magician,Syria,is from
+A Magician,Athens,traveled to
 Acron,Acros,is family of
+Acron,Agrigentum,is from
 Actis,Eudoxus,is family of
-Acusilaus,Cabas,is family of
 Acusilaus,Argos,is from
+Acusilaus,Cabas,is family of
 Aenesidemus,Pyrrho,refers to
-Aeschines,Antishenes,studied the work of
-Aeschines,Charinus,is family of
-Aeschines,Gorgias,studied the work of
-Aeschines,Xanthippe,is associated with
-Aeschines,Dion,is associated with
-Aeschines,Sicily,traveled to
-Aeschines,Megara,traveled to
-Aeschines,Lysanias,is family of
-Aeschines,Socrates,is family of
-Aeschines,Syracuse,traveled to
-Aeschines,Phaeax,is associated with
-Aeschines,Dionysius II,sent letters to
-Aeschines,Athens,is from
-Aeschines,Plato,is associated with
 Aeschines,Aristotle II,is teacher of
+Aeschines,Megara,traveled to
+Aeschines,Antishenes,studied the work of
+Aeschines,Dionysius II,sent letters to
+Aeschines,Lysanias,is family of
+Aeschines,Plato,is associated with
+Aeschines,Xanthippe,is associated with
+Aeschines,Athens,is from
+Aeschines,Socrates,is family of
+Aeschines,Gorgias,studied the work of
+Aeschines,Syracuse,traveled to
+Aeschines,Dion,is associated with
+Aeschines,Phaeax,is associated with
+Aeschines,Sicily,traveled to
 Aeschines,Father of Phaeax,is associated with
+Aeschines,Charinus,is family of
 Aeschines III,Aeschines V,is associated with
 Aeschines IV,Isocrates,is teacher of
 Aeschylus II,Menedemus,is adversary of
 Aesop,Corinth,is associated with
-Aethalides,Hermes,is family of
 Aethalides,Euphorbus,is associated with
+Aethalides,Hermes,is family of
 Aethiops,Ptolemais,is from
 Agathon,Socrates,is associated with
+Agesarchus,Epimenides,is family of
 Agesilaus,Greece,traveled to
-Agesilaus,Thebes,is adversary of
 Agesilaus,Nectanabis,sent letters to
-Agetor,Asclepiades,is friend of
+Agesilaus,Thebes,is adversary of
 Agetor,Lamia,is from
+Agetor,Asclepiades,is friend of
 Agetor,Menedemus,is friend of
 Agrigentines,Pythagoras,is associated with
 Agrigentines,Agrigentum,is from
 Agrigentines,Tarentum,traveled to
 Alcaeus,Aristodemus,refers to
-Alcibiades,Potidaea,traveled to
 Alcibiades,Socrates,is friend of
-Alcmaeon II,Leon V,is associated with
-Alcmaeon II,Pirithous,is family of
-Alcmaeon II,Bathyllus,is associated with
+Alcibiades,Potidaea,traveled to
+Alcippus,Eresus,is from
+Alcippus,Theophrastus,is associated with
 Alcmaeon II,Brontinus,is associated with
+Alcmaeon II,Bathyllus,is associated with
+Alcmaeon II,Pirithous,is family of
+Alcmaeon II,Leon V,is associated with
 Alcmaeon II,Croton,is from
-Alexander,Xenocrates,refers to
 Alexander,Pythagoras,refers to
-Alexander II,Socrates,refers to
+Alexander,Xenocrates,refers to
 Alexander II,Damon,refers to
-Alexinus,Olympia,traveled to
-Alexinus,Ephorus,refers to
+Alexander II,Socrates,refers to
+Alexander II,Pherecydes,refers to
+Alexander II,Chrysippus,refers to
 Alexinus,Zeno,refers to
+Alexinus,Ephorus,refers to
+Alexinus,Olympia,traveled to
 Alexinus,Elis,is from
-Alexo,Myndus,is from
+Alexinus,Dionysius IV,is teacher of
 Alexo,Thyrion,refers to
+Alexo,Myndus,is from
+Alyattes,Bias,is adversary of
+Alyattes,Croesus,is family of
 Amasis,Pythagoras,is associated with
-Ambryon,Theocritus,refers to
 Ambryon,Borborus,refers to
+Ambryon,Theocritus,refers to
 Ambryon,Aristotle,refers to
 Ameinias IV,Diochaetas,is family of
 Ameipsias,Socrates,refers to
 Amphicrates,Theodorus,refers to
-Amyclas,Pythagoreans,is associated with
 Amyclas,Plato,is associated with
-Amyntas,Macedon,is from
+Amyclas,Pythagoreans,is associated with
 Amyntas,Philip,is family of
+Amyntas,Macedon,is from
 Amyntas,Aristotle,is friend of
+Anacharsis,Gnurus,is family of
+Anacharsis,Scythia,is from
+Anacharsis,Croesus,sent letters to
+Anacharsis,Athens,traveled to
+Anacharsis,Sardis,traveled to
+Anaxagoras,Socrates,is teacher of
+Anaxagoras,Lampsacus,traveled to
+Anaxagoras,Damon,is teacher of
+Anaxagoras,Homer,refers to
+Anaxagoras,Hegesibulus,is family of
+Anaxagoras,Clazomenae,is from
+Anaxagoras,Athens,traveled to
+Anaxagoras,Persia,is associated with
+Anaxagoras,Euripides,is teacher of
+Anaxagoras,Democritus,is adversary of
+Anaxagoras,Halicarnassus,traveled to
+Anaxagoras,Ionia,traveled to
+Anaxagoras,Olympia,traveled to
+Anaxagoras,Eubulus II,is family of
 Anaxagoras,Aegospotami,is associated with
 Anaxagoras,Empedocles,is teacher of
-Anaxagoras,Halicarnassus,traveled to
-Anaxagoras,Persia,is associated with
-Anaxagoras,Archelaus,is teacher of
-Anaxagoras,Damon,is teacher of
-Anaxagoras,Hegesibulus,is family of
-Anaxagoras,Ionia,traveled to
-Anaxagoras,Xenophanes,is associated with
-Anaxagoras,Democritus,is adversary of
 Anaxagoras,Pericles,is teacher of
-Anaxagoras,Lampsacus,traveled to
-Anaxagoras,Eubulus II,is family of
-Anaxagoras,Homer,refers to
-Anaxagoras,Clazomenae,is from
-Anaxagoras,Euripides,is teacher of
-Anaxagoras,Olympia,traveled to
-Anaxagoras,Socrates,is teacher of
-Anaxagoras,Athens,traveled to
-Anaxarchus,Alexander,is associated with
-Anaxarchus,Nicocreon,is adversary of
+Anaxagoras,Xenophanes,is associated with
+Anaxagoras,Archelaus,is teacher of
 Anaxarchus,Zeus,is associated with
-Anaxarchus,Persephone,is associated with
-Anaxarchus,Abdera,is from
 Anaxarchus,Cyprus,traveled to
-Anaximander,Praxiades,is family of
+Anaxarchus,Alexander,is associated with
+Anaxarchus,Persephone,is associated with
+Anaxarchus,Nicocreon,is adversary of
+Anaxarchus,Abdera,is from
+Anaxilaus,Myson,refers to
 Anaximander,Anaximenes,is teacher of
-Anaximander,Apollodorus,refers to
+Anaximander,Praxiades,is family of
 Anaximander,Parmenides,is teacher of
-Anaximander,Empedocles,is adversary of
 Anaximander,Miletus,is from
+Anaximander,Empedocles,is adversary of
+Anaximander,Apollodorus,refers to
 Anaximander II,Miletus,is from
-Anaximenes,Thales,refers to
-Anaximenes,Samos,refers to
-Anaximenes,Greece,refers to
 Anaximenes,Persia,refers to
-Anaximenes,Ionia,refers to
-Anaximenes,Miletus,is from
-Anaximenes,Seven Sages,refers to
-Anaximenes,Anaxagoras,is teacher of
-Anaximenes,Sicily,refers to
-Anaximenes,Pythagoras,refers to
 Anaximenes,Diogenes,is teacher of
 Anaximenes,Croton,refers to
-Anaximenes,Eurystratus,is family of
+Anaximenes,Thales,refers to
+Anaximenes,Anaxagoras,is teacher of
 Anaximenes,Italy,refers to
-Anaximenes II,Alexander,refers to
+Anaximenes,Pythagoras,refers to
+Anaximenes,Seven Sages,refers to
+Anaximenes,Sicily,refers to
+Anaximenes,Ionia,refers to
+Anaximenes,Greece,refers to
+Anaximenes,Samos,refers to
+Anaximenes,Miletus,is from
+Anaximenes,Eurystratus,is family of
 Anaximenes II,Lampsacus,is from
-Anaximenes III,Anaximenes II,is family of
+Anaximenes II,Alexander,refers to
 Anaximenes III,Lampsacus,is from
+Anaximenes III,Anaximenes II,is family of
 Anchipylus,Elis,traveled to
 Anchitus,Asclepius,is family of
-Andron,Aristodemus,refers to
 Andron,Chilon,refers to
+Andron,Aristodemus,refers to
 Anniceris,Theodorus,is teacher of
 Anniceris,Plato,is friend of
-Anticlides,Moeris,refers to
 Anticlides,Pythagoras,refers to
+Anticlides,Moeris,refers to
 Antigonus,Persaeus,is associated with
-Antigonus,Anaxagoras III,refers to
-Antigonus,Polemo,refers to
-Antigonus,Lysimachia,traveled to
-Antigonus,Carystus,is from
-Antigonus,Eurylochus II,is associated with
-Antigonus,Democritus III,refers to
-Antigonus,Eretria,is associated with
 Antigonus,Megara,is associated with
+Antigonus,Eurylochus II,is associated with
+Antigonus,Polemo,refers to
 Antigonus,Pyrrho,refers to
+Antigonus,Carystus,is from
+Antigonus,Eretria,is associated with
+Antigonus,Anaxagoras III,refers to
+Antigonus,Democritus III,refers to
+Antigonus,Lysimachia,traveled to
+Antigonus,Lyco,refers to
+Antigonus,Zeno II,refers to
+Antigonus,Bion,is friend of
+Antigonus III,Lyco,refers to
+Antigonus III,Macedonia,is from
+Antigonus III,Zeno II,is benefactor of
+Antigonus III,Cleanthes,is benefactor of
+Antigonus III,Halcyoneus,is family of
+Antigonus III,Athens,traveled to
 Antilochus,Lemnos,is from
 Antilochus,Socrates,is adversary of
+Antipater,Epitimides,is teacher of
 Antipater,Aristotle,is family of
 Antipater,Cyrene,is from
-Antipater,Epitimides,is teacher of
+Antipater III,Tyre,is from
+Antipater IV,Tarsus,is from
+Antipater IV,Heraclides IV,is teacher of
+Antipater V,Zeno II,refers to
 Antiphon,Pythagoras,refers to
-Antishenes,Anytus,refers to
-Antishenes,Anniceris,refers to
-Antishenes,Theodorus,refers to
-Antishenes,Dionysius V,refers to
-Antishenes,Zeno,refers to
 Antishenes,Democritus,refers to
+Antishenes,Theodorus,refers to
+Antishenes,Anytus,refers to
+Antishenes,Zeno,refers to
+Antishenes,Meletus,refers to
 Antishenes,Heraclitus,refers to
 Antishenes,Diogenes,refers to
-Antishenes,Meletus,refers to
+Antishenes,Anniceris,refers to
+Antishenes,Dionysius V,refers to
 Antishenes,Lycon,refers to
 Antisthenes II,Chilon,refers to
 Antisthenes II,Phemonoe,refers to
+Antisthenes II,Sophocles,refers to
+Antisthenes II,Cleanthes,refers to
 Anytus,Socrates,is adversary of
-Anytus,Aristophanes,is associated with
 Anytus,Heraclea,traveled to
+Anytus,Aristophanes,is associated with
 Apollo,Delos,is associated with
+Apollodorus,Democritus,refers to
+Apollodorus,Socrates,refers to
+Apollodorus,Melissus,refers to
+Apollodorus,Xenophanes,refers to
+Apollodorus,Eudoxus III,refers to
+Apollodorus,Plato,refers to
 Apollodorus,Pythagoras,refers to
 Apollodorus,Anaximenes,refers to
-Apollodorus,Zeno,refers to
-Apollodorus,Thales,refers to
-Apollodorus,Anaxagoras,refers to
-Apollodorus,Xenophanes,refers to
-Apollodorus,Mitylene,refers to
-Apollodorus,Plato,refers to
-Apollodorus,Aristotle,refers to
-Apollodorus,Empedocles,refers to
-Apollodorus,Socrates,refers to
-Apollodorus,Eudoxus III,refers to
-Apollodorus,Apsephion,refers to
-Apollodorus,Democritus,refers to
-Apollodorus,Pyrrho,refers to
-Apollodorus,Orthomenes,is from
 Apollodorus,Protagoras,refers to
+Apollodorus,Pyrrho,refers to
+Apollodorus,Mitylene,refers to
+Apollodorus,Orthomenes,is from
 Apollodorus,Eudoxus,refers to
-Apollodorus,Melissus,refers to
+Apollodorus,Empedocles,refers to
+Apollodorus,Anaxagoras,refers to
+Apollodorus,Apsephion,refers to
+Apollodorus,Thales,refers to
+Apollodorus,Aristotle,refers to
+Apollodorus,Zeno,refers to
+Apollodorus,Strato,refers to
+Apollodorus II,Solon,refers to
+Apollodorus III,Solon,refers to
 Apollodorus IV,Socrates,is friend of
-Apollodorus VI,Democritus,refers to
-Apollodorus VI,Cyzicus,is from
+Apollodorus V,Chrysippus,refers to
+Apollodorus V,Epicurus,refers to
 Apollodorus VI,Philolaus,refers to
+Apollodorus VI,Cyzicus,is from
+Apollodorus VI,Democritus,refers to
 Apollodorus VII,Pythagoras,refers to
+Apollodorus X,Archelaus,is family of
+Apollonius II,Stilpo,refers to
+Apollonius II,Crates II,refers to
+Apollonius II,Tyre,is from
+Apollonius II,Zeno II,refers to
 Apollothemis,Diogenes,is family of
 Apsephion,Athens,is from
+Arcesilaus,Pitane,is from
+Arcesilaus,Theophrastus,refers to
+Arcesilaus,Aristodicus,is family of
+Arcesilaus,Cleanthes,is adversary of
+Arcesilaus,Chrysippus,is teacher of
+Arcesilaus,Ion,studied the work of
+Arcesilaus,Homer,studied the work of
+Arcesilaus,Pindar,studied the work of
+Arcesilaus,Theodete,is associated with
+Arcesilaus,Sardis,traveled to
+Arcesilaus,Plato,studied the work of
+Arcesilaus,Ariston IV,is adversary of
+Arcesilaus,Seuthes,is family of
+Arcesilaus II,Strato,is family of
+Arcesilaus II,Lampsacus,is from
 Archagoras,Theodotus,is family of
-Archelaus,Xenophanes,is teacher of
-Archelaus,Midon,is family of
-Archelaus,Socrates,is teacher of
-Archelaus,Samos,traveled to
 Archelaus,Oenopides,is associated with
-Archelaus,Apollodorus,is family of
-Archelaus,Athens,is from
+Archelaus,Midon,is family of
 Archelaus,Miletus,is from
+Archelaus,Athens,is from
+Archelaus,Samos,traveled to
+Archelaus,Xenophanes,is teacher of
+Archelaus,Socrates,is teacher of
+Archelaus,Apollodorus,is family of
 Archelaus II,Macedon,is from
 Archetimus,Seven Sages,refers to
 Archetimus,Syracuse,is from
@@ -217,666 +273,850 @@ Archipolis,Menedemus,is associated with
 Archipolis,Asclepiades,is associated with
 Archippus,Milo,traveled to
 Archippus,Pythagoras,is associated with
-Archytas,Teucer,refers to
 Archytas,Tarentum,is from
-Archytas,Lucania,traveled to
-Archytas,Mnesagoras,is family of
 Archytas,Ocellus,is associated with
-Archytas,Lamiscus,refers to
+Archytas,Teucer,refers to
 Archytas,Eudoxus,is teacher of
 Archytas,Plato,sent letters to
-Aristagoras,Chrysippus VI,is family of
+Archytas,Mnesagoras,is family of
+Archytas,Lucania,traveled to
+Archytas,Lamiscus,refers to
 Aristagoras,Eudoxus,is family of
+Aristagoras,Chrysippus VI,is family of
 Aristides,Sophroniscus II,is family of
 Aristides,Paeonius,is teacher of
-Aristippus,Dionysius II,is friend of
-Aristippus,The Cyrenaics,is teacher of
-Aristippus,Athens,traveled to
-Aristippus,Artaphernes,is associated with
-Aristippus,Megara,traveled to
-Aristippus,Paris,refers to
-Aristippus,Arete,is family of
-Aristippus,Asia,traveled to
-Aristippus,Xenophon,refers to
-Aristippus,Persian King,refers to
-Aristippus,Aethiops,is teacher of
-Aristippus,Alcibiades,refers to
-Aristippus,Aeschines,is friend of
-Aristippus,Eutychides,is associated with
-Aristippus,Pausanias,refers to
-Aristippus,Polyxenus,is associated with
-Aristippus,Cyrene,is from
-Aristippus,Simus,is adversary of
-Aristippus,Pausanians,refers to
 Aristippus,Clinias,refers to
+Aristippus,Xenophon,refers to
+Aristippus,Dionysius II,is friend of
+Aristippus,Persian King,refers to
+Aristippus,Simus,is adversary of
+Aristippus,Aethiops,is teacher of
+Aristippus,The Cyrenaics,is teacher of
 Aristippus,Pythagoras,refers to
-Aristippus,Socrates,refers to
+Aristippus,Paris,refers to
+Aristippus,Alcibiades,refers to
+Aristippus,Athens,traveled to
+Aristippus,Polyxenus,is associated with
 Aristippus,Corinth,traveled to
+Aristippus,Eutychides,is associated with
+Aristippus,Socrates,refers to
+Aristippus,Cyrene,is from
+Aristippus,Pausanians,refers to
+Aristippus,Aeschines,is friend of
+Aristippus,Asia,traveled to
+Aristippus,Megara,traveled to
+Aristippus,Arete,is family of
+Aristippus,Pausanias,refers to
 Aristippus,Son of Aristippus II,is family of
+Aristippus,Artaphernes,is associated with
+Aristippus II,Periander,refers to
+Aristippus II,Crateia,refers to
+Aristippus II,Theophrastus,refers to
 Aristippus IV,Arete,is family of
-Aristippus IV,Theodorus,is teacher of
 Aristippus IV,Aristippus,is family of
+Aristippus IV,Theodorus,is teacher of
+Aristippus VI,Hermias,refers to
 Aristippus VI,Concubine of Hermias,refers to
 Aristippus VI,Aristotle,refers to
-Aristippus VI,Hermias,refers to
-Aristodemus,Chilon,is associated with
+Aristocles III,Zeno II,is associated with
+Aristocrates,Eristheneia,is family of
 Aristodemus,Sparta,is from
+Aristodemus,Chilon,is associated with
+Aristodemus,Eristheneia,is family of
+Aristogoras,Miletus,is from
 Aristomenes,Aristotle,is associated with
-Ariston,Heraclitus,refers to
 Ariston,Socrates,is associated with
+Ariston,Heraclitus,refers to
+Ariston,Strato,refers to
+Ariston,Ceos,is from
+Ariston,Chios,is from
+Ariston,Arcesilaus,refers to
 Ariston IV,Odysseus,refers to
-Aristophanes,Athens,refers to
+Ariston IV,Diphilus III,is teacher of
+Ariston IV,Miltiades III,is teacher of
+Ariston IV,Miltiades II,is family of
+Ariston IV,Chios,is from
+Aristophanes,Greece,refers to
 Aristophanes,Euripides,refers to
 Aristophanes,Socrates,is adversary of
-Aristophanes,Greece,refers to
+Aristophanes,Athens,refers to
 Aristophanes,Pythagoras,is associated with
-Aristotle,A Magician,refers to
+Aristotle,Clitarchus,is teacher of
 Aristotle,Xenophon,refers to
-Aristotle,Zeno,refers to
-Aristotle,Syria,refers to
-Aristotle,Macedonia,traveled to
-Aristotle,Lyceum,traveled to
-Aristotle,Hermias,is family of
-Aristotle,Athens,traveled to
-Aristotle,Academy,traveled to
-Aristotle,Alexander,is teacher of
-Aristotle,Concubine of Hermias,is family of
-Aristotle,Callisthenes,is family of
-Aristotle,Speusippus,studied the work of
-Aristotle,Borborus,traveled to
-Aristotle,Anaximenes II,is adversary of
-Aristotle,Nicanor's mother,refers to
-Aristotle,Theophrastus,is associated with
-Aristotle,Mitylene,traveled to
-Aristotle,Proxenus,refers to
-Aristotle,Nicanor,is associated with
-Aristotle,Gryllion,refers to
-Aristotle,Arimnestus,refers to
-Aristotle,Hipparchus,is associated with
-Aristotle,Chalcis,traveled to
-Aristotle,Timarchus,is associated with
-Aristotle,Dioteles,is associated with
-Aristotle,Myrto,refers to
-Aristotle,Socrates,refers to
-Aristotle,Thales,refers to
 Aristotle,Stagira,is from
+Aristotle,Mitylene,traveled to
+Aristotle,Nicanor,is associated with
+Aristotle,Proxenus,refers to
+Aristotle,Socrates,refers to
+Aristotle,Hipparchus,is associated with
+Aristotle,Concubine of Hermias,is family of
+Aristotle,Lamprocles,refers to
+Aristotle,Empedocles,refers to
+Aristotle,Thales,refers to
+Aristotle,Arimnestus,refers to
+Aristotle,Protagoras,refers to
+Aristotle,Anaximenes II,is adversary of
+Aristotle,Callisthenes,is family of
+Aristotle,Timarchus,is associated with
+Aristotle,Gryllion,refers to
+Aristotle,Borborus,traveled to
+Aristotle,Lyceum,traveled to
+Aristotle,Syria,refers to
+Aristotle,Zeno,refers to
+Aristotle,Speusippus,studied the work of
+Aristotle,Myrto,refers to
+Aristotle,Gryllus,refers to
+Aristotle,Chalcis,traveled to
+Aristotle,Alexander,is teacher of
+Aristotle,Hermias,is family of
+Aristotle,Theophrastus,is associated with
+Aristotle,Athens,traveled to
+Aristotle,Simmias,is teacher of
+Aristotle,Euathlus,refers to
+Aristotle,Macedonia,traveled to
 Aristotle,Delos,refers to
 Aristotle,Delphi,refers to
-Aristotle,Gryllus,refers to
-Aristotle,Pythagoras,refers to
-Aristotle,Euathlus,refers to
-Aristotle,Simmias,is teacher of
-Aristotle,Empedocles,refers to
-Aristotle,Clitarchus,is teacher of
-Aristotle,Lamprocles,refers to
+Aristotle,Academy,traveled to
 Aristotle,Xanthippe,refers to
-Aristotle,Protagoras,refers to
+Aristotle,A Magician,refers to
+Aristotle,Nicanor's mother,refers to
+Aristotle,Pythagoras,refers to
+Aristotle,Dioteles,is associated with
+Aristotle,Periander,refers to
+Aristoxenus,Tyrrhenian Sea,is from
 Aristoxenus,Archelaus,refers to
-Aristoxenus,Xenophilus,refers to
 Aristoxenus,Diocles,is associated with
-Aristoxenus,Polymnastus,is associated with
+Aristoxenus,Phanton,is associated with
+Aristoxenus,Xenophilus,refers to
+Aristoxenus,Socrates,refers to
+Aristoxenus,Spintharus,is family of
+Aristoxenus,Pythagoras,refers to
 Aristoxenus,Archytas,refers to
+Aristoxenus,Thurii,is from
+Aristoxenus,Lasos,refers to
+Aristoxenus,Polymnastus,is associated with
 Aristoxenus,Echecrates,is associated with
 Aristoxenus,Plato,refers to
-Aristoxenus,Lasos,refers to
-Aristoxenus,Pythagoras,refers to
-Aristoxenus,Spintharus,is family of
-Aristoxenus,Tyrrhenian Sea,is from
-Aristoxenus,Thurii,is from
-Aristoxenus,Socrates,refers to
-Aristoxenus,Phanton,is associated with
+Aristoxenus,Myson,refers to
+Aristoxenus,Pherecydes,refers to
 Artemon,Thurii,is associated with
 Ascanius,Abdera,is from
 Ascanius,Pyrrho,refers to
-Asclepiades,Menedemus,is friend of
-Asclepiades,Phlius,is from
 Asclepiades,Eretria,traveled to
+Asclepiades,Phlius,is from
+Asclepiades,Menedemus,is friend of
 Asclepiades,Elis,traveled to
 Asclepiades,Wife of Asclepiades,is family of
-Asclepius,Aristotle,is family of
 Asclepius,Nicomachus,is family of
-Aston,Croto,is from
+Asclepius,Aristotle,is family of
 Aston,Pythagoras,is associated with
+Aston,Croto,is from
+Astyanax,Troas,is from
+Astyanax II,Lyco,is family of
+Athenaeus,Theodorus XVII,is teacher of
 Athenians,Diogenes,is adversary of
-Athenians,Athens,is from
 Athenians,Protagoras,is adversary of
+Athenians,Athens,is from
+Athenians,Zeno II,is friend of
 Athenodorus,Democritus,refers to
+Athenodorus,Melantes,refers to
+Athenodorus,Theophrastus,refers to
+Athenodorus,Soli,is from
+Athenodorus II,Zeno II,studied the work of
 Athlius,Chrysippus VI,is teacher of
-Bathycles,Arcadia,is from
 Bathycles,Thales,is associated with
+Bathycles,Arcadia,is from
 Bias,Solon,is friend of
+Bias,Priene,is from
 Bion,Aristippus,refers to
-Boton,Athens,is from
+Bion,Borysthenes,is from
+Bion,Theophrastus,studied the work of
+Bion,Theodorus,studied the work of
+Bion IV,Abdera,is from
 Boton,Xenophanes,is teacher of
-Brontinus,Croto,is from
+Boton,Athens,is from
 Brontinus,Empedocles,is teacher of
+Brontinus,Croto,is from
 Bryson,Pyrrho,is teacher of
+Caduidas,Scythia,is from
+Caduidas,Anacharsis,is family of
+Caeneus,Speusippus,refers to
 Calimachus,Heraclitus III,is associated with
 Calliades,Athens,is from
 Callias II,Socrates,refers to
 Callimachus,Philistion,refers to
-Callimachus,Archytas,refers to
 Callimachus,Thales,refers to
-Callimachus,Aeschines,refers to
 Callimachus,Euphorbus,refers to
-Callimachus,Eudoxus,refers to
+Callimachus,Aeschines,refers to
 Callimachus,Pythagoras,refers to
+Callimachus,Archytas,refers to
+Callimachus,Eudoxus,refers to
 Callimachus,Bathycles,refers to
-Callisthenes,Alexander,is adversary of
+Callimachus,Pittacus,refers to
+Callimachus,Hyrrhadius,refers to
+Callippus II,Corinth,is from
 Callisthenes,Olynthus,is from
+Callisthenes,Alexander,is adversary of
 Carcinus,Syracuse,traveled to
 Carcinus,Aeschines,is friend of
+Carneades,Chrysippus,refers to
+Carneades,Cyrene,is from
+Cassius,Zeno II,is adversary of
 Cebes,Thebes,is from
-Cephisodorus,Hegesilaus,is associated with
 Cephisodorus,Mantinea,traveled to
 Cephisodorus,Gryllus,is associated with
+Cephisodorus,Hegesilaus,is associated with
 Chabrinus,Lasos,is family of
-Chaldaeans,Babylon,is from
 Chaldaeans,Persia,is from
+Chaldaeans,Babylon,is from
 Charmantides,Lasos,is family of
 Charondas,Aristippus,is associated with
 Chilon,Laconia,is from
+Chilon,Periander,sent letters to
+Chilon,Aesop,is associated with
+Chilon,Pisa,traveled to
+Chilon,Hippocrates II,is associated with
 Choerilus,Thales,refers to
 Chonuphis,Heliopolis,is from
+Chremonides,Zeno II,is friend of
+Chremonides,Cleanthes,is associated with
 Chrysippus,Egypt,traveled to
 Chrysippus,Eudoxus,is associated with
+Chrysippus,Zeno II,refers to
+Chrysippus,Tarsus,is from
+Chrysippus,Aristocreon,is teacher of
+Chrysippus,Apollonius III,is family of
+Chrysippus,Philocrates II,is teacher of
+Chrysippus,Soli,is from
+Chrysippus II,Cnidus,is from
 Chrysippus VI,Cnidos,is from
 Chrysippus VI,Erineus,is family of
 Cleanthes,Heraclitus,refers to
+Cleanthes,Assos,is from
+Cleanthes,Sphaerus,is teacher of
+Cleanthes,Phanias II,is family of
+Cleanthes,Chrysippus,is teacher of
+Cleanthes,Ariston IV,is friend of
+Cleanthes,Athens,traveled to
 Clearchus,Pittacus,refers to
 Clearchus,Croesus,refers to
 Cleippides,Cyzicus,is from
+Cleobulus,Lindus,is from
+Cleobulus,Solon,sent letters to
 Cleon,Anaxagoras,is adversary of
-Cleonymus,Phlius,is from
 Cleonymus,Euthyphro IV,is family of
+Cleonymus,Phlius,is from
 Clinias,Plato,is associated with
 Clinias,Pythagoreans,is associated with
 Clinomachus,Thurii,is from
 Clisthenes,Menedemus,is family of
 Clitarchus,Cyrenaica,is from
 Clitomachus,The Cyrenaics,refers to
+Codrus,Pisistratus,is family of
 Cotys,Thrace,is from
+Crantor,Euripides,studied the work of
+Crantor,Antagoras,refers to
+Crantor,Soli,is from
+Crantor,Homer,studied the work of
 Crates,Athens,is from
 Crates,Asia,is from
-Crates II,Asclepiades,refers to
-Crates II,Phlius,refers to
+Crates,Bion,is associated with
+Crates,Arcesilaus,is teacher of
 Crates II,Menedemus,refers to
 Crates II,Eretria,refers to
+Crates II,Phlius,refers to
+Crates II,Asclepiades,refers to
+Crates II,Zeno II,is teacher of
 Crates XII,Heraclitus,studied the work of
 Cratinus,Pythagoras,is adversary of
+Cratinus,Solon,refers to
+Cratinus,Cleobuline II,refers to
 Creophylus,Hermodamas,is family of
 Critias,Leon II,is adversary of
-Crito,Ctesippus,is family of
-Crito,Critobulus,is family of
 Crito,Epigenes,is family of
+Crito,Critobulus,is family of
 Crito,Hermogenes II,is family of
+Crito,Ctesippus,is family of
 Crito,Athens,is from
-Critobulus,Ctesippus,is family of
 Critobulus,Hermogenes II,is family of
 Critobulus,Epigenes,is family of
-Croesus,Thales,is adversary of
+Critobulus,Ctesippus,is family of
 Croesus,Solon,is associated with
-Ctesiclides,Xenophon,refers to
+Croesus,Thales,is adversary of
 Ctesiclides,Athens,is from
+Ctesiclides,Xenophon,refers to
 Cybisthus,Thales,is family of
-Cylon,Pythagoras,is adversary of
 Cylon,Croto,is from
 Cylon,Croton,is from
-Daimachus,Plato,studied the work of
+Cylon,Pythagoras,is adversary of
+Cypselus,Periander,is family of
+Cypselus II,Lysida,is family of
+Cypselus II,Periander,is family of
 Daimachus,Croesus,refers to
 Daimachus,Pittacus,refers to
+Daimachus,Plato,studied the work of
+Damagetas,Chilon,is family of
 Damasus,Democritus,is family of
 Damo,Pythagoras,is family of
 Damo,Theano,is family of
-Damon,Cyrene,is from
-Damon,Seven Sages,refers to
 Damon,Socrates,is teacher of
+Damon,Seven Sages,refers to
+Damon,Cyrene,is from
 Darius,Hystaspes,is family of
 Delphis,Eudoxus,is family of
-Demetrius,Zeno,refers to
-Demetrius,Ptolemy,is associated with
-Demetrius,Phalerum,is from
+Demetrius,Xenophanes,refers to
+Demetrius,Diogenes,refers to
+Demetrius,Theodorus,is friend of
+Demetrius,Socrates,refers to
+Demetrius,Crito,refers to
 Demetrius,Magnesia,is from
+Demetrius,Democritus,refers to
+Demetrius,Oropus,is associated with
+Demetrius,Phalerum,is from
+Demetrius,Ptolemy,is associated with
+Demetrius,Zeno,refers to
+Demetrius,Anaxagoras,refers to
+Demetrius,Thales,refers to
+Demetrius,Athens,traveled to
 Demetrius,Aristotle,refers to
 Demetrius,Hermias,refers to
-Demetrius,Anaxagoras,refers to
-Demetrius,Theodorus,is friend of
-Demetrius,Xenophanes,refers to
-Demetrius,Socrates,refers to
 Demetrius,Heraclitus,refers to
-Demetrius,Diogenes,refers to
-Demetrius,Athens,traveled to
-Demetrius,Oropus,is associated with
-Demetrius,Thales,refers to
-Demetrius,Democritus,refers to
-Demetrius,Crito,refers to
+Demetrius III,Elis,refers to
 Demetrius III,Corinth,refers to
-Demetrius III,Philesia,refers to
 Demetrius III,Philolaus,refers to
-Demetrius III,Alcmaeon II,refers to
+Demetrius III,Thales,refers to
+Demetrius III,Philesia,refers to
 Demetrius III,Xenophon,refers to
 Demetrius III,Magnesia,is from
-Demetrius III,Thales,refers to
-Demetrius III,Elis,refers to
+Demetrius III,Alcmaeon II,refers to
+Demetrius III,Aristotle,refers to
+Demetrius III,Hermias,refers to
+Demetrius III,Eubulus III,refers to
+Demetrius III,Epimenides,refers to
+Demetrius III,Chrysippus,refers to
+Demetrius III,Crates II,refers to
+Demetrius III,Zeno II,refers to
+Demetrius III,Cleanthes,refers to
+Demetrius III,Socrates,refers to
+Demetrius III,Mnaseas,refers to
 Demetrius IV,Socrates,refers to
 Demetrius IV,Crito,refers to
-Demetrius XXV,Empedocles,refers to
+Demetrius IV,Byzantium,is from
 Demetrius XXV,Troezen,is from
 Demetrius XXV,Homer,refers to
+Demetrius XXV,Empedocles,refers to
+Demetrius XXVI,Persaeus,is family of
+Demetrius XXVIII,Cyrene,traveled to
+Demochares,Laches,is family of
+Demochares,Zeno II,is adversary of
 Democritus,Philolaus,is family of
-Democritus,Leucippus,is associated with
-Democritus,Protagoras,is teacher of
-Democritus,Hegesistratus,is family of
-Democritus,Xerxes,is associated with
-Democritus,Aethiopia,traveled to
+Democritus,Persia,traveled to
 Democritus,Thales,refers to
-Democritus,Miletus,is from
+Democritus,Hegesistratus,is family of
 Democritus,Abdera,is associated with
+Democritus,Gymnosophists,is associated with
+Democritus,Aethiopia,traveled to
+Democritus,Athenocritus,is family of
 Democritus,Pythagoras,is associated with
 Democritus,Metrodorus,is teacher of
+Democritus,Miletus,is from
 Democritus,Red Sea,traveled to
-Democritus,Archelaus,is associated with
+Democritus,Xerxes,is associated with
 Democritus,Egypt,traveled to
-Democritus,Gymnosophists,is associated with
-Democritus,Athenocritus,is family of
+Democritus,Leucippus,is associated with
 Democritus,Damasippus,is family of
-Democritus,Persia,traveled to
+Democritus,Archelaus,is associated with
+Democritus,Protagoras,is teacher of
+Democritus,Bion IV,is teacher of
 Democritus II,Chios,is from
 Democritus IV,Samothrace,is associated with
 Democritus IV,Ephesus,is associated with
 Democritus VI,Pergamum,is from
+Demodicus,Leros,is from
 Demophilus,Aristotle,is adversary of
+Demophilus,Theophrastus,refers to
 Demosthenes,Calauria,traveled to
-Dicaearchus,Thales,refers to
-Dicaearchus,Anacharsis,refers to
-Dicaearchus,Solon,refers to
-Dicaearchus,Seven Sages,refers to
 Dicaearchus,Pythagoras,refers to
-Dicaearchus,Cleobulus,refers to
-Dicaearchus,Chilon,refers to
-Dicaearchus,Aristodemus,refers to
+Dicaearchus,Solon,refers to
+Dicaearchus,Thales,refers to
 Dicaearchus,Pamphylus,refers to
+Dicaearchus,Aristodemus,refers to
+Dicaearchus,Chilon,refers to
+Dicaearchus,Cleobulus,refers to
 Dicaearchus,Periander,refers to
-Dicaearchus,Bias,refers to
+Dicaearchus,Anacharsis,refers to
+Dicaearchus,Seven Sages,refers to
 Dicaearchus,Pittacus,refers to
-Dinarchus,Gryllus,refers to
+Dicaearchus,Bias,refers to
+Dieuchidas,Solon,refers to
+Dieuchidas,Homer,refers to
+Dieuchidas,Pisistratus,refers to
 Dinarchus,Sparta,refers to
 Dinarchus,Diodorus V,refers to
 Dinarchus,Xenophon,refers to
+Dinarchus,Gryllus,refers to
 Dinon,Protagoras,refers to
 Diocles,Pleistarchus,refers to
 Diocles,Pyrrho,refers to
+Diocles,Ariston IV,refers to
+Diocles,Zeno II,refers to
+Diocles,Menedemus,refers to
+Diocles,Chrysippus,refers to
+Diocles,Dionysius IV,refers to
+Diocles,Heraclides,refers to
+Diocles,Cleanthes,refers to
+Diocles,Polemo,refers to
+Diocles,Alexinus,refers to
 Diodorus,Ptolemy,is associated with
 Diodorus,Alexandria,traveled to
 Diodorus,Ameinias,is family of
+Diodorus,Zeno II,is friend of
+Diodorus,Philo II,is teacher of
+Diodorus III,Anaximander,studied the work of
 Diodorus III,Ephesus,is from
 Diodorus III,Empedocles,refers to
-Diodorus III,Anaximander,studied the work of
-Diodorus V,Gryllus III?,is family of
+Diodorus IV,Speusippus,refers to
+Diodorus V,Lepreum,traveled to
 Diodorus V,Corinth,traveled to
 Diodorus V,Philesia,is family of
 Diodorus V,Athens,traveled to
-Diodorus V,Lepreum,traveled to
+Diodorus V,Gryllus III?,is family of
 Diodotus,Heraclitus,is associated with
 Diogenes,Apollonia,is from
-Diogenes II,Ichthyas,refers to
 Diogenes II,Aristippus,refers to
+Diogenes II,Ichthyas,refers to
 Diogenes VII,Anaxarchus,is teacher of
 Diogenes VII,Smyrna,is from
 Diomedon,Zeno,refers to
 Dion,Syracuse,is from
-Dionysius,Pythagoras VIII,refers to
 Dionysius,Plato,is adversary of
-Dionysius II,Simus,is associated with
+Dionysius,Pythagoras VIII,refers to
+Dionysius,Speusippus,refers to
+Dionysius,Axiothea,refers to
 Dionysius II,Syracuse,is from
+Dionysius II,Simus,is associated with
+Dionysius IV,Aratus,studied the work of
+Dionysius IV,Heraclea,is from
+Dionysius IV,Theophantus,is family of
 Dionysius V,Theodorus,is teacher of
 Dionysius VIII,Heraclitus,refers to
 Dionysodorus,Socrates,refers to
-Diphilus,Bosphorus,is from
+Dioscurides,Solon,refers to
 Diphilus,Euphantus,is family of
+Diphilus,Bosphorus,is from
 Dorian,Doris,is from
+Dosiadas,Epimenides,is family of
 Duris,Socrates,refers to
 Duris,Thales,refers to
+Duris,Cleobulus,refers to
+Duris,Hyrrhadius,refers to
+Duris,Pittacus,refers to
+Duris,Bias,refers to
+Duris,Pherecydes,refers to
 Egyptians,Egypt,is from
-Eleusis_Author,Thyrion,refers to
+Eleusis,Thyrion,refers to
 Elians,Elis,is from
-Empedocles,Thurii,traveled to
-Empedocles,Nestis,refers to
-Empedocles,Exaenetus,is family of
-Empedocles,Syracuse,traveled to
-Empedocles,Aidoneus,refers to
-Empedocles,Olympia,traveled to
-Empedocles,Athenians,is adversary of
-Empedocles,Permenides,studied the work of
 Empedocles,Zeus,refers to
-Empedocles,Hades,traveled to
-Empedocles,Agrigentines,is associated with
 Empedocles,Agrigentum,is from
+Empedocles,Agrigentines,is associated with
+Empedocles,Permenides,studied the work of
+Empedocles,Rome,is associated with
+Empedocles,Pausanians,is friend of
+Empedocles,Nestis,refers to
+Empedocles,Callicratides,is family of
+Empedocles,Peloponnesus,traveled to
+Empedocles,Athenians,is adversary of
+Empedocles,Syracuse,traveled to
+Empedocles,Peisianax,is associated with
+Empedocles,Archinomus,is family of
+Empedocles,Panthea,is associated with
 Empedocles,Pythagoreans,is associated with
 Empedocles,Acron,is adversary of
-Empedocles,Selinus,is associated with
-Empedocles,Rome,is associated with
-Empedocles,Sicily,is from
 Empedocles,Etna,traveled to
-Empedocles,Peisianax,is associated with
-Empedocles,Hera,refers to
-Empedocles,Callicratides,is family of
-Empedocles,Pausanians,is friend of
-Empedocles,Xenophanes,studied the work of
-Empedocles,Messene,traveled to
-Empedocles,Peloponnesus,traveled to
-Empedocles,Archinomus,is family of
 Empedocles,Meton,is family of
-Empedocles,Panthea,is associated with
+Empedocles,Olympia,traveled to
+Empedocles,Xenophanes,studied the work of
+Empedocles,Selinus,is associated with
+Empedocles,Aidoneus,refers to
+Empedocles,Thurii,traveled to
+Empedocles,Hera,refers to
+Empedocles,Exaenetus,is family of
+Empedocles,Hades,traveled to
+Empedocles,Sicily,is from
+Empedocles,Messene,traveled to
 Empedocles,Gorgias,is teacher of
-Epaminondas,Hegesilaus,is associated with
 Epaminondas,Cephisodorus,is associated with
-Epaminondas,Gryllus,is associated with
 Epaminondas,Mantinea,traveled to
+Epaminondas,Gryllus,is associated with
+Epaminondas,Hegesilaus,is associated with
 Ephesians,Hermodorus,is adversary of
 Ephesians,Ephesus,is from
-Ephorus,Hegesilaus,refers to
-Ephorus,Seven Sages,refers to
-Ephorus,Mantinea,refers to
-Ephorus,Cephisodorus,refers to
 Ephorus,Anacharsis,refers to
+Ephorus,Cephisodorus,refers to
+Ephorus,Seven Sages,refers to
 Ephorus,Gryllus,refers to
-Epicharmus,Sicily,traveled to
-Epicharmus,Helothales,is family of
+Ephorus,Hegesilaus,refers to
+Ephorus,Mantinea,refers to
+Ephorus,Periander,refers to
 Epicharmus,Megara,traveled to
+Epicharmus,Sicily,traveled to
 Epicharmus,Syracuse,traveled to
+Epicharmus,Helothales,is family of
 Epicharmus,Cos,is from
-Epicurus,Pyrrho,studied the work of
+Epicomus,Carneades,is family of
 Epicurus,Protagoras,refers to
+Epicurus,Pyrrho,studied the work of
 Epicurus,Theodorus,studied the work of
-Epigenes,Hermogenes II,is family of
+Epicurus,Zeno II,refers to
+Epicurus,Philonides,refers to
+Epicurus,Persaeus,refers to
+Epicurus,Aristobulus,is family of
 Epigenes,Ctesippus,is family of
+Epigenes,Hermogenes II,is family of
 Epimenides,Ida,traveled to
 Epimenides,Pythagoras,is associated with
 Epimenides,Crete,traveled to
+Epimenides,Cnossos,is from
+Epimenides,Athens,traveled to
 Epitimides,Paraebates,is teacher of
-Eratosthenes,Pyrrho,refers to
 Eratosthenes,Baton,sent letters to
-Euanthes,Thales,refers to
+Eratosthenes,Pyrrho,refers to
+Eratosthenes,Pherecydes,refers to
+Euagoras,Cleobulus,is family of
 Euanthes,Chilon,refers to
+Euanthes,Thales,refers to
 Euanthes,Miletus,is from
 Euathlus,Protagoras,is adversary of
-Eubulides,Miletus,is from
 Eubulides,Euphantus,is teacher of
-Eubulides,Alexinus,is teacher of
 Eubulides,Diodorus,is teacher of
 Eubulides,Apollonius,is teacher of
+Eubulides,Miletus,is from
+Eubulides,Alexinus,is teacher of
 Eubulides II,Socrates,refers to
 Eubulus III,Bithynia,is from
 Eubulus V,Xenophon,is adversary of
+Euclides,Alcibiades,refers to
+Euclides,Eubulides,is teacher of
 Euclides,Ichthyas,is teacher of
 Euclides,Crito,refers to
-Euclides,Aeschines,refers to
-Euclides,Megara,is from
-Euclides,Eubulides,is teacher of
-Euclides,Parmenides,refers to
 Euclides,Stilpo,is teacher of
-Euclides,Alcibiades,refers to
+Euclides,Aeschines,refers to
+Euclides,Parmenides,refers to
+Euclides,Megara,is from
 Euclides,Clinomachus,is teacher of
 Eudemus,Thales,refers to
 Eudoxus,Chonuphis,is associated with
-Eudoxus,Propontis,traveled to
-Eudoxus,Greece,is associated with
-Eudoxus,Piraeus,traveled to
-Eudoxus,Cyzicus,traveled to
 Eudoxus,Thales,refers to
-Eudoxus,Seven Sages,refers to
-Eudoxus,Chilon,refers to
-Eudoxus,Myson,refers to
-Eudoxus,Memphis,traveled to
 Eudoxus,Athens,traveled to
+Eudoxus,Propontis,traveled to
 Eudoxus,Mausolus,traveled to
+Eudoxus,Cyzicus,traveled to
+Eudoxus,Piraeus,traveled to
 Eudoxus,Cnidos,is from
+Eudoxus,Greece,is associated with
 Eudoxus,Theomedon,is friend of
+Eudoxus,Memphis,traveled to
+Eudoxus,Myson,refers to
+Eudoxus,Chilon,refers to
+Eudoxus,Seven Sages,refers to
 Eudoxus,Egypt,traveled to
 Eudoxus III,Dionysia,traveled to
-Eudoxus III,Agathocles,is family of
 Eudoxus III,Lenaea,traveled to
-Eumelus,Chalcis,refers to
+Eudoxus III,Agathocles,is family of
 Eumelus,Plato,refers to
+Eumelus,Chalcis,refers to
 Eumelus,Aristotle,refers to
 Eunomus,Pythagoras,is family of
-Euphantus,Olynthus,is from
-Euphantus,Demetrius,refers to
 Euphantus,Menedemus,refers to
-Euphantus,Oropus,refers to
 Euphantus,Antigonus,is teacher of
+Euphantus,Demetrius,refers to
+Euphantus,Oropus,refers to
+Euphantus,Olynthus,is from
 Euphorbus,Menelaus,is adversary of
 Euphorbus,Phrygia,is from
 Euphorbus,Hermotimus,is associated with
-Euripides,Athens,is associated with
-Euripides,Sceptics,is associated with
 Euripides,Heraclitus,studied the work of
+Euripides,Sceptics,is associated with
+Euripides,Athens,is associated with
 Euripides,Ariston,is associated with
 Eurylochus,Larissa,is from
-Eurylochus II,Menedemus,is associated with
 Eurylochus II,Cleippides,is associated with
+Eurylochus II,Menedemus,is associated with
 Eurylochus II,Casandrea,is from
 Eurymedon,Aristotle,is adversary of
-Eurytus,Polymnastus,is teacher of
-Eurytus,Phanton,is teacher of
-Eurytus,Echecrates,is teacher of
-Eurytus,Xenophilus,is teacher of
-Eurytus,Diocles,is teacher of
 Eurytus,Tarentum,is from
+Eurytus,Polymnastus,is teacher of
+Eurytus,Xenophilus,is teacher of
+Eurytus,Echecrates,is teacher of
+Eurytus,Phanton,is teacher of
+Eurytus,Diocles,is teacher of
 Euthyphro IV,Hippasus,is family of
+Euthyrphro III,Myson,refers to
 Exaenetus,Myrmex,is family of
 Execestides,Solon,is family of
-Favorinus,Eurymenes,refers to
-Favorinus,Alcmaeon II,refers to
-Favorinus,Isthmus,refers to
-Favorinus,Aeschines,refers to
 Favorinus,Democritus,refers to
-Favorinus,Demophilus,refers to
-Favorinus,Delphi,refers to
+Favorinus,Socrates,refers to
 Favorinus,Hermias,refers to
-Favorinus,Aristotle,refers to
-Favorinus,Anaxagoras,refers to
-Favorinus,Pythagoras,refers to
-Favorinus,Eratosthenes,refers to
 Favorinus,Anaximander,refers to
+Favorinus,Eurymenes,refers to
+Favorinus,Isthmus,refers to
+Favorinus,Demophilus,refers to
+Favorinus,Aeschines,refers to
+Favorinus,Eratosthenes,refers to
+Favorinus,Pythagoras,refers to
+Favorinus,Xenophanes,refers to
 Favorinus,Meletus,refers to
+Favorinus,Alcmaeon II,refers to
 Favorinus,Eudoxus,refers to
 Favorinus,Polyeuctus,refers to
+Favorinus,Delphi,refers to
+Favorinus,Aristotle,refers to
+Favorinus,Anaxagoras,refers to
 Favorinus,Parmenides,refers to
-Favorinus,Xenophanes,refers to
-Favorinus,Socrates,refers to
+Favorinus,Speusippus,refers to
 Glaucon,Plato,is family of
-Glaucon II,Plato,is family of
 Glaucon II,Athens,is from
+Glaucon II,Plato,is family of
 Glauconides,Socrates,is associated with
 Glaucos,Empedocles,refers to
 Glaucus,Rhegium,is from
 Gorgiadas,Leophantus,is family of
-Gorgias,Leontini,is from
-Gorgias,Proxenus,is teacher of
 Gorgias,Cyrus II,is friend of
-Gryllus,Mantinea,traveled to
-Gryllus,Diodorus V,is family of
-Gryllus,Athens,traveled to
-Gryllus,Philesia,is family of
-Gryllus,Corinth,traveled to
-Gryllus,Gryllus III?,is family of
+Gorgias,Proxenus,is teacher of
+Gorgias,Leontini,is from
 Gryllus,Lepreum,traveled to
+Gryllus,Philesia,is family of
+Gryllus,Diodorus V,is family of
+Gryllus,Corinth,traveled to
+Gryllus,Athens,traveled to
+Gryllus,Gryllus III?,is family of
+Gryllus,Mantinea,traveled to
 Gymnosophists,India,is from
 Hecataeus,Abdera,is from
+Hecato,Zeno II,refers to
+Hecato,Chrysippus,refers to
+Hecato,Cleanthes,refers to
+Hegesias III,Hipparchus,is family of
 Hegesilaus,Mantinea,traveled to
 Hegesilaus,Gryllus,is associated with
 Hegesistratus,Xerxes,is associated with
+Heraclides,Pythagoras,refers to
 Heraclides,Persaeus,is adversary of
+Heraclides,Stilpo,refers to
+Heraclides,Pontus,is from
+Heraclides,Empedocles,refers to
 Heraclides,Serapion,is family of
 Heraclides,Homer,refers to
-Heraclides,Pontus,is from
-Heraclides,Pausanias,refers to
-Heraclides,Artemon,refers to
-Heraclides,Zeno II,refers to
-Heraclides,Pythagoras,refers to
-Heraclides,Empedocles,refers to
 Heraclides,Thales,refers to
-Heraclides,Stilpo,refers to
+Heraclides,Zeno II,refers to
+Heraclides,Artemon,refers to
+Heraclides,Pausanias,refers to
+Heraclides,Periander,refers to
+Heraclides,Heraclea,is from
+Heraclides,Dionysius IV,is teacher of
 Heraclides II,Satyrus,is associated with
-Heraclides of Serapion,Pythagoras,refers to
+Heraclides IV,Tarsus,is from
 Heraclides of Serapion,Serapion,is family of
+Heraclides of Serapion,Pythagoras,refers to
 Heracliteans,Heraclitus,studied the work of
-Heraclitus,Heracon,is family of
-Heraclitus,Hesiod,refers to
-Heraclitus,Pythagoras,refers to
-Heraclitus,Xenophanes,refers to
-Heraclitus,Hecataeus,refers to
-Heraclitus,Hermodorus,is friend of
-Heraclitus,Bloson,is family of
 Heraclitus,Ephesus,is from
-Heraclitus,Archilochus,refers to
-Heraclitus,Thales,refers to
-Heraclitus,Homer,refers to
+Heraclitus,Hermodorus,is friend of
 Heraclitus,Athenians,is adversary of
+Heraclitus,Hesiod,refers to
+Heraclitus,Thales,refers to
+Heraclitus,Hecataeus,refers to
 Heraclitus,Ephesians,is associated with
+Heraclitus,Archilochus,refers to
+Heraclitus,Heracon,is family of
+Heraclitus,Homer,refers to
+Heraclitus,Pythagoras,refers to
+Heraclitus,Xenophanes,is teacher of
+Heraclitus,Bloson,is family of
+Heraclitus,Teutames,refers to
+Heraclitus,Bias,refers to
 Heraclitus III,Halicarnassus,is from
 Heraclitus IV,Lesbos,is from
 Heraclitus IV,Macedonia,is associated with
-Hermias,Eubulus III,is adversary of
+Herillus,Carthage,is from
 Hermias,Bithynia,is from
 Hermias,Concubine of Hermias,is family of
-Hermippus,Pericles,refers to
-Hermippus,Pittacus,refers to
+Hermias,Eubulus III,is adversary of
 Hermippus,Timaeus,studied the work of
-Hermippus,Periander,refers to
-Hermippus,Chilon,refers to
-Hermippus,Isocrates,refers to
-Hermippus,Democritus,refers to
-Hermippus,Menedemus,refers to
-Hermippus,Boeotia,refers to
 Hermippus,Lasos,refers to
-Hermippus,Leophantus,refers to
-Hermippus,Aristodemus,refers to
-Hermippus,Zeno,refers to
 Hermippus,Anaxagoras,refers to
-Hermippus,Anacharsis,refers to
-Hermippus,Epimenides,refers to
-Hermippus,Aristotle,refers to
-Hermippus,Empedocles,refers to
-Hermippus,Myson,refers to
-Hermippus,Acusilaus,refers to
-Hermippus,Eudoxus,refers to
-Hermippus,Samos,is from
-Hermippus,Zeus,refers to
-Hermippus,Stilpo,refers to
-Hermippus,Pherecydes,refers to
-Hermippus,Philolaus,refers to
 Hermippus,Cleobulus,refers to
+Hermippus,Zeno,refers to
 Hermippus,Thales,refers to
-Hermippus,Pythagoras,refers to
+Hermippus,Philolaus,refers to
+Hermippus,Anacharsis,refers to
+Hermippus,Isocrates,refers to
+Hermippus,Boeotia,refers to
 Hermippus,Polycrates II,refers to
+Hermippus,Aristodemus,refers to
+Hermippus,Democritus,refers to
+Hermippus,Pherecydes,refers to
+Hermippus,Pericles,refers to
+Hermippus,Zeus,refers to
+Hermippus,Samos,is from
+Hermippus,Pythagoras,refers to
+Hermippus,Periander,refers to
+Hermippus,Empedocles,refers to
+Hermippus,Aristotle,refers to
+Hermippus,Chilon,refers to
+Hermippus,Acusilaus,refers to
+Hermippus,Myson,refers to
+Hermippus,Epimenides,refers to
+Hermippus,Menedemus,refers to
+Hermippus,Pittacus,refers to
+Hermippus,Stilpo,refers to
 Hermippus,Bias,refers to
+Hermippus,Leophantus,refers to
+Hermippus,Eudoxus,refers to
+Hermippus,Lyco,refers to
+Hermippus,Strymon,refers to
+Hermippus,Eubulides,refers to
+Hermippus,Theophrastus,refers to
+Hermippus,Chrysippus,refers to
 Hermodamas,Pythagoras,is friend of
 Hermogenes II,Ctesippus,is family of
-Hermolaus,Alexander,is adversary of
 Hermolaus,Callisthenes,is associated with
+Hermolaus,Alexander,is adversary of
 Hermotimus,Brachidae,traveled to
 Hermotimus,Pyrrhus,is associated with
-Herodotus,Hegesistratus,refers to
-Herodotus,Zamolxis,refers to
-Herodotus,Pythagoras,refers to
 Herodotus,Thales,refers to
+Herodotus,Pythagoras,refers to
+Herodotus,Zamolxis,refers to
+Herodotus,Hegesistratus,refers to
 Herodotus,Xerxes,refers to
+Herodotus,Thrasybulus,refers to
+Herodotus,Hippocrates II,refers to
+Herodotus,Chilon,refers to
+Herodotus,Periander,refers to
+Herophilus,Speusippus II,is teacher of
 Hesiod,Hades,traveled to
 Hesiod,Cercops,is adversary of
 Hicetas,Syracuse,is from
 Hierocles,Shrine of Amphiaraus,traveled to
-Hieronymus,Scythinus,refers to
+Hieronymus,Socrates,refers to
+Hieronymus,Myrto,refers to
+Hieronymus,Pericles,refers to
+Hieronymus,Phaedo,refers to
+Hieronymus,Rhodes,is from
+Hieronymus,Xanthippe,refers to
+Hieronymus,Thales,refers to
 Hieronymus,Anaxagoras,refers to
 Hieronymus,Pythagoras,refers to
-Hieronymus,Socrates,refers to
-Hieronymus,Thales,refers to
-Hieronymus,Xanthippe,refers to
-Hieronymus,Myrto,refers to
-Hieronymus,Phaedo,refers to
-Hieronymus,Pericles,refers to
-Hieronymus,Rhodes,is from
+Hieronymus,Scythinus,refers to
+Hieronymus,Lyco,is adversary of
+Hieronymus,Arcesilaus,is adversary of
 Hipparchus,Democritus,refers to
-Hippasus,Metapontum,is from
-Hippasus,Empedocles,is teacher of
 Hippasus,Pythagoras,is adversary of
+Hippasus,Empedocles,is teacher of
+Hippasus,Metapontum,is from
 Hippasus III,Laconia,is from
 Hippias,Thales,refers to
-Hippobotus,Orpheus,refers to
-Hippobotus,Cleobulus,refers to
-Hippobotus,Democritus,refers to
-Hippobotus,Bias,refers to
-Hippobotus,Myson,refers to
-Hippobotus,Pythagoras,refers to
-Hippobotus,Linus,refers to
-Hippobotus,Pittacus,refers to
-Hippobotus,Epicharmus,refers to
-Hippobotus,Thales,refers to
+Hippionicus,Arcesilaus,is teacher of
 Hippobotus,Empedocles,is associated with
+Hippobotus,Orpheus,refers to
+Hippobotus,Linus,refers to
+Hippobotus,Thales,refers to
+Hippobotus,Pythagoras,refers to
+Hippobotus,Solon,refers to
+Hippobotus,Cleobulus,refers to
+Hippobotus,Myson,refers to
+Hippobotus,Epicharmus,refers to
+Hippobotus,Pittacus,refers to
+Hippobotus,Democritus,refers to
 Hippobotus,Periander,refers to
 Hippobotus,Anacharsis,refers to
-Hippobotus,Solon,refers to
+Hippobotus,Bias,refers to
+Hippobotus,Diodorus,refers to
+Hippobotus,Callippus II,refers to
+Hippobotus,Athenodorus,refers to
+Hippobotus,Posidonius II,refers to
+Hippobotus,Zeno II,refers to
+Hippobotus,Zeno IX,refers to
+Hippobotus,Philonides,refers to
 Hippocrates,Democritus,is associated with
+Hippocrates II,Olympia,traveled to
+Hipponax,Bias,refers to
+Hipponax,Myson,refers to
 Hipponicus,Macedon,is from
-Hipponicus,Menedemus,is friend of
 Hipponicus,Asclepiades,is friend of
-Homer,Syagrus,is adversary of
+Hipponicus,Menedemus,is friend of
 Homer,Hades,traveled to
 Homer,Pyrrhoneans,is associated with
+Homer,Syagrus,is adversary of
+Hyrrhadius,Thrace,is from
+Hyrrhadius,Pittacus,is family of
 Ichthyas,Metallus,is family of
 Idomeneus,Socrates,refers to
-Idomeneus,Aeschines,refers to
-Idomeneus,Plato,refers to
-Idomeneus,Aristippus,refers to
 Idomeneus,Crito,refers to
-Ion,Orpheus,refers to
+Idomeneus,Plato,refers to
+Idomeneus,Aeschines,refers to
+Idomeneus,Aristippus,refers to
+Ion,Socrates,refers to
 Ion,Archelaus,refers to
 Ion,Chios,is from
+Ion,Orpheus,refers to
 Ion,Pythagoras,refers to
-Ion,Socrates,refers to
+Ion,Pherecydes,refers to
 Iphicrates,Socrates,is associated with
-Isocrates,Gryllus,refers to
+Isidorus,Zeno II,is adversary of
 Isocrates,Anaxagoras II,is teacher of
-Istrus,Xenophon,refers to
+Isocrates,Gryllus,refers to
 Istrus,Eubulus V,refers to
-Justus,Athens,refers to
+Istrus,Xenophon,refers to
 Justus,Socrates,refers to
+Justus,Athens,refers to
 Justus,Plato,refers to
 Justus,Tiberias,is from
 Lacademonian,Laconia,is associated with
-Lais,Aristippus,is friend of
-Lamprocles,Aristides,is family of
-Lamprocles,Socrates,is family of
+Lacydes,Cyrene,is from
+Lacydes,Arcesilaus,is associated with
+Lacydes,Chrysippus,is teacher of
 Lamprocles,Menexenus,is family of
 Lamprocles,Myrto,is family of
+Lamprocles,Aristides,is family of
 Lamprocles,Sophroniscus II,is family of
 Lamprocles,Xanthippe,is family of
+Lamprocles,Socrates,is family of
 Lasos,Hermione,is from
-Leon,Pythagoras,refers to
 Leon,Phlius,is from
-Leon II,Salamis,is from
+Leon,Pythagoras,refers to
 Leon II,Socrates,is associated with
+Leon II,Salamis,is from
 Leptines,Glaucus II,is family of
 Leucippus,Miletus,is from
 Leucippus,Elea,is from
-Lobon,Argos,is from
 Lobon,Thales,refers to
-Lucanians,Lucania,is from
+Lobon,Argos,is from
+Lobon,Epimenides,refers to
 Lucanians,Pythagoras,is associated with
+Lucanians,Lucania,is from
+Lyco,Troas,is from
+Lyco,Astyanax,is family of
+Lyco,Strato,is associated with
+Lyco II,Lyco,is family of
 Lycon,Socrates,is adversary of
+Lycon III,Aristotle,refers to
+Lycophron,Periander,is family of
+Lycophron,Cypselus II,is family of
+Lycophron,Corcyra,traveled to
+Lycophron,Lysida,is family of
 Lycophron II,Menedemus,refers to
-Lysias,Socrates,is friend of
 Lysias,Aeschines,refers to
+Lysias,Socrates,is friend of
+Lysias,Draco,refers to
+Lysias,Solon,refers to
 Lysippus,Socrates,is associated with
 Lysippus,Athens,is associated with
 Lysis II,Hippasus,sent letters to
+Lysis II,Milo,traveled to
+Lysis II,Pythagoras,is associated with
+Lysis II,Epaminondas,is teacher of
 Lysis II,Thebes,traveled to
 Lysis II,Tarentum,is from
-Lysis II,Milo,traveled to
-Lysis II,Epaminondas,is teacher of
-Lysis II,Pythagoras,is associated with
 Machaon,Aristotle,is family of
 Maeandrius,Epimenides,refers to
 Maeandrius,Leophantus,refers to
@@ -886,168 +1126,218 @@ Marmacus,Hippasus,is family of
 Marmacus,Samos,is associated with
 Marmacus,Phlius,is from
 Medes,Media,is from
+Melantes,Theophrastus,is family of
 Melanthius,Rhodes,is from
 Melantho,Penelope,is associated with
 Meleager,The Cyrenaics,refers to
-Meletus,Anytus,is associated with
-Meletus,Pitthos,is from
 Meletus,Socrates,is adversary of
 Meletus,Polyeuctus,is associated with
+Meletus,Pitthos,is from
+Meletus,Anytus,is associated with
 Meletus II,Meletus,is family of
-Melissus,Samos,is from
-Melissus,Ephesians,is associated with
 Melissus,Heraclitus,is associated with
+Melissus,Samos,is from
 Melissus,Ithaegenes,is family of
-Menedemus,Shrine of Amphiaraus,traveled to
-Menedemus,Lysimachia,refers to
-Menedemus,Oropus,traveled to
-Menedemus,Ptolemy,is associated with
-Menedemus,Xanthippe,refers to
-Menedemus,Eretria,is from
+Melissus,Ephesians,is associated with
 Menedemus,Alexinius,is associated with
-Menedemus,Hierocles,is associated with
-Menedemus,Demetrius,sent letters to
+Menedemus,Ptolemy,is associated with
 Menedemus,Socrates,refers to
-Menedemus,Megara,traveled to
-Menedemus,Elis,traveled to
-Menedemus,Antigonus,is teacher of
+Menedemus,Oropus,traveled to
+Menedemus,Hierocles,is associated with
+Menedemus,Lysimachia,refers to
+Menedemus,Shrine of Amphiaraus,traveled to
+Menedemus,Demetrius,sent letters to
+Menedemus,Eretria,is from
 Menedemus,Lysimachus,is associated with
-Menedemus,Wife of Menedemus,is family of
-Menelaus,Apollo,is associated with
+Menedemus,Menedemus' Wife,is family of
+Menedemus,Xanthippe,refers to
+Menedemus,Antigonus,is teacher of
+Menedemus,Elis,traveled to
+Menedemus,Megara,traveled to
+Menedemus,Dionysius IV,is teacher of
 Menelaus,Troy,traveled to
-Menexenus,Myrto,is family of
-Menexenus,Aristides,is family of
-Menexenus,Sophroniscus II,is family of
+Menelaus,Apollo,is associated with
 Menexenus,Socrates,is family of
+Menexenus,Sophroniscus II,is family of
+Menexenus,Myrto,is family of
 Menexenus,Xanthippe,is family of
+Menexenus,Aristides,is family of
 Meno,Pharsalus,is from
 Meno,Xenophon,is adversary of
-Messapians,Salento,is from
 Messapians,Pythagoras,is associated with
+Messapians,Salento,is from
 Metapontines,Metapontum,is from
 Metrocles,Corinth,traveled to
 Metrodorus,Homer,refers to
 Metrodorus,Lampsacus,is from
 Minyas,Thales,refers to
 Minyas,Thrasybulus,refers to
-Mnesimachus,Euripides,refers to
+Mnaseas,Citium,is family of
+Mnaseas,Zeno II,is family of
 Mnesimachus,Socrates,refers to
-Moschus,Anchipylus,is associated with
+Mnesimachus,Euripides,refers to
+Mnesistratus II,Sphaerus,is associated with
+Moereas,Arcesilaus,is family of
 Moschus,Menedemus,is associated with
 Moschus,Asclepiades,is associated with
 Moschus,Elis,traveled to
-Myrmex,Nicanor,is associated with
+Moschus,Anchipylus,is associated with
 Myrmex,Aristotle,is family of
+Myrmex,Nicanor,is associated with
+Myronianus,Amastris,is from
+Myronianus,Epimenides,refers to
+Myronianus,Pompylus,refers to
+Myronianus,Theophrastus,refers to
+Myronianus,Xenocrates,refers to
+Myronianus,Speusippus,refers to
+Myrto,Sophroniscus II,is family of
 Myrto,Aristides,is family of
 Myrto,Socrates,is family of
-Myrto,Sophroniscus II,is family of
 Myson,Chen,is from
+Myson,Crete,is from
+Myson,Strymon,is family of
+Myson,Etis,is from
 Nausiphanes,Pyrrho,refers to
 Nausiphanes,Teos,is from
-Neanthes,Empedocles,refers to
 Neanthes,Pythagoreans,refers to
+Neanthes,Empedocles,refers to
 Neanthes,Cyzicus,is from
 Neanthes,Heraclitus,refers to
-Nessas,Chios,is from
+Neanthes,Periander,refers to
+Neophron,Sicyon,is from
 Nessas,Metrodorus,is teacher of
-Nicanor,Nicomachus II,is associated with
+Nessas,Chios,is from
 Nicanor,Nicanor's mother,is family of
+Nicanor,Nicomachus II,is associated with
 Nicocreon,Cyprus,is associated with
 Nicomachus,Aristotle,is family of
 Nicomachus II,Aristotle,is family of
 Nicomachus II,Nicomachus,is family of
-Nicomachus III,Aristotle,is family of
 Nicomachus III,Herpyllis,is family of
+Nicomachus III,Aristotle,is family of
 Nicomedes,Heraclitus,refers to
+Nicostratus,Polemo,is associated with
+Nicostratus,Crates,is teacher of
+Nileos,Thales,is associated with
 Nileos,Phoenicia,is from
 Nileos,Miletus,traveled to
-Nileos,Thales,is associated with
 Numenius,Pyrrho,refers to
 Olympius,Aristotle,is associated with
-Onetor,Nicarete,refers to
 Onetor,Stilpo,refers to
+Onetor,Nicarete,refers to
+Orestades,Pythagoras,is associated with
 Orestades,Pythagoreans,is associated with
 Orestades,Xenophanes,is associated with
-Orestades,Pythagoras,is associated with
-Pamphila,Alcibiades,refers to
 Pamphila,Socrates,refers to
+Pamphila,Alcibiades,refers to
 Pamphila,Thales,refers to
-Panaetius,Xenophanes,refers to
+Pamphila,Periander,refers to
+Pamphila,Chilon,refers to
+Pamphila,Theophrastus,refers to
+Pamphila,Menander,refers to
 Panaetius,Antishenes,refers to
-Panaetius,The Cyrenaics,refers to
-Panaetius,Aeschines,refers to
-Panaetius,Aristippus,refers to
-Panaetius,Euclides,refers to
-Panaetius,Xenophon,refers to
-Panaetius,Phaedo,refers to
-Panaetius,Plato,refers to
-Panaetius,Epicurus,refers to
 Panaetius,Socrates,is associated with
+Panaetius,Epicurus,refers to
+Panaetius,Plato,refers to
+Panaetius,Euclides,refers to
+Panaetius,Aristippus,refers to
+Panaetius,Aeschines,refers to
+Panaetius,Xenophon,refers to
+Panaetius,Xenophanes,refers to
+Panaetius,Phaedo,refers to
 Panaetius,Stoic,is associated with
+Panaetius,The Cyrenaics,refers to
 Panthea,Agrigentum,is from
-Paraebates,Anniceris,is teacher of
+Panthoides,Lyco,is teacher of
 Paraebates,Hegesias,is teacher of
-Parmenides,Elea,is from
-Parmenides,Ameinias IV,is associated with
+Paraebates,Anniceris,is teacher of
+Parmenides,Anaximenes,is teacher of
 Parmenides,Melissus,is teacher of
 Parmenides,Zeno,is teacher of
-Parmenides,Anaximenes,is teacher of
+Parmenides,Ameinias IV,is associated with
 Parmenides,Empedocles,is teacher of
 Parmenides,Pyres,is family of
-Parmeniscus,Xenophanes,is associated with
-Parmeniscus,Pythagoras,is associated with
+Parmenides,Elea,is from
+Parmenides,Myson,refers to
 Parmeniscus,Pythagoreans,is associated with
+Parmeniscus,Pythagoras,is associated with
+Parmeniscus,Xenophanes,is associated with
 Pasiphon,Eretria,is associated with
 Pasiphon,The Eretrians,is associated with
 Patroclus,Pyrrho,is associated with
 Pausanias,Anchitus,is family of
-Pausanias,Empedocles,is friend of
-Pausanias,Heraclitus,refers to
 Pausanias,Gela,is from
+Pausanias,Heraclitus,refers to
+Pausanias,Empedocles,is friend of
 Pausanias,Asclepius,is family of
+Periander,Corinth,is from
+Periander,Procles,sent letters to
+Periander,Wise Men,sent letters to
 Permenides,Pythagoras,is associated with
+Persaeus,Ariston IV,is adversary of
+Persaeus,Citium,is from
+Persaeus,Antigonus III,is associated with
 Peucetians,Apulia,is from
 Peucetians,Pythagoras,is associated with
 Phaedo,Menedemus,is teacher of
-Phaedo,Plistanus,is teacher of
-Phaedo,Elis,is from
-Phaedo,Anchipylus,is teacher of
 Phaedo,Crito,is associated with
 Phaedo,Moschus,is teacher of
 Phaedo,Aristippus,is associated with
 Phaedo,Alcibiades,is associated with
+Phaedo,Plistanus,is teacher of
+Phaedo,Elis,is from
+Phaedo,Anchipylus,is teacher of
+Phaestius,Epimenides,is family of
 Phanias,Aristippus,refers to
 Phanias,Eresus,is from
 Phanias,Socrates,refers to
+Phanias III,Panaetius,refers to
 Phanodicus,Bias,refers to
+Phanostratus,Demetrius,is family of
 Phanton,Phlius,is from
-Pherecydes,Pythagoras,is friend of
 Pherecydes,Delos,traveled to
+Pherecydes,Pythagoras,is friend of
+Pherecydes,Syros,is from
+Pherecydes,Delphi,traveled to
+Pherecydes,Messene,traveled to
+Pherecydes,Olympia,traveled to
+Pherecydes,Babys,is family of
+Pherecydes,Samos,traveled to
+Philemon,Zeno II,refers to
 Philesia,Elis,traveled to
 Philesia,Gryllus III?,is family of
-Philip,Macedon,is from
-Philip,Alexander,is family of
+Philetaerus,Arcesilaus,is family of
 Philip,Aristotle,is associated with
 Philip,Macedonia,is from
+Philip,Macedon,is from
+Philip,Alexander,is family of
 Philip IV,Megara,is from
 Philista,Pyrrho,is family of
 Philistion,Eudoxus,is teacher of
 Philistion,Sicily,is from
+Phillip,Xenocrates,refers to
 Philo,Pyrrho,is friend of
+Philo II,Zeno II,is friend of
 Philo III,Aristotle,is associated with
 Philochorus,Protagoras,refers to
-Philochorus,Socrates,refers to
 Philochorus,Euripides,refers to
+Philochorus,Socrates,refers to
+Philocomus,Carneades,is family of
 Philolaus,Echecrates,is teacher of
-Philolaus,Polymnastus,is teacher of
 Philolaus,Diocles,is teacher of
 Philolaus,Croton,is from
-Philolaus,Xenophilus,is teacher of
 Philolaus,Phanton,is teacher of
+Philolaus,Xenophilus,is teacher of
+Philolaus,Polymnastus,is teacher of
 Philolaus,Pythagoras,is associated with
+Philonides,Thebes,is from
+Philonides,Antigonus III,is associated with
+Philostratus,Polemo,is family of
 Philtis,Eudoxus,is family of
-Phocus,Samos,is from
+Phlegon,Epimenides,refers to
 Phocus,Thales,is associated with
+Phocus,Samos,is from
+Phrynon,Pittacus,is adversary of
 Phylopidas,Sparta,is from
 Phylopidas,Xenophon,is friend of
 Phylopidas,Scillus,refers to
@@ -1055,113 +1345,131 @@ Pisianax,Syracuse,is from
 Pisistratus,Solon,is family of
 Pisistratus,Aeschines,refers to
 Pisistratus,Ephesus,is from
-Plato,Protagoras,refers to
-Plato,Anytus,refers to
-Plato,Dion,is associated with
+Pittacus,Croesus,sent letters to
+Pittacus,Pherecydes,is teacher of
+Pittacus,Mitylene,is from
+Plato,Zeno,refers to
 Plato,Pythagoras,is associated with
-Plato,Thales,refers to
-Plato,Dionysius II,is associated with
-Plato,Democritus,is adversary of
-Plato,Menedemus,is teacher of
-Plato,Academy,traveled to
-Plato,Xenocrates,is teacher of
-Plato,Sicily,traveled to
-Plato,Philolaus,is associated with
+Plato,Eudoxus,is teacher of
+Plato,Anaxagoras,refers to
+Plato,Myson,refers to
 Plato,Prodicus,refers to
+Plato,Theaetetus,refers to
+Plato,Democritus,is adversary of
+Plato,Parmenides,refers to
+Plato,Menedemus,is teacher of
+Plato,Philolaus,is associated with
+Plato,Thales,refers to
+Plato,Anytus,refers to
+Plato,Sicily,traveled to
+Plato,Dionysius II,is associated with
+Plato,Xenocrates,is teacher of
+Plato,Dion,is associated with
+Plato,Agathon,refers to
+Plato,Protagoras,refers to
 Plato,Aristotle,is teacher of
 Plato,Aristippus,is associated with
-Plato,Myson,refers to
-Plato,Anaxagoras,refers to
-Plato,Zeno,refers to
-Plato,Agathon,refers to
-Plato,Parmenides,refers to
-Plato,Theaetetus,refers to
-Plato,Eudoxus,is teacher of
+Plato,Academy,traveled to
+Plato,Periander,refers to
+Plato,Pittacus,studied the work of
+Plato,Axiothea,is teacher of
 Pleistarchus,Pyrrho,is family of
 Plistanus,Menedemus,is teacher of
 Plistanus,Elis,is from
 Plistanus,Asclepiades,is teacher of
 Plutarch,Alexander,refers to
-Polemo,Athens,is from
 Polemo,Crates,is teacher of
+Polemo,Athens,is from
 Polemo,Xenocrates,is associated with
+Polemo,Zeno II,is teacher of
+Polemo,Ariston IV,is associated with
+Polemo,Hesiod,refers to
+Polemo,Sophocles,studied the work of
+Polemo,Crantor,is teacher of
 Polycrates,Samos,is from
+Polycritus,Carcinus,refers to
 Polycritus,Syracuse,refers to
-Polycritus,Dionysius II,refers to
 Polycritus,Dion,refers to
 Polycritus,Mende,is from
-Polycritus,Carcinus,refers to
+Polycritus,Dionysius II,refers to
 Polydora,Penelope,is associated with
 Polymnastus,Phlius,is from
 Polyzelus,Pythodorus,is family of
+Pompylus,Theophrastus,is family of
+Poseidippus,Zeno II,refers to
 Posidonius,Pyrrho,refers to
+Posidonius,Phanias III,is teacher of
+Posidonius II,Alexandria,is from
+Procles,Lysida,is family of
+Procles,Epidaurus,is from
 Prodicus,Ceos,is from
-Protagoras,Artemon,is family of
 Protagoras,Meandrius,is associated with
+Protagoras,Artemon,is family of
+Protagoras,Athens,traveled to
+Protagoras,Abdera,is from
+Protagoras,Socrates,is associated with
+Protagoras,Archagoras,is teacher of
+Protagoras,Sicily,traveled to
 Protagoras,Euripides,is associated with
 Protagoras,Teos,is associated with
-Protagoras,Archagoras,is teacher of
-Protagoras,Abdera,is from
-Protagoras,Sicily,traveled to
-Protagoras,Athens,traveled to
-Protagoras,Socrates,is associated with
-Proxenus,Boeotia,is from
 Proxenus,Cyrus II,is friend of
+Proxenus,Boeotia,is from
 Proxenus,Sardis,traveled to
-Ptolemy,Lysimachus,is associated with
-Ptolemy,Theodorus,is friend of
 Ptolemy,Alexandria,is associated with
+Ptolemy,Theodorus,is friend of
+Ptolemy,Lysimachus,is associated with
 Ptolemy,Lagus,is family of
-Pyrrhaeus,Herpyllis,is associated with
+Ptolemy,Theophrastus,is associated with
+Ptolemy II,Chrysippus,sent letters to
 Pyrrhaeus,Aristotle,is associated with
+Pyrrhaeus,Herpyllis,is associated with
 Pyrrho,Democritus,is associated with
-Pyrrho,Sophists,is adversary of
-Pyrrho,Elis,is from
-Pyrrho,Anaxarchus,is associated with
-Pyrrho,Cotys,is adversary of
-Pyrrho,Hecataeus,is teacher of
-Pyrrho,Magi,is associated with
 Pyrrho,Homer,is associated with
-Pyrrho,Athens,is associated with
 Pyrrho,Alpheus,traveled to
 Pyrrho,Eurylochus III,is teacher of
+Pyrrho,Hecataeus,is teacher of
+Pyrrho,Sophists,is adversary of
+Pyrrho,Magi,is associated with
+Pyrrho,Athens,is associated with
 Pyrrho,Hellas,is associated with
+Pyrrho,Cotys,is adversary of
+Pyrrho,Anaxarchus,is associated with
 Pyrrhoneans,Pyrrho,is associated with
 Pyrrhus,Delos,is from
 Pyrrhus,Pythagoras,is associated with
-Pythagoras,Theano,is family of
-Pythagoras,Hermes,refers to
-Pythagoras,Magi,is associated with
-Pythagoras,Egypt,traveled to
-Pythagoras,Milo,traveled to
-Pythagoras,Eurymenes,is associated with
-Pythagoras,Metapontum,traveled to
-Pythagoras,Polycrates,is adversary of
-Pythagoras,Hesiod,is associated with
-Pythagoras,Hermotimus,is associated with
-Pythagoras,Aethalides,is associated with
-Pythagoras,Charondas,is teacher of
-Pythagoras,Homer,is associated with
-Pythagoras,Italy,traveled to
-Pythagoras,Alcmaeon II,is teacher of
-Pythagoras,Themistoclea,is associated with
-Pythagoras,Ida,traveled to
-Pythagoras,Mnesarchus,is family of
-Pythagoras,Zaleucus,is teacher of
-Pythagoras,Lesbos,traveled to
-Pythagoras,Glaucus,is teacher of
-Pythagoras,Delos,traveled to
-Pythagoras,Apollo,is associated with
-Pythagoras,Marmacus,is family of
-Pythagoras,Nessus,traveled to
-Pythagoras,Crete,traveled to
-Pythagoras,Euphorbus,is associated with
 Pythagoras,Chaldaeans,is associated with
-Pythagoras,Empedocles,is teacher of
-Pythagoras,Epicharmus,is teacher of
+Pythagoras,Glaucus,is teacher of
+Pythagoras,Polycrates,is adversary of
 Pythagoras,Samos,is from
+Pythagoras,Theano,is family of
+Pythagoras,Aethalides,is associated with
+Pythagoras,Themistoclea,is associated with
+Pythagoras,Italy,traveled to
+Pythagoras,Charondas,is teacher of
+Pythagoras,Hades,traveled to
+Pythagoras,Magi,is associated with
+Pythagoras,Zaleucus,is teacher of
+Pythagoras,Eurymenes,is associated with
+Pythagoras,Hermotimus,is associated with
+Pythagoras,Hesiod,is associated with
+Pythagoras,Milo,traveled to
+Pythagoras,Euphorbus,is associated with
+Pythagoras,Homer,is associated with
+Pythagoras,Egypt,traveled to
 Pythagoras,Croto,traveled to
-Pythagoras,Hades,is associated with
+Pythagoras,Empedocles,is teacher of
+Pythagoras,Nessus,traveled to
+Pythagoras,Marmacus,is family of
+Pythagoras,Lesbos,traveled to
+Pythagoras,Metapontum,traveled to
+Pythagoras,Alcmaeon II,is teacher of
+Pythagoras,Delos,traveled to
+Pythagoras,Crete,traveled to
+Pythagoras,Ida,traveled to
+Pythagoras,Apollo,is associated with
+Pythagoras,Mnesarchus,is family of
+Pythagoras,Epicharmus,is teacher of
+Pythagoras,Hermes,refers to
 Pythagoras II,Croto,is from
 Pythagoras V,Samos,is from
 Pythagoras VII,Homer,is associated with
@@ -1176,292 +1484,396 @@ Romans,Rome,is from
 Romans,Pythagoras,is associated with
 Salarus,Priene,is from
 Samians,Samos,is from
-Satyrus,Gorgias,studied the work of
-Satyrus,Anaxagoras,refers to
 Satyrus,Xanthippe,refers to
+Satyrus,Anaxagoras,refers to
+Satyrus,Myrto,refers to
+Satyrus,Pausanians,refers to
 Satyrus,Empedocles,refers to
 Satyrus,Socrates,refers to
 Satyrus,Pausanias,refers to
-Satyrus,Pausanians,refers to
-Satyrus,Myrto,refers to
+Satyrus,Gorgias,studied the work of
+Satyrus,Thucydides,refers to
+Satyrus,Bias,refers to
+Satyrus,Seven Sages,refers to
+Satyrus,Lycurgus,refers to
 Scabras,Acusilaus,is family of
 Scopas,Cranon,is from
 Scythinus,Persephone,refers to
 Scythinus,Heraclitus,studied the work of
 Seleucus II,Heraclitus,refers to
-Selinuntines,Selinus,is from
 Selinuntines,Empedocles,is associated with
+Selinuntines,Selinus,is from
 Seuthes,Odrysia,is from
 Sicilian,Sicily,is from
 Silenus,Anaxagoras,refers to
-Simmias,Syracuse,is from
 Simmias,Daughter of Stilpo,is family of
-Simon,Pericles,sent letters to
+Simmias,Syracuse,is from
 Simon,Athens,is from
+Simon,Pericles,sent letters to
 Simon,Aristotle,is associated with
 Simon III,Seleucus,is associated with
+Simonides,Pittacus,refers to
+Simonides,Cleobulus,refers to
 Simus,Phrygia,is from
 Sisymbrinus,Lasos,is family of
-Socrates,Eurylochus,is adversary of
-Socrates,Delphi,traveled to
-Socrates,Aesop,studied the work of
+Socrates,Phaedo,is friend of
+Socrates,Plato,is teacher of
+Socrates,Glaucon,is associated with
 Socrates,Amphipolis,traveled to
-Socrates,Euthyphro,is associated with
-Socrates,Isthmus,traveled to
-Socrates,Sophroniscus,is family of
+Socrates,Hermogenes II,is teacher of
 Socrates,Scopas,is adversary of
+Socrates,Samos,traveled to
+Socrates,Midias,refers to
 Socrates,Phaenarete,is family of
-Socrates,Prytaneum,refers to
+Socrates,Lysis,is associated with
 Socrates,Charmides,is teacher of
+Socrates,Isthmus,traveled to
+Socrates,Critobulus,is teacher of
+Socrates,Euripides,is friend of
+Socrates,Callias,refers to
+Socrates,Crito,is teacher of
+Socrates,Delium,traveled to
+Socrates,Delphi,traveled to
+Socrates,Heraclitus,studied the work of
+Socrates,Critias,is adversary of
+Socrates,Athens,is from
+Socrates,Sophroniscus,is family of
+Socrates,Aristides,is family of
+Socrates,Archelaus II,is adversary of
+Socrates,Aesop,studied the work of
+Socrates,Ctesippus,is teacher of
+Socrates,Glaucon II,is associated with
+Socrates,Prytaneum,refers to
+Socrates,Pythagoras,studied the work of
+Socrates,Euthyphro,is associated with
+Socrates,Potidaea,traveled to
+Socrates,Eurylochus,is adversary of
 Socrates,Epigenes,is teacher of
 Socrates,Simon,is teacher of
-Socrates,Glaucon II,is associated with
-Socrates,Athens,is from
-Socrates,Potidaea,traveled to
-Socrates,Delium,traveled to
-Socrates,Callias,refers to
-Socrates,Critobulus,is teacher of
-Socrates,Aristides,is family of
-Socrates,Euripides,is friend of
-Socrates,Plato,is teacher of
-Socrates,Hermogenes II,is teacher of
-Socrates,Archelaus II,is adversary of
-Socrates,Critias,is adversary of
-Socrates,Crito,is teacher of
-Socrates,Samos,traveled to
-Socrates,Phaedo,is friend of
-Socrates,Lysis,is associated with
-Socrates,Ctesippus,is teacher of
-Socrates,Midias,refers to
-Socrates,Pythagoras,studied the work of
 Socrates,Phthia,traveled to
-Socrates,Heraclitus,studied the work of
-Socrates,Glaucon,is associated with
 Socrates III,Bithynia,is from
 Socrates V,Cos,is from
-Solon,Cyprus,traveled to
-Solon,Cilicia,traveled to
-Solon,Athens,traveled to
-Solon,Salamis,is from
-Solon,Crete,traveled to
 Solon,Egypt,traveled to
+Solon,Crete,traveled to
+Solon,Athens,traveled to
+Solon,Cyprus,traveled to
+Solon,Salamis,is from
+Solon,Cilicia,traveled to
+Solon,Periander,sent letters to
+Solon,Epimenides,sent letters to
+Solon,Thespis,is adversary of
 Sophilus,Stilpo,refers to
+Sosibius,Epimenides,refers to
+Sosibius,Laconia,is from
 Sosicrates,Aristippus,refers to
-Sosicrates,Pisistratus,refers to
 Sosicrates,Solon,refers to
-Sosicrates,Thales,refers to
+Sosicrates,Pythagoras,refers to
 Sosicrates,Leon,refers to
 Sosicrates,Rhodes,is from
-Sosicrates,Pythagoras,refers to
-Sotion,Cleon,refers to
-Sotion,Eudoxus,refers to
-Sotion,Anaxagoras,refers to
-Sotion,Lais,refers to
-Sotion,Pericles,refers to
-Sotion,Heraclitus,refers to
-Sotion,Ariston,refers to
-Sotion,Parmenides,refers to
-Sotion,Xenophanes,refers to
+Sosicrates,Pisistratus,refers to
+Sosicrates,Thales,refers to
+Sosicrates,Myson,refers to
+Sosicrates,Periander,refers to
+Sosicrates,Anacharsis,refers to
+Sosicrates,Pittacus,refers to
+Sosicrates,Chilon,refers to
+Sosicrates,Strymon,refers to
+Sosicrates,Croesus,refers to
+Sositheus,Cleanthes,is adversary of
 Sotion,Aristippus,refers to
-Speusippus,Axiothea,is teacher of
-Speusippus,Lasthenia,is teacher of
+Sotion,Parmenides,refers to
+Sotion,Eudoxus,refers to
+Sotion,Cleon,refers to
+Sotion,Anaxagoras,refers to
+Sotion,Xenophanes,refers to
+Sotion,Pericles,refers to
+Sotion,Ariston,refers to
+Sotion,Heraclitus,refers to
+Sotion,Periander,refers to
+Sotion,Chrysippus,refers to
+Sotion,Arcesilaus,refers to
+Sotion,Lacydes,refers to
+Sotion,Lais,refers to
 Speusippus,Athens,is from
+Speusippus,Lasthenia,is teacher of
 Speusippus,Eurymedon,is family of
 Speusippus,Parmenides,refers to
+Speusippus,Axiothea,is teacher of
+Speusippus,Xenocrates,sent letters to
+Speusippus,Macedonia,traveled to
+Speusippus,Diogenes II,is friend of
+Speusippus II,Alexandria,is from
 Sphaerus,Heraclitus,refers to
-Stilpo,Nicarete,is family of
-Stilpo,Myrmex,is teacher of
-Stilpo,Areopagus,is associated with
-Stilpo,Athens,traveled to
-Stilpo,Simmias,is teacher of
-Stilpo,Crates II,is teacher of
-Stilpo,Timagoras,is teacher of
-Stilpo,Diphilus,is teacher of
+Sphaerus,Bosporus,is from
+Sphaerus,Ptolemy III,is associated with
+Sphaerus,Alexandria,traveled to
 Stilpo,Menedemus,is teacher of
-Stilpo,Clitarchus,is teacher of
-Stilpo,Zeno II,is teacher of
-Stilpo,Alcimus,is teacher of
-Stilpo,Ptolemy,is friend of
-Stilpo,Paeonius,is teacher of
+Stilpo,Myrmex,is teacher of
 Stilpo,Daughter of Stilpo,is family of
-Stilpo,Bryson,is family of
-Stilpo,Megara,is from
-Stilpo,Phrasidemus,is teacher of
-Stilpo,Asclepiades,is teacher of
-Stilpo,Metrodorus II,is teacher of
 Stilpo,Antigonus,is friend of
 Stilpo,Metrodorus,is teacher of
+Stilpo,Crates II,is teacher of
+Stilpo,Clitarchus,is teacher of
+Stilpo,Areopagus,is associated with
+Stilpo,Simmias,is teacher of
+Stilpo,Metrodorus II,is teacher of
+Stilpo,Diphilus,is teacher of
+Stilpo,Asclepiades,is teacher of
+Stilpo,Megara,is from
+Stilpo,Phrasidemus,is teacher of
+Stilpo,Bryson,is family of
+Stilpo,Ptolemy,is friend of
+Stilpo,Alcimus,is teacher of
+Stilpo,Nicarete,is family of
+Stilpo,Timagoras,is teacher of
+Stilpo,Athens,traveled to
+Stilpo,Zeno II,is teacher of
+Stilpo,Paeonius,is teacher of
 Stoic,Socrates,is associated with
 Strato,Aristippus,refers to
-Suitors of Penelope,Melantho,is friend of
+Strato,Ptolemy II,is teacher of
+Strato,Lampsacus,is from
+Strato,Arsinoe,sent letters to
 Suitors of Penelope,Penelope,is adversary of
+Suitors of Penelope,Melantho,is friend of
 Suitors of Penelope,Polydora,is friend of
 Syracusans,Pythagoras,is adversary of
 Syracusans,Syracuse,is from
-Telauges,Pythagoras,is family of
 Telauges,Theano,is family of
 Telauges,Philolaus,sent letters to
 Telauges,Empedocles,is teacher of
+Telauges,Pythagoras,is family of
 Teucer,Carthage,is from
+Teutames,Bias,is family of
 Thale,Aristotle,is associated with
-Thales,Phoenicia,is from
-Thales,Athens,traveled to
 Thales,Examyas,is family of
-Thales,Ionia,is associated with
+Thales,Athens,traveled to
 Thales,Crete,traveled to
 Thales,Egypt,traveled to
+Thales,Solon,sent letters to
+Thales,Phoenicia,is from
+Thales,Ionia,is associated with
 Thales,Pherecydes,sent letters to
 Thales,Nile,refers to
-Thales,Solon,sent letters to
-The Cyrenaics,Cyrene,is associated with
+Thales,Anaximander,is teacher of
+Thaumasias,Arcesilaus,is family of
 The Cyrenaics,Theodorus,is associated with
-The Cyrenaics,Hegesias,is associated with
 The Cyrenaics,Anniceris,is associated with
+The Cyrenaics,Hegesias,is associated with
+The Cyrenaics,Cyrene,is associated with
 The Eretrians,Eretria,is associated with
 The Thirty,Socrates,is adversary of
 Theaetetus,Socrates,is associated with
 Theaetetus II,Pythagoras,refers to
 Theano,Brontinus,is family of
 Themistoclea,Brachidae,is from
-Theocritus,Chios,is from
 Theocritus,Aristotle,is adversary of
-Theodorus,Corinth,traveled to
-Theodorus,Athens,traveled to
-Theodorus,Euryclides,is adversary of
-Theodorus,Dionysus the God,refers to
-Theodorus,Aristippus,refers to
+Theocritus,Chios,is from
 Theodorus,Magas,is family of
-Theodorus,Semele,refers to
 Theodorus,Cyrene,traveled to
-Theodorus,Metrocles,is associated with
+Theodorus,Dionysus the God,refers to
+Theodorus,Euryclides,is adversary of
+Theodorus,Athens,traveled to
 Theodorus,Mithras,is associated with
 Theodorus,Stilpo,refers to
+Theodorus,Aristippus,refers to
+Theodorus,Semele,refers to
+Theodorus,Corinth,traveled to
+Theodorus,Metrocles,is associated with
 Theodorus XIII,Menodotus,refers to
 Theodosius,Sceptics,refers to
 Theomedon,Piraeus,traveled to
 Theomedon,Athens,traveled to
-Theophrastus,Empedocles,refers to
-Theophrastus,Timagoras,is teacher of
-Theophrastus,Heraclitus,refers to
 Theophrastus,Metrodorus,is teacher of
 Theophrastus,Parmenides,refers to
+Theophrastus,Heraclitus,refers to
+Theophrastus,Empedocles,refers to
 Theophrastus,Metrodorus II,is teacher of
+Theophrastus,Timagoras,is teacher of
+Theophrastus,Plato,is associated with
+Theophrastus,Menander,is teacher of
+Theophrastus,Eresus,is from
+Theophrastus,Phanias,sent letters to
+Theophrastus,Erasistratus,is teacher of
+Theophrastus,Demetrius,is teacher of
+Theophrastus,Hipparchus,is associated with
+Theophrastus,Timaeus,is teacher of
+Theopompus,Epimenides,refers to
+Theopompus,Pherecydes,refers to
 Thesmophoria,Democritus,is family of
-Thrasybulus,Miletus,is from
+Thraso II,Athens,is from
+Thraso II,Antigonus III,is associated with
 Thrasybulus,Thales,is associated with
-Thrasylus,Demetrius,refers to
+Thrasybulus,Miletus,is from
+Thrasybulus,Periander,is friend of
 Thrasylus,Democritus,refers to
-Thrasymachus,Stilpo,is teacher of
+Thrasylus,Demetrius,refers to
 Thrasymachus,Corinth,is from
+Thrasymachus,Stilpo,is teacher of
+Thrasymachus,Ichthyas,is friend of
 Thucydides,Pericles,is adversary of
 Thyrion,Bathycles,is family of
-Timaeus,Nicomachus III,refers to
 Timaeus,Herpyllis,refers to
-Timaeus,Pythagoras,refers to
-Timaeus,Moeris,refers to
 Timaeus,Permenides,refers to
-Timaeus,Empedocles,refers to
-Timaeus,Selinuntines,is adversary of
 Timaeus,Heraclides,refers to
+Timaeus,Selinuntines,is adversary of
+Timaeus,Moeris,refers to
+Timaeus,Empedocles,refers to
+Timaeus,Nicomachus III,refers to
 Timaeus,Aristotle,refers to
-Timon,Phlius,is from
-Timon,Aristippus,refers to
-Timon,Democritus,refers to
+Timaeus,Pythagoras,refers to
+Timaeus,Epimenides,refers to
+Timocrates,Zeno II,refers to
+Timon,Protagoras,refers to
 Timon,Anaxagoras,refers to
-Timon,Socrates,refers to
+Timon,Pythagoras,refers to
+Timon,Pyrrho,refers to
 Timon,Aeschines,refers to
 Timon,Thales,refers to
-Timon,Pythagoras,refers to
-Timon,Menedemus,refers to
+Timon,Aristippus,refers to
+Timon,Phlius,is from
+Timon,Democritus,refers to
+Timon,Socrates,refers to
 Timon,Heraclitus,refers to
 Timon,Aristotle,refers to
-Timon,Protagoras,refers to
+Timon,Parmenides,refers to
+Timon,Melissus,refers to
+Timon,Menedemus,refers to
+Timon,Xenophanes,refers to
 Timon,Greece,refers to
 Timon,Xenophon,refers to
-Timon,Parmenides,refers to
-Timon,Pyrrho,refers to
-Timon,Melissus,refers to
-Timon,Xenophanes,refers to
 Timon,Zeno,refers to
+Timon,Zeno II,refers to
+Timon,Cleanthes,refers to
+Timon,Ariston IV,refers to
+Timon,Arcesilaus,refers to
 Timonides,Speusippus,sent letters to
+Timonides,Dion,refers to
+Timonides,Bion,refers to
 Timotheus,Aristotle,refers to
+Timotheus,Zeno II,refers to
+Timotheus,Athens,is from
+Timotheus,Speusippus,refers to
 Tycho,Aristotle,is associated with
+Tyrraeus,Pittacus,is family of
 Tyrrhenians,Tyrrhenian Sea,is from
 Tyrrhenus,Pythagoras,is family of
 Xanthus,Empedocles,refers to
-Xenocrates,Academy,traveled to
+Xanthus II,Athens,is from
+Xanthus II,Arcesilaus,is teacher of
 Xenocrates,Aristotle,is adversary of
-Xenocrates,Chalcedon,is from
+Xenocrates,Academy,traveled to
 Xenocrates,Antipater II,is associated with
-Xenophanes,Epimenides,is adversary of
-Xenophanes,Homer,is adversary of
-Xenophanes,Dexius,is family of
-Xenophanes,Hesiod,is adversary of
-Xenophanes,Colophon,is from
-Xenophanes,Anaximander,is associated with
-Xenophanes,Parmenides,is teacher of
-Xenophanes,Elea,traveled to
+Xenocrates,Chalcedon,is from
+Xenocrates,Zeno II,is teacher of
+Xenocrates,Agathenor,is family of
+Xenocrates,Crantor,is teacher of
+Xenocrates,Sicily,traveled to
+Xenocrates,Parmenides,studied the work of
+Xenocrates,Graces,is associated with
 Xenophanes,Pythagoras,refers to
-Xenophanes,Catana,traveled to
-Xenophanes,Thales,is adversary of
+Xenophanes,Colophon,is from
+Xenophanes,Hesiod,is adversary of
+Xenophanes,Elea,traveled to
+Xenophanes,Epimenides,is adversary of
 Xenophanes,Zancle,traveled to
+Xenophanes,Parmenides,is teacher of
+Xenophanes,Thales,is adversary of
+Xenophanes,Catana,traveled to
+Xenophanes,Dexius,is family of
+Xenophanes,Anaximander,is associated with
+Xenophanes,Homer,is adversary of
 Xenophanes II,Lesbos,is from
 Xenophilus,Thracian,is associated with
 Xenophilus,Chalcidice,is from
-Xenophon,Greece,traveled to
-Xenophon,Apollonides II,is associated with
+Xenophon,Dardanus,is associated with
 Xenophon,Diodorus V,is family of
-Xenophon,Thucydides II,studied the work of
-Xenophon,Pontus,traveled to
-Xenophon,Philesia,is family of
-Xenophon,Delium,traveled to
-Xenophon,Plato,is associated with
-Xenophon,Gryllus,is family of
 Xenophon,Megabyzus,is friend of
+Xenophon,Philesia,is family of
+Xenophon,Scillus,traveled to
+Xenophon,Plato,is associated with
 Xenophon,Thebes,is adversary of
 Xenophon,Socrates,is friend of
-Xenophon,Dardanus,is associated with
+Xenophon,Lepreum,traveled to
+Xenophon,Cyrus II,is friend of
 Xenophon,Athens,is from
 Xenophon,The Thirty,refers to
-Xenophon,Elis,traveled to
-Xenophon,Glaucon,refers to
-Xenophon,Cyrus II,is friend of
-Xenophon,Seuthes,is associated with
-Xenophon,Corinth,traveled to
-Xenophon,Gryllus III?,is family of
-Xenophon,Lepreum,traveled to
+Xenophon,Greece,traveled to
+Xenophon,Delium,traveled to
+Xenophon,Apollonides II,is associated with
 Xenophon,Glaucon II,refers to
+Xenophon,Seuthes,is associated with
+Xenophon,Gryllus,is family of
+Xenophon,Gryllus III?,is family of
+Xenophon,Glaucon,refers to
+Xenophon,Thucydides II,studied the work of
+Xenophon,Pontus,traveled to
 Xenophon,Proxenus,is friend of
+Xenophon,Elis,traveled to
 Xenophon,Asia,traveled to
-Xenophon,Scillus,traveled to
+Xenophon,Corinth,traveled to
+Xenophon,Clinias,is friend of
+Xenophon III,Pythostratus,is family of
 Xenophon III,Pelopidas,refers to
 Xenophon III,Epaminondas,refers to
-Xenophon III,Pythostratus,is family of
 Xenophon IV,Hannibal,refers to
 Xenophon VI,Cos,is from
 Xenophon VII,Paros,is from
-Zamolxis,Pythagoras,is family of
 Zamolxis,Cronos,is associated with
-Zeno,Nearchus,is adversary of
-Zeno,Teleutagoras,is family of
-Zeno,Hesiod,refers to
-Zeno,Elea,is from
-Zeno,Leucippus,is teacher of
-Zeno,Empedocles,is associated with
+Zamolxis,Pythagoras,is family of
 Zeno,Lipara,is associated with
+Zeno,Nearchus,is adversary of
+Zeno,Empedocles,is associated with
+Zeno,Leucippus,is teacher of
+Zeno,Elea,is from
+Zeno,Hesiod,refers to
+Zeno,Teleutagoras,is family of
 Zeno II,Phoenicia,is from
 Zeno II,Citium,is from
+Zeno II,Persaeus,is teacher of
+Zeno II,Antisthenes II,studied the work of
+Zeno II,Callippus II,is teacher of
+Zeno II,Cyprus,is from
+Zeno II,Halcyoneus,is teacher of
+Zeno II,Herillus,is teacher of
+Zeno II,Ariston IV,is teacher of
+Zeno II,Cleanthes,is teacher of
+Zeno II,Philonides,is teacher of
+Zeno II,Homer,refers to
+Zeno II,Xenophon,studied the work of
+Zeno II,Dionysius IV,is teacher of
+Zeno II,Peiraeus,traveled to
+Zeno II,Posidonius II,is teacher of
+Zeno II,Caphisius,refers to
+Zeno II,Athens,traveled to
+Zeno II,Euripides,refers to
+Zeno II,Sphaerus,is teacher of
+Zeno II,Socrates,refers to
+Zeno II,Pythagoras II,refers to
+Zeno II,Athenodorus,is teacher of
+Zeno II,Zeno IX,is teacher of
+Zeno IX,Sidon,is from
 Zenodotus,Anaxagoras IV,is teacher of
+Zenodotus II,Zeno II,refers to
 Zoilus,Pythagoras,is family of
-Demeter,Eleusis,is from
+Demeter,Eleusis_geo,is from
 Ambracis,Aristotle,is associated with
+Axiothea,Phlius,is from
 Cleobulina,Thales,is family of
-Herpyllis,Nicanor,is family of
+Cleobuline II,Cleobulus,is family of
+Crateia,Periander,is family of
 Herpyllis,Aristotle,is family of
+Herpyllis,Nicanor,is family of
+Lais,Aristippus,is friend of
 Lasthenia,Plato,studied the work of
+Lasthenia,Mantinea,is from
+Lysida,Periander,is family of
+Lysida,Eristheneia,is family of
 Phaenarete,Sophroniscus,is family of
 Phaestis,Aristotle,is family of
 Potone,Plato,is family of
-Wife of Asclepiades,Wife of Menedemus,is family of
+Wife of Asclepiades,Menedemus' Wife,is family of
 Wife of Menedemus,Oropus,is from
 Xanthippe,Sophroniscus II,is family of
+Autolycus,Arcesilaus,is teacher of
+Halcyoneus,Antigonus,is family of
