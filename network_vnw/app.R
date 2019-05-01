@@ -162,24 +162,24 @@ server <- function(input, output) {
 	  }
 	  
 	  #Set label size
-	  if (is.null(input$label_size[1])) min_label = 0.0
+	  if (is.null(input$label_size[1])) min_label = 1.0
 	  else min_label = input$label_size[1]
 	  
-	  if (is.null(input$label_size[2])) max_label = 5.0
+	  if (is.null(input$label_size[2])) max_label = 4.0
 	  else max_label = input$label_size[2]
 	  
 	  # Scaling labels
-	  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size[1], input$label_size[2])
+	  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
 	  V(g_)$label.cex <- labsize
 	  
 	  # Funtion to convert igraph format to visNetwork format
 	  data <- toVisNetworkData(g_)
 	  
 	  # Set node size
-	  if (is.null(input$node_size[1])) min_node = 10.0
+	  if (is.null(input$node_size[1])) min_node = 20.0
 	  else min_node = input$node_size[1]
 	  
-	  if (is.null(input$node_size[2])) max_node = 50.0
+	  if (is.null(input$node_size[2])) max_node = 40.0
 	  else max_node = input$node_size[2]
 	  
 	  # Scaling nodes

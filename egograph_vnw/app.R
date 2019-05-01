@@ -158,10 +158,10 @@ server <- function(input, output) {
 	                        mindist = 0)
 	    
 	    #Set label size
-	    if (is.null(input$label_size[1])) min_label = 0.3
+	    if (is.null(input$label_size[1])) min_label = 0.4
 	    else min_label = input$label_size[1]
 	    
-	    if (is.null(input$label_size[2])) max_label = 1.0
+	    if (is.null(input$label_size[2])) max_label = 0.9
 	    else max_label = input$label_size[2]
 	    
 	    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
@@ -172,10 +172,10 @@ server <- function(input, output) {
 	    data <- toVisNetworkData(d[[1]])
 	    
 	    # Set node size
-	    if (is.null(input$node_size[1])) min_node = 3.0
+	    if (is.null(input$node_size[1])) min_node = 8.0
 	    else min_node = input$node_size[1]
 	    
-	    if (is.null(input$node_size[2])) max_node = 30.0
+	    if (is.null(input$node_size[2])) max_node = 20.0
 	    else max_node = input$node_size[2]
 	    
 	    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)

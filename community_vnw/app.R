@@ -136,7 +136,7 @@ server <- function(input, output) {
         else max_label = input$label_size[2]
         
         # Scaling labels
-        labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size[1], input$label_size[2])
+        labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
         V(g_)$label.cex <- labsize
         
         # Assign membership ids to vertex
