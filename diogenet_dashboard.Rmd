@@ -61,6 +61,8 @@ sliderInput(inputId = "node_size_global", label = "Node Size", min = 10.0, max =
 hr()
 helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
+div(message, style = "color:red")
+
 ```
 
 Row
@@ -276,6 +278,7 @@ sliderInput(inputId = "node_size_local", label = "Node Size", min = 3.0, max = 3
 hr()
 helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
+div(message, style = "color:red")
 ```
 
 Row
@@ -503,6 +506,8 @@ sliderInput(inputId = "label_size_comm", label = "Label Size", min = 0.0, max = 
 sliderInput(inputId = "node_size_comm", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
 hr()
 helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+div(message, style = "color:red")
 
 ```
 
