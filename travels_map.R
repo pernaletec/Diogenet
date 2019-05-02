@@ -10,6 +10,7 @@ library(leaflet)
 library(magrittr)
 library(shiny)
 library(sp)
+library(htmlwidgets)
 
 
 install_github("editio/georeference")
@@ -239,7 +240,7 @@ m <- leaflet(avail_data_tb) %>%
   
 m
 
-
+saveWidget(m, file = map.hmtl)
 
 
 
