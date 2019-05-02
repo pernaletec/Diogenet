@@ -39,9 +39,6 @@ missing_indx = which(missing == FALSE)
 edges_[missing_indx]
 table(edges_ %in% nodes$Name)
 
-# Setting seed is important so the graph is always with the same configuration when starts
-set.seed(123)
-
 # Function to rescale node degree
 rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 
@@ -120,6 +117,9 @@ ledges <- data.frame(color = c("#0000FF"),
                      label = c("is teacher of"), 
                      arrows =c("to"), 
                      font.align = "bottom")
+
+# Setting seed is important so the graph is always with the same configuration when starts
+set.seed(123)
 
 # Visnetwork graph creation
 global_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
@@ -212,6 +212,9 @@ data$nodes$title = paste0("<b>",data$nodes$id,"</b>")
 # Shows the relation when hovering over the edge
 data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
 
+# Setting seed is important so the graph is always with the same configuration when starts
+set.seed(123)
+
 egonet_vnw_html = visNetwork(nodes = data$nodes, edges = data$edges)%>%
   visNodes(shape = "dot") %>%
   visEdges(arrows =list(to = list(enabled = TRUE)),
@@ -300,6 +303,9 @@ data$nodes$title = paste0("<b>",data$nodes$id,"</b>","<br/>" , "Community N°: "
 
 # Shows the relation when hovering over the edge
 data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+
+# Setting seed is important so the graph is always with the same configuration when starts
+set.seed(123)
 
 # Visnetwork graph creation
 comnty_vnw = visNetwork(nodes = data$nodes, edges = data$edges)%>%

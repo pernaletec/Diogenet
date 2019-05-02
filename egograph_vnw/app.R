@@ -225,6 +225,7 @@ server <- function(input, output) {
       # Shows the relation when hovering over the edge
       data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
       
+      # Setting seed is important so the graph is always with the same configuration when starts
       set.seed(123)
       
       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
