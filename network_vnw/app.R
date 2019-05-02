@@ -213,7 +213,7 @@ server <- function(input, output) {
     # edges data.frame for legend
     ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
                          label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
-                         arrows =c(as.character(arrow), FALSE, FALSE, FALSE, FALSE), 
+                         arrows =c("to", FALSE, FALSE, FALSE, FALSE), 
                          font.align = "bottom")
     
     # Shows the name when hovering over the node
