@@ -1,9 +1,11 @@
 ---
-title: "Diogenet"
+title: "Diogenet dashboard"
 subtitle: "Intellectual Networks from Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
         favicon: iah_classicalstudies_logo_fv_pq.png
+        navbar:
+          - { icon: "fa-home", href: " http://diogenet.ucsd.edu", align: right }
 runtime: shiny
 ---
 
