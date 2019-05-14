@@ -62,6 +62,7 @@ selectInput(inputId = "layout_global",
                           "layout_with_drl" = "layout_with_drl",
                           "layout_with_fr" = "layout_with_fr",
                           "layout_with_gem" = "layout_with_gem",
+                          "layout_with_lgl" = "layout_with_lgl",
                           "layout_with_graphopt" = "layout_with_graphopt",
                           "layout_with_kk" = "layout_with_kk",
                           "layout_with_mds" = "layout_with_mds",
@@ -401,7 +402,7 @@ output$local_network = renderVisNetwork({
     # edges data.frame for legend
     ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
                          label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
-                       arrows =c("to", FALSE, FALSE, "to", "to"), 
+                         arrows = arrow, 
                          font.align = "bottom")
     
   	# Shows the name when hovering over the node
@@ -424,7 +425,7 @@ output$local_network = renderVisNetwork({
 	               color = list(color = "gray",
 	                            highlight = "red")) %>%
         visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
-	      visIgraphLayout(layout = "layout_as_tree")%>%
+	      visIgraphLayout()%>%
 	      visOptions(highlightNearest = TRUE)
 	    })
   }
@@ -504,7 +505,18 @@ br()
 # Plot Height
 h4("Community detection")
 # Algorithm for community detection
-selectInput("cmnt_dtc_alg", "Algorithm:", choices=c("Cluster Leading Eigen", "Cluster Fast Greedy", "Cluster Louvain"))
+selectInput("cmnt_dtc_alg", "Algorithm:", choices=c(
+                                                    "Cluster Edge Betweenness",
+                                                    "Cluster Fast Greedy",
+                                                    "Cluster Infomap",
+                                                    "Cluster Label Prop",
+                                                    "Cluster Leading Eigen",
+                                                    "Cluster Louvain",
+                                                    #"Cluster Optimal", # Crashes the system! #
+                                                    "Cluster Spinglass",
+                                                    "Cluster Walktrap"))
+
+
 hr()
 helpText("Different algorithms for community detection are available")
 br()
@@ -536,7 +548,8 @@ output$comm_network = renderVisNetwork({
   )
 
   # Use function is_directed
-  directed = is_directed(input$edges_select_comm)
+  #directed = is_directed(input$edges_select_comm)
+  directed = FALSE
   
   try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
   
@@ -551,15 +564,42 @@ output$comm_network = renderVisNetwork({
   
 	# Community detection
   
-  if (input$cmnt_dtc_alg == "Cluster Leading Eigen") try(cluster <- cluster_leading_eigen(g_))
-  if (input$cmnt_dtc_alg == "Cluster Fast Greedy") try(cluster <- cluster_fast_greedy(g_))
-  if (input$cmnt_dtc_alg == "Cluster Louvain") try(cluster <- cluster_louvain(g_))
+  clustering = function(alg, graph){
+    if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph)
+    if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph)
+    if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph)
+    if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph)
+    if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph)
+    if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph)
+    #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system #
+    if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
+    if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph)
+    return(cluster)
+  } 
+  
+  handledClustering = function(alg, graph){
+    tryCatch(clustering(alg,graph), 
+             #warning = function(w){;},
+             error = function(e){message = e;NULL})
+  }
+  
+  cluster = handledClustering(input$cmnt_dtc_alg, g_)
+
+  # if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") try(cluster <- cluster_edge_betweenness(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Fast Greedy") try(cluster <- cluster_fast_greedy(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Infomap") try(cluster <- cluster_infomap(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Label Prop") try(cluster <- cluster_label_prop(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Leading Eigen") try(cluster <- cluster_leading_eigen(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Louvain") try(cluster <- cluster_louvain(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Optimal") try(cluster <- cluster_optimal(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Spinglass") try(cluster <- cluster_spinglass(g_))
+  # if (input$cmnt_dtc_alg == "Cluster Walktrap") try(cluster <- cluster_walktrap(g_))
 
   validate(
     need(try(!is.null(cluster)), 
          paste("The algorithm ",
                input$cmnt_dtc_alg,
-               " could not identify communities given the current Phylosophers and Relations")
+               " could not identify communities given the current Phylosophers and Relations"," . ",  message)
          )
   )
   
