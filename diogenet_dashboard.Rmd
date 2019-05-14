@@ -44,6 +44,35 @@ checkboxGroupInput("edges_select_global",
                    selected = 1,
                    inline = FALSE)
 br()
+
+h4("Graph Layout")
+selectInput(inputId = "layout_global", 
+            label = "Layout Type", 
+            choices = list(
+#                          "layout_as_bipartite" = "layout_as_bipartite",
+                          "layout_as_star" = "layout_as_star",
+                          "layout_as_tree" = "layout_as_tree",
+                          "layout_components" = "layout_components",
+                          "layout_in_circle" = "layout_in_circle",
+                          "layout_nicely" = "layout_nicely",
+                          "layout_on_grid" = "layout_on_grid",
+                          "layout_on_sphere" = "layout_on_sphere",
+                          "layout_randomly" = "layout_randomly",
+                          "layout_with_dh" = "layout_with_dh",
+                          "layout_with_drl" = "layout_with_drl",
+                          "layout_with_fr" = "layout_with_fr",
+                          "layout_with_gem" = "layout_with_gem",
+                          "layout_with_graphopt" = "layout_with_graphopt",
+                          "layout_with_kk" = "layout_with_kk",
+                          "layout_with_mds" = "layout_with_mds",
+                          "layout_with_sugiyama" = "layout_with_sugiyama",
+                          "layout_with_graphopt" = "layout_with_graphopt",
+                          "layout_with_kk" = "layout_with_kk",
+                          "layout_with_mds" = "layout_with_mds",
+                          "layout_with_sugiyama" = "layout_with_sugiyama"), selected = "layout_nicely", multiple = FALSE)
+
+br()
+
 # Plot Height
 h4("Appearence")
 # Nodes/Label sizes
@@ -111,7 +140,9 @@ is_directed = function(edges_selected) {
 # network stores an object rendered by renderVisnetwork 
 output$global_network = renderVisNetwork({
   
-
+  # First validate if there are edges (Ties) selected
+  validate(need(try(!is.null(input$edges_select_global)), "Please select at least one Tie Type"))  
+  
   # Use function is_directed
   directed = is_directed(input$edges_select_global)
   
@@ -217,8 +248,8 @@ output$global_network = renderVisNetwork({
     visNetwork(nodes = data$nodes, edges = data$edges)%>%
       visNodes(shape = "dot") %>%
       visEdges(arrows =list(to = list(enabled = directed))) %>%
-      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
-      visIgraphLayout()%>%
+      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	    visIgraphLayout(layout = as.character(input$layout_global))%>%
       visOptions(highlightNearest = TRUE)
   })
 })
@@ -392,8 +423,8 @@ output$local_network = renderVisNetwork({
 	      visEdges(arrows =list(to = list(enabled = directed)),
 	               color = list(color = "gray",
 	                            highlight = "red")) %>%
-	      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, zoom = FALSE)%>%
-	      visIgraphLayout()%>%
+        visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout(layout = "layout_as_tree")%>%
 	      visOptions(highlightNearest = TRUE)
 	    })
   }
@@ -624,7 +655,7 @@ output$comm_network = renderVisNetwork({
 		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
 		  visNodes(shape = "dot") %>%
 		  visEdges(arrows =list(to = list(enabled = directed))) %>%
-      visLegend(addNodes = lnodes, addEdges = ledges, useGroups = FALSE, width = 0.15, zoom = FALSE)%>%
+      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
 		  visIgraphLayout()%>%
 		  visOptions(highlightNearest = TRUE)
 		
