@@ -501,14 +501,10 @@ output$comm_network = renderVisNetwork({
   )
 
   # If there is only one edge selected and this edge is the number 1, use directed edges
-  if(length(input$edges_select_comm) == 1 & input$edges_select_comm[1] == 1) {
-    g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
-    directed = TRUE
-  }else {
-    g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
-    directed = FALSE
-  }
-
+  if(length(input$edges_select_comm) == 1 & input$edges_select_comm[1] == 1) directed = TRUE else directed = FALSE
+  
+  try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+  
   # ids in nodes are es required to export to Pajek format. Just in case!
   V(g)$id = V(g)$name
   
@@ -519,10 +515,18 @@ output$comm_network = renderVisNetwork({
   g_ = subset_graph(input$edges_select_comm, g)
   
 	# Community detection
-	
-	if (input$cmnt_dtc_alg == "Cluster Leading Eigen") cluster = cluster_leading_eigen(g_)
-	if (input$cmnt_dtc_alg == "Cluster Fast Greedy") cluster = cluster_fast_greedy(g_)
-	if (input$cmnt_dtc_alg == "Cluster Louvain") cluster = cluster_louvain(g_)
+  
+  if (input$cmnt_dtc_alg == "Cluster Leading Eigen") try(cluster <- cluster_leading_eigen(g_))
+  if (input$cmnt_dtc_alg == "Cluster Fast Greedy") try(cluster <- cluster_fast_greedy(g_))
+  if (input$cmnt_dtc_alg == "Cluster Louvain") try(cluster <- cluster_louvain(g_))
+
+  validate(
+    need(try(!is.null(cluster)), 
+         paste("The algorithm ",
+               input$cmnt_dtc_alg,
+               " could not identify communities given the current Phylosophers and Relations")
+         )
+  )
   
   #Set label size
   if (is.null(input$label_size_comm[1])) min_label = 0.0
