@@ -95,20 +95,27 @@ subset_graph  = function(edges_selected, g){
   return(g_)
 } 
 
+is_directed = function(edges_selected) {
+  # Default directed
+  directed = TRUE
+  # If "Is family of" or "is friend of" is present convert the graph to undirected
+  for (i in edges_selected) {
+    if ((i == 2) || (i == 3)) {
+      directed = as.logical(FALSE)
+      break
+    }
+  }
+  return(directed)
+}
+
 # network stores an object rendered by renderVisnetwork 
 output$global_network = renderVisNetwork({
-# First validate if there are edges (Ties) selected
-  validate(
-    need(try(!is.null(input$edges_select_global)), "Please select at least one Tie Type")
-  )
-  # If there is only one edge selected and this edge is the number 1, use directed edges
-  if(length(input$edges_select_global) == 1 & input$edges_select_global[1] == 1) {
-    g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
-    directed = TRUE
-  }else {
-    g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
-    directed = FALSE
-  }
+  
+
+  # Use function is_directed
+  directed = is_directed(input$edges_select_global)
+  
+  try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 	
   # ids in nodes are es required to export to Pajek format. Just in case!
   V(g)$id = V(g)$name
@@ -183,12 +190,12 @@ output$global_network = renderVisNetwork({
                        color = c("#FF6347", "#ffa500"),
                        id = 1:2)
   
-  if (directed) arrow = as.character("to") else arrow = as.logical(FALSE)
+  if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
   
   # edges data.frame for legend
   ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
                        label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
-                       arrows =c("to", FALSE, FALSE, FALSE, FALSE), 
+                       arrows =arrow, 
                        font.align = "bottom")
   
   # Shows the name when hovering over the node
@@ -274,13 +281,10 @@ output$local_network = renderVisNetwork({
 
   if (!is.null(input$node_sel) && !is.null(input$order)) {
 
-    if(length(input$edges_select_local) == 1 & input$edges_select_local[1] == 1) {
-      g = graph_from_data_frame(d = edges, directed=TRUE, vertices = nodes)
-      directed = TRUE
-    }else {
-      g = graph_from_data_frame(d = edges, directed=FALSE, vertices = nodes)
-      directed = FALSE
-    }
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local)
+    
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
     # id en nodos es necesario para exportar al formato Pajek
     V(g)$id = V(g)$name
@@ -361,12 +365,12 @@ output$local_network = renderVisNetwork({
                          color = c("#FF6347", "#ffa500"),
                          id = 1:2)
     
-    if (directed) arrow = as.character("to") else arrow = as.logical(FALSE)
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
     
     # edges data.frame for legend
     ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
                          label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
-                         arrows =c("to", FALSE, FALSE, FALSE, FALSE), 
+                       arrows =c("to", FALSE, FALSE, "to", "to"), 
                          font.align = "bottom")
     
   	# Shows the name when hovering over the node
@@ -500,8 +504,8 @@ output$comm_network = renderVisNetwork({
     need(try(!is.null(input$edges_select_comm)), "Please select at least one Tie Type")
   )
 
-  # If there is only one edge selected and this edge is the number 1, use directed edges
-  if(length(input$edges_select_comm) == 1 & input$edges_select_comm[1] == 1) directed = TRUE else directed = FALSE
+  # Use function is_directed
+  directed = is_directed(input$edges_select_comm)
   
   try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
   
@@ -592,12 +596,12 @@ output$comm_network = renderVisNetwork({
                        color = c("#FF6347", "#ffa500"),
                        id = 1:2)
   
-  if (directed) arrow = as.character("to") else arrow = as.logical(FALSE)
+  if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
   
   # edges data.frame for legend
   ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
                        label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
-                       arrows =c("to", FALSE, FALSE, FALSE, FALSE), 
+                       arrows =arrow, 
                        font.align = "bottom")
   
   # Shows the name when hovering over the node
