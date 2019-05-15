@@ -516,18 +516,20 @@ selectInput("cmnt_dtc_alg", "Algorithm:", choices=c(
                                                     "Cluster Spinglass",
                                                     "Cluster Walktrap"))
 
-
-hr()
-helpText("Different algorithms for community detection are available")
+br()
+h4("Visualization package")
+# Library for community visualization
+selectInput("cmnt_vsl_pck", "Library:", choices=c("visNetwork", "igraph"))
 br()
 # Plot Height
 h4("Appearance")
-# Label Size
-sliderInput(inputId = "label_size_comm", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE)
-# Node Size
-sliderInput(inputId = "node_size_comm", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
+# Nodes/Label sizes
+uiOutput(outputId="nodeUI_vnw")
+uiOutput(outputId="nodeUI_igp")
+uiOutput(outputId="labelUI_vnw")
+uiOutput(outputId="labelUI_igp")
 hr()
-helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees")
 
 div(message, style = "color:red")
 
@@ -540,8 +542,8 @@ Row
 
 ```{r}
 
-output$comm_network = renderVisNetwork({
-
+network_cmnt =  reactive({
+  
   # First validate if there are edges (Ties) selected
   validate(
     need(try(!is.null(input$edges_select_comm)), "Please select at least one Tie Type")
@@ -585,16 +587,6 @@ output$comm_network = renderVisNetwork({
   
   cluster = handledClustering(input$cmnt_dtc_alg, g_)
 
-  # if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") try(cluster <- cluster_edge_betweenness(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Fast Greedy") try(cluster <- cluster_fast_greedy(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Infomap") try(cluster <- cluster_infomap(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Label Prop") try(cluster <- cluster_label_prop(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Leading Eigen") try(cluster <- cluster_leading_eigen(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Louvain") try(cluster <- cluster_louvain(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Optimal") try(cluster <- cluster_optimal(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Spinglass") try(cluster <- cluster_spinglass(g_))
-  # if (input$cmnt_dtc_alg == "Cluster Walktrap") try(cluster <- cluster_walktrap(g_))
-
   validate(
     need(try(!is.null(cluster)), 
          paste("The algorithm ",
@@ -602,106 +594,183 @@ output$comm_network = renderVisNetwork({
                " could not identify communities given the current Phylosophers and Relations"," . ",  message)
          )
   )
-  
-  #Set label size
-  if (is.null(input$label_size_comm[1])) min_label = 0.0
-  else min_label = input$label_size_comm[1]
-  
-  if (is.null(input$label_size_comm[2])) max_label = 5.0
-  else max_label = input$label_size_comm[2]
-  
-  # Scaling labels
-  labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), input$label_size_comm[1], input$label_size_comm[2])
-  V(g_)$label.cex <- labsize
-  
-  # Assign membership ids to vertex
-  V(g_)$community  <- cluster$membership
-  
-  data <- toVisNetworkData(g_)
-  
-  # Set node size
-  if (is.null(input$node_size_comm[1])) min_node = 10.0
-  else min_node = input$node_size_comm[1]
-  
-  if (is.null(input$node_size_comm[2])) max_node = 50.0
-  else max_node = input$node_size_comm[2]
-  
-  # Scaling nodes
-  nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
-  data$nodes$size = nodesize
-  
-  # A try for controling the colours of each group
-  node_colours = rainbow(summary(cluster$membership)[6])
-  setColour = function(x) {node_colours[x]}
-  
-  # Setting parameters straight in the data frame for visNetwork
-  #data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
     
-  # Setting group in visnetwork format
-  data$nodes$group = data$nodes$community
+  if (input$cmnt_vsl_pck == "visNetwork") {
+    
+    output$cmnt_vnw = renderVisNetwork({
   
-  data$nodes$color.border = rep("#000000",length(data$nodes$group))
-  
-  #data$nodes$color.highlight = sapply(data$nodes$community, FUN = setColour)
-  
-  # Setting parameters straight in the data frame for visNetwork
-  data$edges$color.color = case_when(
-    data$edges$Relation == "is teacher of" ~ '#0000FF',
-    data$edges$Relation == "is friend of" ~ '#228B22',
-    data$edges$Relation == "is family of" ~ '#FF0000', 
-    data$edges$Relation == "studied the work of" ~ '#ff01d9',
-    data$edges$Relation == "sent letters to" ~ '#ffbf00'
-  )
-  
-  data$edges$color.highlight = case_when(
-    data$edges$Relation == "is teacher of" ~ '#00ffff',
-    data$edges$Relation == "is friend of" ~ '#568b22',
-    data$edges$Relation == "is family of" ~ '#ff4000',
-    data$edges$Relation == "studied the work of" ~ '#d9ff01',
-    data$edges$Relation == "sent letters to" ~ '#8400ff'
-  )
-
-  # nodes data.frame for legend
-  lnodes <- data.frame(label = c("Male", "Female"),
-                       shape = c( "dot"),
-                       color = c("#FF6347", "#ffa500"),
-                       id = 1:2)
-  
-  if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
-  
-  # edges data.frame for legend
-  ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
-                       label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
-                       arrows =arrow, 
-                       font.align = "bottom")
-  
-  # Shows the name when hovering over the node
-  data$nodes$title = paste0("<b>",data$nodes$id,"</b>","<br/>" , "Community N°: ", "<b>",data$nodes$community,"</b>")
-  
-  # Shows the relation when hovering over the edge
-  data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+      #Set label size
+      if (is.null(input$labelUI_vnw[1])) min_label = 0.0
+      else min_label = input$labelUI_vnw[1]
+      
+      if (is.null(input$labelUI_vnw[2])) max_label = 5.0
+      else max_label = input$labelUI_vnw[2]
+      
+      # Scaling labels
+      labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
+      V(g_)$label.cex <- labsize
+      
+      # Assign membership ids to vertex
+      V(g_)$community  <- cluster$membership
+      
+      data <- toVisNetworkData(g_)
+      
+      # Set node size
+      if (is.null(input$nodeUI_vnw[1])) min_node = 10.0
+      else min_node = input$nodeUI_vnw[1]
+      
+      if (is.null(input$nodeUI_vnw[2])) max_node = 50.0
+      else max_node = input$nodeUI_vnw[2]
+      
+      # Scaling nodes
+      nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+      data$nodes$size = nodesize
+      
+      # A try for controling the colours of each group
+      node_colours = rainbow(summary(cluster$membership)[6])
+      setColour = function(x) {node_colours[x]}
+      
+      # Setting parameters straight in the data frame for visNetwork
+      #data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
         
+      # Setting group in visnetwork format
+      data$nodes$group = data$nodes$community
+      
+      data$nodes$color.border = rep("#000000",length(data$nodes$group))
+      
+      #data$nodes$color.highlight = sapply(data$nodes$community, FUN = setColour)
+      
+      # Setting parameters straight in the data frame for visNetwork
+      data$edges$color.color = case_when(
+        data$edges$Relation == "is teacher of" ~ '#0000FF',
+        data$edges$Relation == "is friend of" ~ '#228B22',
+        data$edges$Relation == "is family of" ~ '#FF0000', 
+        data$edges$Relation == "studied the work of" ~ '#ff01d9',
+        data$edges$Relation == "sent letters to" ~ '#ffbf00'
+      )
+      
+      data$edges$color.highlight = case_when(
+        data$edges$Relation == "is teacher of" ~ '#00ffff',
+        data$edges$Relation == "is friend of" ~ '#568b22',
+        data$edges$Relation == "is family of" ~ '#ff4000',
+        data$edges$Relation == "studied the work of" ~ '#d9ff01',
+        data$edges$Relation == "sent letters to" ~ '#8400ff'
+      )
+    
+      # nodes data.frame for legend
+      lnodes <- data.frame(label = c("Male", "Female"),
+                           shape = c( "dot"),
+                           color = c("#FF6347", "#ffa500"),
+                           id = 1:2)
+      
+      if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+      
+      # edges data.frame for legend
+      ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                           label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                           arrows =arrow, 
+                           font.align = "bottom")
+      
+      # Shows the name when hovering over the node
+      data$nodes$title = paste0("<b>",data$nodes$id,"</b>","<br/>" , "Community N°: ", "<b>",data$nodes$community,"</b>")
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title = paste0("<i>",data$edges$Relation,"</i>")
+            
+    
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+        incProgress(0.6, detail = paste("Running VisNetwork"))
+    		mod <- round(modularity(cluster),3)
+    		subTitle = paste0("MODULARITY: ", mod)
+    		
+    		# Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        
+    		# Visnetwork graph creation
+    		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
+    		  visNodes(shape = "dot") %>%
+    		  visEdges(arrows =list(to = list(enabled = directed))) %>%
+          visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+    		  visIgraphLayout()%>%
+    		  visOptions(highlightNearest = TRUE)
+      })
+    })
+    return(visNetworkOutput(outputId="cmnt_vnw"))
+  } 
+  if (input$cmnt_vsl_pck == "igraph") {
+    
+      #Set label size
+      if (is.null(input$labelUI_igp[1])) min_label = 0.6
+      else min_label = input$labelUI_igp[1]
+      
+      if (is.null(input$labelUI_igp[2])) max_label = 1.5
+      else max_label = input$labelUI_igp[2]
+      
+      # Scaling labels
+      labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
+      V(g_)$label.cex <- labsize
+      
+      # Assign membership ids to vertex
+      V(g_)$community  <- cluster$membership
+      
+      # Set node size
+      if (is.null(input$nodeUI_igp[1])) min_node = 8.0
+      else min_node = input$nodeUI_igp[1]
+      
+      if (is.null(input$nodeUI_igp[2])) max_node = 20.0
+      else max_node = input$nodeUI_igp[2]
+      
+      # Scaling nodes
+      nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+      V(g_)$size <- nodesize
+    
+      output$cmnt_igp = renderPlot({
+        withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+          Sys.sleep(0.25)
+          incProgress(0.6, detail = paste("Running igraph"))
+          mod <- round(modularity(cluster),3)
+          subTitle = paste0("MODULARITY: ", mod)
+          return(plot(cluster,g_,main = subTitle))
+      })
+    })
+    return(plotOutput(outputId="cmnt_igp"))
+  }
+})    
 
-  withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
-    Sys.sleep(0.25)
-    incProgress(0.6, detail = paste("Running VisNetwork"))
-		mod <- round(modularity(cluster),3)
-		subTitle = paste0("MODULARITY: ", mod)
-		
-		# Setting seed is important so the graph is always with the same configuration when starts
-    set.seed(123)
-		
-		# Visnetwork graph creation
-		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
-		  visNodes(shape = "dot") %>%
-		  visEdges(arrows =list(to = list(enabled = directed))) %>%
-      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
-		  visIgraphLayout()%>%
-		  visOptions(highlightNearest = TRUE)
-		
-  })
+output$graph_cmnt <- renderUI({
+  network_cmnt()
 })
 
-visNetworkOutput(outputId="comm_network")
+output$labelUI_vnw <- renderUI({
+  if (input$cmnt_vsl_pck == "visNetwork") {
+    if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(input$labelUI_vnw[1], input$labelUI_vnw[2]),ticks = FALSE, step = 0.1)
+    else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(1.0, 4.0),ticks = FALSE)
+  } 
+})
+
+output$nodeUI_vnw <- renderUI({
+  if (input$cmnt_vsl_pck == "visNetwork") {
+    if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(input$nodeUI_vnw[1], input$nodeUI_vnw[2]),ticks = FALSE, step = 0.1)
+    else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(20, 40),ticks = FALSE)
+  }
+})
+
+output$labelUI_igp <- renderUI({
+  if (input$cmnt_vsl_pck == "igraph") {
+    if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(input$labelUI_igp[1], input$labelUI_igp[2]),ticks = FALSE,step = 0.1)
+    else sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(0.6, 1.5),ticks = FALSE)
+  } 
+})
+
+
+output$nodeUI_igp <- renderUI({
+  if (input$cmnt_vsl_pck == "igraph") {
+    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 3, max = 30, value = c(input$nodeUI_igp[1], input$nodeUI_igp[2]),ticks = FALSE, step = 1)
+    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 3, max = 30, value = c(8, 20),ticks = FALSE)
+  }
+})
+  
+uiOutput(outputId="graph_cmnt")
 
 ```
