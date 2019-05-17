@@ -192,7 +192,9 @@ output$global_network = renderVisNetwork({
   # Setting parameters straight in the data frame for visNetwork
   data$nodes$color.background = case_when(
     data$nodes$Group == "Male" ~ '#FF6347',
-    data$nodes$Group == "Female" ~ '#ffa500'
+    data$nodes$Group == "Female" ~ '#ffa500',
+    data$nodes$Group == "Place" ~ '#31e001',
+    data$nodes$Group == "God" ~ '#05e2ff'
   )
   
   # Setting group in visnetwork format
@@ -202,8 +204,9 @@ output$global_network = renderVisNetwork({
   
   data$nodes$color.highlight = case_when(
     data$nodes$Group == "Male" ~ '#47e3ff',
-    data$nodes$Group == "Female" ~ '#005aff',
-    data$nodes$Group == "Place" ~ '#ffa500'
+    data$nodes$Group == "Female" ~ '#4d00ff',
+    data$nodes$Group == "Place" ~ '#ff0134',
+    data$nodes$Group == "God" ~ '#ff4c05'
   )
   
   # Setting parameters straight in the data frame for visNetwork
@@ -421,9 +424,12 @@ output$local_network = renderVisNetwork({
     data$nodes$size = nodesize
 
     # Setting parameters straight in the data frame for visNetwork
+    # Setting parameters straight in the data frame for visNetwork
     data$nodes$color.background = case_when(
       data$nodes$Group == "Male" ~ '#FF6347',
-      data$nodes$Group == "Female" ~ '#ffa500'
+      data$nodes$Group == "Female" ~ '#ffa500',
+      data$nodes$Group == "Place" ~ '#31e001',
+      data$nodes$Group == "God" ~ '#05e2ff'
     )
 
     # Setting group in visnetwork format
@@ -433,8 +439,9 @@ output$local_network = renderVisNetwork({
 
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
-      data$nodes$Group == "Female" ~ '#005aff',
-      data$nodes$Group == "Place" ~ '#ffa500'
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
     )
     
     # Setting parameters straight in the data frame for visNetwork
