@@ -1,5 +1,5 @@
 ---
-title: "Diogenet dashboard"
+title: "Diogenet's Dashboard"
 subtitle: "Intellectual Networks from Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
@@ -53,18 +53,18 @@ selectInput(inputId = "layout_global",
                           #"layout_as_star" = "layout_as_star",
                           #"layout_as_tree" = "layout_as_tree",
                           #"layout_components" = "layout_components",
-                          "layout_in_circle" = "layout_in_circle",
-                          "layout_nicely" = "layout_nicely",
+                          "Nicely" = "layout_nicely",
+                          "In Circle" = "layout_in_circle",
                           #"layout_on_grid" = "layout_on_grid",
-                          "layout_on_sphere" = "layout_on_sphere",
+                          "On sphere" = "layout_on_sphere",
                           #"layout_randomly" = "layout_randomly",
                           #"layout_with_dh" = "layout_with_dh",
                           #"layout_with_drl" = "layout_with_drl",
-                          "layout_with_fr" = "layout_with_fr",
+                          "Fruchterman-Reingold" = "layout_with_fr",
                           #"layout_with_gem" = "layout_with_gem",
                           #"layout_with_lgl" = "layout_with_lgl",
                           #"layout_with_graphopt" = "layout_with_graphopt",
-                          "layout_with_kk" = "layout_with_kk"
+                          "Kamada-Kawai" = "layout_with_kk"
                           #"layout_with_mds" = "layout_with_mds",
                           #"layout_with_sugiyama" = "layout_with_sugiyama",
                           #"layout_with_graphopt" = "layout_with_graphopt",
@@ -79,10 +79,10 @@ br()
 # Plot Height
 h4("Appearence")
 # Nodes/Label sizes
-sliderInput(inputId = "label_size_global", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE)
-sliderInput(inputId = "node_size_global", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE)
-hr()
-helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+sliderInput(inputId = "label_size_global", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 4),ticks = FALSE, step = 1)
+sliderInput(inputId = "node_size_global", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 40),ticks = FALSE, step = 5)
+#hr()
+#helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
 div(message, style = "color:red")
 
@@ -286,7 +286,7 @@ visNetworkOutput(outputId="global_network")
 
 ```
 
-Local Network View
+Local Network
 ===================================== 
 
 Inputs {.sidebar}
@@ -316,10 +316,10 @@ sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
 # Node and Label Size
 br()
 h4("Appearance")
-sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE)
-sliderInput(inputId = "node_size_local", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE)
-hr()
-helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE, step = 0.1)
+sliderInput(inputId = "node_size_local", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE, step = 3)
+#hr()
+#helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
 div(message, style = "color:red")
 ```
@@ -327,7 +327,7 @@ div(message, style = "color:red")
 Row
 -------------------------------------
 
-### Local View
+### Local Network
 
 ```{r}
 
@@ -507,7 +507,7 @@ visNetworkOutput(outputId="local_network")
 
 ```
 
-Communities View
+Communities
 ===================================== 
 
 Inputs {.sidebar}
@@ -516,7 +516,7 @@ Inputs {.sidebar}
 ```{r}
 
 br()
-h4("Network relations")
+h4("Network Ties")
 # Selection of the edges that will appear in the relation network 
 checkboxGroupInput("edges_select_comm",
                    label = "Tie Type",
@@ -539,7 +539,7 @@ selectInput("cmnt_dtc_alg", "Algorithm:", choices=c(
                                                     "Cluster Leading Eigen",
                                                     "Cluster Louvain",
                                                     #"Cluster Optimal", # Crashes the system! #
-                                                    "Cluster Spinglass",
+                                                    #"Cluster Spinglass",
                                                     "Cluster Walktrap"))
 
 br()
@@ -550,12 +550,12 @@ br()
 # Plot Height
 h4("Appearance")
 # Nodes/Label sizes
-uiOutput(outputId="nodeUI_vnw")
-uiOutput(outputId="nodeUI_igp")
 uiOutput(outputId="labelUI_vnw")
 uiOutput(outputId="labelUI_igp")
-hr()
-helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees")
+uiOutput(outputId="nodeUI_vnw")
+uiOutput(outputId="nodeUI_igp")
+#hr()
+#helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees")
 
 div(message, style = "color:red")
 
@@ -578,7 +578,7 @@ clustering = function(alg, graph){
   if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph)
   if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph)
   #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system #
-  if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
+  #if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
   if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph)
   return(cluster)
 } 
@@ -774,30 +774,30 @@ output$graph_cmnt <- renderUI({
 
 output$labelUI_vnw <- renderUI({
   if (input$cmnt_vsl_pck == "visNetwork") {
-    if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(input$labelUI_vnw[1], input$labelUI_vnw[2]),ticks = FALSE, step = 0.1)
-    else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(1.0, 4.0),ticks = FALSE)
+    if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(input$labelUI_vnw[1], input$labelUI_vnw[2]),ticks = FALSE, step = 1)
+    else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(1.0, 4.0),ticks = FALSE, step = 1)
   } 
 })
 
 output$nodeUI_vnw <- renderUI({
   if (input$cmnt_vsl_pck == "visNetwork") {
-    if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(input$nodeUI_vnw[1], input$nodeUI_vnw[2]),ticks = FALSE, step = 0.1)
-    else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(20, 40),ticks = FALSE)
+    if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(input$nodeUI_vnw[1], input$nodeUI_vnw[2]),ticks = FALSE, step = 10)
+    else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(20, 40),ticks = FALSE, step = 10)
   }
 })
 
 output$labelUI_igp <- renderUI({
   if (input$cmnt_vsl_pck == "igraph") {
-    if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(input$labelUI_igp[1], input$labelUI_igp[2]),ticks = FALSE,step = 0.1)
-    else sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(0.6, 1.5),ticks = FALSE)
+    if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(input$labelUI_igp[1], input$labelUI_igp[2]),ticks = FALSE,step = 0.45)
+    else sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(0.6, 1.5),ticks = FALSE, step = 0.45)
   } 
 })
 
 
 output$nodeUI_igp <- renderUI({
   if (input$cmnt_vsl_pck == "igraph") {
-    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(input$nodeUI_igp[1], input$nodeUI_igp[2]),ticks = FALSE, step = 1)
-    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(3.0, 10.0),ticks = FALSE)
+    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(input$nodeUI_igp[1], input$nodeUI_igp[2]),ticks = FALSE, step = 5)
+    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(3.0, 10.0),ticks = FALSE, step = 5)
   }
 })
   
