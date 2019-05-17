@@ -21,7 +21,7 @@ library(tidyverse)
 library(visNetwork)
 ```
 
-Network of Intellectuals
+Global Network
 ===================================== 
 
 Inputs {.sidebar}
@@ -49,29 +49,31 @@ h4("Graph Layout")
 selectInput(inputId = "layout_global", 
             label = "Layout Type", 
             choices = list(
-#                          "layout_as_bipartite" = "layout_as_bipartite",
-                          "layout_as_star" = "layout_as_star",
-                          "layout_as_tree" = "layout_as_tree",
-                          "layout_components" = "layout_components",
+                          #"layout_as_bipartite" = "layout_as_bipartite",
+                          #"layout_as_star" = "layout_as_star",
+                          #"layout_as_tree" = "layout_as_tree",
+                          #"layout_components" = "layout_components",
                           "layout_in_circle" = "layout_in_circle",
                           "layout_nicely" = "layout_nicely",
-                          "layout_on_grid" = "layout_on_grid",
+                          #"layout_on_grid" = "layout_on_grid",
                           "layout_on_sphere" = "layout_on_sphere",
-                          "layout_randomly" = "layout_randomly",
-                          "layout_with_dh" = "layout_with_dh",
-                          "layout_with_drl" = "layout_with_drl",
+                          #"layout_randomly" = "layout_randomly",
+                          #"layout_with_dh" = "layout_with_dh",
+                          #"layout_with_drl" = "layout_with_drl",
                           "layout_with_fr" = "layout_with_fr",
-                          "layout_with_gem" = "layout_with_gem",
-                          "layout_with_lgl" = "layout_with_lgl",
-                          "layout_with_graphopt" = "layout_with_graphopt",
-                          "layout_with_kk" = "layout_with_kk",
-                          "layout_with_mds" = "layout_with_mds",
-                          "layout_with_sugiyama" = "layout_with_sugiyama",
-                          "layout_with_graphopt" = "layout_with_graphopt",
-                          "layout_with_kk" = "layout_with_kk",
-                          "layout_with_mds" = "layout_with_mds",
-                          "layout_with_sugiyama" = "layout_with_sugiyama"), selected = "layout_nicely", multiple = FALSE)
-
+                          #"layout_with_gem" = "layout_with_gem",
+                          #"layout_with_lgl" = "layout_with_lgl",
+                          #"layout_with_graphopt" = "layout_with_graphopt",
+                          "layout_with_kk" = "layout_with_kk"
+                          #"layout_with_mds" = "layout_with_mds",
+                          #"layout_with_sugiyama" = "layout_with_sugiyama",
+                          #"layout_with_graphopt" = "layout_with_graphopt",
+                          #,
+                          #"layout_with_mds" = "layout_with_mds",
+                          #"layout_with_sugiyama" = "layout_with_sugiyama"), selected = "layout_nicely", multiple = FALSE
+                          ), 
+            selected = "layout_nicely"
+            )
 br()
 
 # Plot Height
@@ -241,17 +243,41 @@ output$global_network = renderVisNetwork({
     Sys.sleep(0.25)
     
     incProgress(1, detail = paste("Running visnetwork"))
-  
-    # Setting seed is important so the graph is always with the same configuration when starts
-    set.seed(123)
-  
-    # Visnetwork graph creation
-    visNetwork(nodes = data$nodes, edges = data$edges)%>%
-      visNodes(shape = "dot") %>%
-      visEdges(arrows =list(to = list(enabled = directed))) %>%
-      visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
-	    visIgraphLayout(layout = as.character(input$layout_global))%>%
-      visOptions(highlightNearest = TRUE)
+    
+    if (input$layout_global == "layout_with_fr") {
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+      # Visnetwork graph creation
+      visNetwork(nodes = data$nodes, edges = data$edges)%>%
+        visNodes(shape = "dot") %>%
+        visEdges(arrows =list(to = list(enabled = directed))) %>%
+        visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+        visIgraphLayout(layout = "layout_with_fr", niter= 10000) %>%
+        visOptions(highlightNearest = TRUE)
+    } 
+    else {
+      if (input$layout_global == "layout_with_kk") {
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        # Visnetwork graph creation
+        visNetwork(nodes = data$nodes, edges = data$edges)%>%
+          visNodes(shape = "dot") %>%
+          visEdges(arrows =list(to = list(enabled = directed))) %>%
+          visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+          visIgraphLayout(layout = "layout_with_kk", maxiter = 1000) %>%
+        visOptions(highlightNearest = TRUE)
+      } else {
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        # Visnetwork graph creation
+        visNetwork(nodes = data$nodes, edges = data$edges)%>%
+          visNodes(shape = "dot") %>%
+          visEdges(arrows =list(to = list(enabled = directed))) %>%
+          visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+          visIgraphLayout(layout = as.character(input$layout_global)) %>%
+          visOptions(highlightNearest = TRUE)
+      }
+    }
   })
 })
 
