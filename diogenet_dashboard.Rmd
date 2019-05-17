@@ -542,6 +542,27 @@ Row
 
 ```{r}
 
+# Community detection
+
+clustering = function(alg, graph){
+  if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph)
+  if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph)
+  if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph)
+  if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph)
+  if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph)
+  if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph)
+  #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system #
+  if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
+  if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph)
+  return(cluster)
+} 
+
+handledClustering = function(alg, graph){
+  tryCatch(clustering(alg,graph), 
+           #warning = function(w){;},
+           error = function(e){message = e;NULL})
+}
+
 network_cmnt =  reactive({
   
   # First validate if there are edges (Ties) selected
@@ -563,27 +584,6 @@ network_cmnt =  reactive({
   
   # Subsetting according to edges selected
   g_ = subset_graph(input$edges_select_comm, g)
-  
-	# Community detection
-  
-  clustering = function(alg, graph){
-    if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph)
-    if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph)
-    if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph)
-    if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph)
-    if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph)
-    if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph)
-    #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system #
-    if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
-    if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph)
-    return(cluster)
-  } 
-  
-  handledClustering = function(alg, graph){
-    tryCatch(clustering(alg,graph), 
-             #warning = function(w){;},
-             error = function(e){message = e;NULL})
-  }
   
   cluster = handledClustering(input$cmnt_dtc_alg, g_)
 
@@ -698,7 +698,10 @@ network_cmnt =  reactive({
     })
     return(visNetworkOutput(outputId="cmnt_vnw"))
   } 
+
   if (input$cmnt_vsl_pck == "igraph") {
+    
+     output$cmnt_igp = renderPlot({
     
       #Set label size
       if (is.null(input$labelUI_igp[1])) min_label = 0.6
@@ -715,24 +718,25 @@ network_cmnt =  reactive({
       V(g_)$community  <- cluster$membership
       
       # Set node size
-      if (is.null(input$nodeUI_igp[1])) min_node = 8.0
+      if (is.null(input$nodeUI_igp[1])) min_node = 3.0
       else min_node = input$nodeUI_igp[1]
       
-      if (is.null(input$nodeUI_igp[2])) max_node = 20.0
+      if (is.null(input$nodeUI_igp[2])) max_node = 10.0
       else max_node = input$nodeUI_igp[2]
       
       # Scaling nodes
       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
       V(g_)$size <- nodesize
     
-      output$cmnt_igp = renderPlot({
-        withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
-          Sys.sleep(0.25)
-          incProgress(0.6, detail = paste("Running igraph"))
-          mod <- round(modularity(cluster),3)
-          subTitle = paste0("MODULARITY: ", mod)
-          return(plot(cluster,g_,main = subTitle))
-      })
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+        incProgress(0.6, detail = paste("Running igraph"))
+        mod <- round(modularity(cluster),3)
+        subTitle = paste0("MODULARITY: ", mod)
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        plot(cluster,g_,main = subTitle)
+        })
     })
     return(plotOutput(outputId="cmnt_igp"))
   }
@@ -766,8 +770,8 @@ output$labelUI_igp <- renderUI({
 
 output$nodeUI_igp <- renderUI({
   if (input$cmnt_vsl_pck == "igraph") {
-    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 3, max = 30, value = c(input$nodeUI_igp[1], input$nodeUI_igp[2]),ticks = FALSE, step = 1)
-    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 3, max = 30, value = c(8, 20),ticks = FALSE)
+    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(input$nodeUI_igp[1], input$nodeUI_igp[2]),ticks = FALSE, step = 1)
+    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(3.0, 10.0),ticks = FALSE)
   }
 })
   
