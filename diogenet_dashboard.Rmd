@@ -31,6 +31,16 @@ Inputs {.sidebar}
 
 source("source_data.R")
 
+# Re-scale sliders
+
+# a and b are the desired initial values in the original scale 
+# The function return the 0 and 10 values for the 0-10 scale
+# The function is built using the a=4 and b=6 values (desired values)
+rescaled_value = function(a,b,x) {
+  y = ((b-a)/(6-4))*(x-4)+a
+  return(y)
+}
+
 br()
 h4("Network Ties")
 # Selection of the edges that will appear in the relation network 
@@ -81,8 +91,8 @@ br()
 # Plot Height
 h4("Appearence")
 # Nodes/Label sizes
-sliderInput(inputId = "label_size_global", label = "Label Size", min = 0.0, max = 5.0, value = c(1, 2),ticks = FALSE, step = 1)
-sliderInput(inputId = "node_size_global", label = "Node Size", min = 10.0, max = 60.0, value = c(20, 30),ticks = FALSE, step = 5)
+sliderInput(inputId = "label_size_global", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_global", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
@@ -144,6 +154,8 @@ is_directed = function(edges_selected) {
   return(directed)
 }
 
+
+
 # network stores an object rendered by renderVisnetwork 
 output$global_network = renderVisNetwork({
   
@@ -165,11 +177,11 @@ output$global_network = renderVisNetwork({
   g_ = subset_graph(input$edges_select_global, g)
   
   #Set label size
-  if (is.null(input$label_size_global[1])) min_label = 1.0
-  else min_label = input$label_size_global[1]
+  if (is.null(input$label_size_global[1])) min_label = rescaled_value(1.0,2.0,4)
+  else min_label = rescaled_value(1.0,2.0,input$label_size_global[1])
   
-  if (is.null(input$label_size_global[2])) max_label = 2.0
-  else max_label = input$label_size_global[2]
+  if (is.null(input$label_size_global[2])) max_label = rescaled_value(1.0,2.0,6)
+  else max_label = rescaled_value(1.0,2.0,input$label_size_global[2])
   
   # Scaling labels
   labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
@@ -179,11 +191,11 @@ output$global_network = renderVisNetwork({
   data <- toVisNetworkData(g_)
   
   # Set node size
-  if (is.null(input$node_size_global[1])) min_node = 20.0
-  else min_node = input$node_size_global[1]
+  if (is.null(input$node_size_global[1])) min_node = rescaled_value(20.0,30.0,4)
+  else min_node = rescaled_value(20.0,30.0,input$node_size_global[1])
   
-  if (is.null(input$node_size_global[2])) max_node = 30.0
-  else max_node = input$node_size_global[2]
+  if (is.null(input$node_size_global[2])) max_node = rescaled_value(20.0,30.0,6)
+  else max_node = rescaled_value(20.0,30.0,input$node_size_global[2])
   
   # Scaling nodes
   nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
@@ -355,8 +367,8 @@ sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
 # Node and Label Size
 br()
 h4("Appearance")
-sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.3, max = 1.0, value = c(0.4, 0.9),ticks = FALSE, step = 0.1)
-sliderInput(inputId = "node_size_local", label = "Node Size", min = 3.0, max = 30.0, value = c(8.0, 20.0),ticks = FALSE, step = 3)
+sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
@@ -400,11 +412,11 @@ output$local_network = renderVisNetwork({
                         mindist = 0)
 
     #Set label size
-    if (is.null(input$label_size_local[1])) min_label = 0.3
-    else min_label = input$label_size_local[1]
+    if (is.null(input$label_size_local[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local[1])
 
-    if (is.null(input$label_size_local[2])) max_label = 1.0
-    else max_label = input$label_size_local[2]
+    if (is.null(input$label_size_local[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local[2])
 
     labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
     V(d[[1]])$label.cex <- labsize
@@ -414,11 +426,11 @@ output$local_network = renderVisNetwork({
     data <- toVisNetworkData(d[[1]])
 
     # Set node size
-    if (is.null(input$node_size_local[1])) min_node = 3.0
-    else min_node = input$node_size_local[1]
+    if (is.null(input$node_size_local[1])) min_node = rescaled_value(3.0,30.0,4)
+    else min_node = rescaled_value(3.0,30.0,input$node_size_local[1])
 
-    if (is.null(input$node_size_local[2])) max_node = 30.0
-    else max_node = input$node_size_local[2]
+    if (is.null(input$node_size_local[2])) max_node = rescaled_value(3.0,30.0,6)
+    else max_node = rescaled_value(3.0,30.0,input$node_size_local[2])
 
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
@@ -697,11 +709,11 @@ network_cmnt =  reactive({
     output$cmnt_vnw = renderVisNetwork({
   
       #Set label size
-      if (is.null(input$labelUI_vnw[1])) min_label = 0.0
-      else min_label = input$labelUI_vnw[1]
+      if (is.null(input$labelUI_vnw[1])) min_label = rescaled_value(1.0,2.0,4)
+      else min_label = rescaled_value(1.0,2.0,input$labelUI_vnw[1])
       
-      if (is.null(input$labelUI_vnw[2])) max_label = 5.0
-      else max_label = input$labelUI_vnw[2]
+      if (is.null(input$labelUI_vnw[2])) max_label = rescaled_value(1.0,2.0,6)
+      else max_label = rescaled_value(1.0,2.0,input$labelUI_vnw[2])
       
       # Scaling labels
       labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
@@ -713,11 +725,11 @@ network_cmnt =  reactive({
       data <- toVisNetworkData(g_)
       
       # Set node size
-      if (is.null(input$nodeUI_vnw[1])) min_node = 10.0
-      else min_node = input$nodeUI_vnw[1]
+      if (is.null(input$nodeUI_vnw[1])) min_node = rescaled_value(20.0,30.0,4)
+      else min_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[1])
       
-      if (is.null(input$nodeUI_vnw[2])) max_node = 50.0
-      else max_node = input$nodeUI_vnw[2]
+      if (is.null(input$nodeUI_vnw[2])) max_node = rescaled_value(20.0,30.0,6)
+      else max_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[2])
       
       # Scaling nodes
       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
@@ -827,11 +839,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
      output$cmnt_igp = renderPlot({
     
       #Set label size
-      if (is.null(input$labelUI_igp[1])) min_label = 0.6
-      else min_label = input$labelUI_igp[1]
+      if (is.null(input$labelUI_igp[1])) min_label = rescaled_value(0.6,1.5,4)
+      else min_label = rescaled_value(0.6,1.5,input$labelUI_igp[1])
       
-      if (is.null(input$labelUI_igp[2])) max_label = 1.5
-      else max_label = input$labelUI_igp[2]
+      if (is.null(input$labelUI_igp[2])) max_label = rescaled_value(0.6,1.5,6)
+      else max_label = rescaled_value(0.6,1.5,input$labelUI_igp[2])
       
       # Scaling labels
       labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
@@ -841,11 +853,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       V(g_)$community  <- cluster$membership
       
       # Set node size
-      if (is.null(input$nodeUI_igp[1])) min_node = 3.0
-      else min_node = input$nodeUI_igp[1]
+      if (is.null(input$nodeUI_igp[1])) min_node = rescaled_value(3.0,10.0,4)
+      else min_node = rescaled_value(3.0,10.0,input$nodeUI_igp[1])
       
-      if (is.null(input$nodeUI_igp[2])) max_node = 10.0
-      else max_node = input$nodeUI_igp[2]
+      if (is.null(input$nodeUI_igp[2])) max_node = rescaled_value(3.0,10.0,6)
+      else max_node = rescaled_value(3.0,10.0,input$nodeUI_igp[2])
       
       # Scaling nodes
       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
@@ -871,30 +883,30 @@ output$graph_cmnt <- renderUI({
 
 output$labelUI_vnw <- renderUI({
   if (input$cmnt_vsl_pck == "visNetwork") {
-    if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(input$labelUI_vnw[1], input$labelUI_vnw[2]),ticks = FALSE, step = 1)
-    else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 5.0, value = c(1.0, 2.0),ticks = FALSE, step = 1)
+    if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
   } 
 })
 
 output$nodeUI_vnw <- renderUI({
   if (input$cmnt_vsl_pck == "visNetwork") {
-    if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(input$nodeUI_vnw[1], input$nodeUI_vnw[2]),ticks = FALSE, step = 10)
-    else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 10, max = 60, value = c(20, 30),ticks = FALSE, step = 10)
+    if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
   }
 })
 
 output$labelUI_igp <- renderUI({
   if (input$cmnt_vsl_pck == "igraph") {
-    if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(input$labelUI_igp[1], input$labelUI_igp[2]),ticks = FALSE,step = 0.45)
-    else sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.2, max = 2.0, value = c(0.6, 1.5),ticks = FALSE, step = 0.45)
+    if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "labelUI_igp", label = "Label Size",min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
   } 
 })
 
 
 output$nodeUI_igp <- renderUI({
   if (input$cmnt_vsl_pck == "igraph") {
-    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(input$nodeUI_igp[1], input$nodeUI_igp[2]),ticks = FALSE, step = 5)
-    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 20.0, value = c(3.0, 10.0),ticks = FALSE, step = 5)
+    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
   }
 })
   
