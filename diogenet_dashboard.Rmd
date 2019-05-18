@@ -51,7 +51,7 @@ checkboxGroupInput("edges_select_global",
                                   "Is family of" = 3, 
                                   "Studied the work of" = 4, 
                                   "Sent letters to" = 5, 
-                                  "Is associated with" = 6, 
+                                  #"Is associated with" = 6, 
                                   "Is benefactor of" = 7),
                    selected = 1,
                    inline = FALSE)
@@ -123,7 +123,7 @@ subset_graph  = function(edges_selected, g){
     if (edges_selected[k] == 3) edge = "is family of"
     if (edges_selected[k] == 4) edge = "studied the work of"
     if (edges_selected[k] == 5) edge = "sent letters to"
-    if (edges_selected[k] == 6) edge = "is associated with"
+    #if (edges_selected[k] == 6) edge = "is associated with"
     if (edges_selected[k] == 7) edge = "is benefactor of"
     
     #...then the subsetting rule is created dynamically
@@ -228,7 +228,7 @@ output$global_network = renderVisNetwork({
     data$edges$Relation == "is family of" ~ '#FF0000', 
     data$edges$Relation == "studied the work of" ~ '#ff01d9',
     data$edges$Relation == "sent letters to" ~ '#ffbf00',
-    data$edges$Relation == "is associated with" ~ '#14ff03',
+    #data$edges$Relation == "is associated with" ~ '#14ff03',
     data$edges$Relation == "is benefactor of" ~ '#fff23c'
   )
   
@@ -238,7 +238,7 @@ output$global_network = renderVisNetwork({
     data$edges$Relation == "is family of" ~ '#ff4000',
     data$edges$Relation == "studied the work of" ~ '#d9ff01',
     data$edges$Relation == "sent letters to" ~ '#8400ff',
-    data$edges$Relation == "is associated with" ~ '#ff0314',
+    #data$edges$Relation == "is associated with" ~ '#ff0314',
     data$edges$Relation == "is benefactor of" ~ '#e53cff'
   )
   
@@ -352,7 +352,7 @@ checkboxGroupInput("edges_select_local",
                                   "Is family of" = 3, 
                                   "Studied the work of" = 4, 
                                   "Sent letters to" = 5, 
-                                  "Is associated with" = 6, 
+                                  #"Is associated with" = 6, 
                                   "Is benefactor of" = 7),
                    selected = 1,
                    inline = FALSE)
@@ -463,7 +463,7 @@ output$local_network = renderVisNetwork({
       data$edges$Relation == "is family of" ~ '#FF0000', 
       data$edges$Relation == "studied the work of" ~ '#ff01d9',
       data$edges$Relation == "sent letters to" ~ '#ffbf00',
-      data$edges$Relation == "is associated with" ~ '#14ff03',
+      #data$edges$Relation == "is associated with" ~ '#14ff03',
       data$edges$Relation == "is benefactor of" ~ '#fff23c'
     )
     
@@ -473,7 +473,7 @@ output$local_network = renderVisNetwork({
       data$edges$Relation == "is family of" ~ '#ff4000',
       data$edges$Relation == "studied the work of" ~ '#d9ff01',
       data$edges$Relation == "sent letters to" ~ '#8400ff',
-      data$edges$Relation == "is associated with" ~ '#ff0314',
+      #data$edges$Relation == "is associated with" ~ '#ff0314',
       data$edges$Relation == "is benefactor of" ~ '#e53cff'
     )
   
@@ -576,7 +576,13 @@ output$node_sel <- renderUI({
     all_nodes = c(all_nodes, 
                   as.character(edges$Source[which(edges$Relation == "sent letters to")]),
                   as.character(edges$Target[which(edges$Relation == "sent letters to")]))
-    }
+  }
+  
+  if (7 %in% input$edges_select_local){
+  all_nodes = c(all_nodes, 
+                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
+                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
+  }
     
   all_nodes = sort(unique(all_nodes))
     
