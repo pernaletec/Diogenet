@@ -743,17 +743,15 @@ network_cmnt =  reactive({
       
       # A try for controling the colours of each group
       node_colours = rainbow(summary(cluster$membership)[6])
-      setColour = function(x) {node_colours[x]}
+      setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
       
       # Setting parameters straight in the data frame for visNetwork
-      #data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
+      data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
         
       # Setting group in visnetwork format
-      data$nodes$group = data$nodes$community
+      # data$nodes$group = data$nodes$community
       
-      data$nodes$color.border = rep("#000000",length(data$nodes$group))
-      
-      #data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
+      data$nodes$color.border = rep("#000000",length(data$nodes$community))
       
       # Setting parameters straight in the data frame for visNetwork
       data$edges$color.color = case_when(
@@ -842,11 +840,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
      output$cmnt_igp = renderPlot({
     
       #Set label size
-      if (is.null(input$labelUI_igp[1])) min_label = rescaled_value(0.6,1.5,4)
-      else min_label = rescaled_value(0.6,1.5,input$labelUI_igp[1])
+      if (is.null(input$labelUI_igp[1])) min_label = rescaled_value(0.7,1.2,4)
+      else min_label = rescaled_value(0.7,1.2,input$labelUI_igp[1])
       
-      if (is.null(input$labelUI_igp[2])) max_label = rescaled_value(0.6,1.5,6)
-      else max_label = rescaled_value(0.6,1.5,input$labelUI_igp[2])
+      if (is.null(input$labelUI_igp[2])) max_label = rescaled_value(0.7,1.2,6)
+      else max_label = rescaled_value(0.7,1.2,input$labelUI_igp[2])
       
       # Scaling labels
       labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
@@ -856,11 +854,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       V(g_)$community  <- cluster$membership
       
       # Set node size
-      if (is.null(input$nodeUI_igp[1])) min_node = rescaled_value(3.0,10.0,4)
-      else min_node = rescaled_value(3.0,10.0,input$nodeUI_igp[1])
+      if (is.null(input$nodeUI_igp[1])) min_node = rescaled_value(4.0,9.0,4)
+      else min_node = rescaled_value(4.0,9.0,input$nodeUI_igp[1])
       
-      if (is.null(input$nodeUI_igp[2])) max_node = rescaled_value(3.0,10.0,6)
-      else max_node = rescaled_value(3.0,10.0,input$nodeUI_igp[2])
+      if (is.null(input$nodeUI_igp[2])) max_node = rescaled_value(4.0,9.0,6)
+      else max_node = rescaled_value(4.0,9.0,input$nodeUI_igp[2])
       
       # Scaling nodes
       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
@@ -873,7 +871,8 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
         subTitle = paste0("MODULARITY: ", mod)
         # Setting seed is important so the graph is always with the same configuration when starts
         set.seed(123)
-        plot(cluster,g_,main = subTitle)
+        coords <- layout_(g_, nicely())
+        plot(cluster,g_,main = subTitle, layout = matrix(c(coords[,1], -coords[,2]), nrow = length(coords[,1]), ncol = 2, byrow = FALSE, dimnames = list()))
         })
     })
     return(plotOutput(outputId="cmnt_igp"))
