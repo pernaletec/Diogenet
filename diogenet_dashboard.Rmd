@@ -735,7 +735,7 @@ network_cmnt =  reactive({
       
       data$nodes$color.border = rep("#000000",length(data$nodes$group))
       
-      #data$nodes$color.highlight = sapply(data$nodes$community, FUN = setColour)
+      #data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
       
       # Setting parameters straight in the data frame for visNetwork
       data$edges$color.color = case_when(
@@ -773,14 +773,15 @@ network_cmnt =  reactive({
                            font.align = "bottom")
       
       # Shows the name when hovering over the node
-      data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+      data$nodes$title = paste0('<center><p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
                                 data$nodes$id,
-                                '</p>', 
+                                '</p></center>', 
                                 '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
                                 data$nodes$color.background, 
                                 ';">',
                                 data$nodes$Group,
-                                '</p></center>'
+                                '</p></center>', 
+                                '<center>Community N°: ', '<b>',data$nodes$community,'</b></center>'
                                 )
       
       # Shows the relation when hovering over the edge
