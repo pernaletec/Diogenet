@@ -877,7 +877,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
         #print(c("black","red")[igraph::crossing(cluster, g_) + 1])
         #print(igraph::crossing(cluster, g_) + 1)
         
-        if (input$cmnt_dtc_alg == "Cluster Edges Betweenness") {
+        if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") {
           #Print in console the id's of the edges identified as bridges 
           print(cluster$bridges)
           e = length(E(g_)$id)
