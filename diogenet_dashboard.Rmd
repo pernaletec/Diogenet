@@ -877,18 +877,14 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
         #print(c("black","red")[igraph::crossing(cluster, g_) + 1])
         #print(igraph::crossing(cluster, g_) + 1)
         
-        #Print in console the id's of the edges identified as bridges 
-        print(cluster$bridges)
-        
-        e = length(E(g_)$id)
-        e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1
-      
-        
-        #print(e_bool)
-        
-        classical_edge_col = c("black","red")[igraph::crossing(cluster, g_) + 1]
-        bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]
-        
+        if (input$cmnt_dtc_alg == "Cluster Edges Betweenness") {
+          #Print in console the id's of the edges identified as bridges 
+          print(cluster$bridges)
+          e = length(E(g_)$id)
+          e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1
+          #print(e_bool)
+          bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]  
+        } else bridges_edge_col  = c("black","red")[igraph::crossing(cluster, g_) + 1]
         
         new_cols <- node_colours[membership(cluster)]
         plot(x=cluster,
