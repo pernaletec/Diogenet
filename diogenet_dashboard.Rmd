@@ -660,7 +660,7 @@ Row
 # Community detection
 
 clustering = function(alg, graph){
-  if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph)
+  if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph, bridges = TRUE)
   if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph)
   if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph)
   if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph)
@@ -701,6 +701,10 @@ network_cmnt =  reactive({
   g_ = subset_graph(input$edges_select_comm, g)
   
   cluster = handledClustering(input$cmnt_dtc_alg, g_)
+  
+  # Controling the colours of each group
+  node_colours = rainbow(summary(cluster$membership)[6])
+  setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
 
   validate(
     need(try(!is.null(cluster)), 
@@ -740,10 +744,6 @@ network_cmnt =  reactive({
       # Scaling nodes
       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
       data$nodes$size = nodesize
-      
-      # A try for controling the colours of each group
-      node_colours = rainbow(summary(cluster$membership)[6])
-      setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
       
       # Setting parameters straight in the data frame for visNetwork
       data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
@@ -872,7 +872,35 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
         # Setting seed is important so the graph is always with the same configuration when starts
         set.seed(123)
         coords <- layout_(g_, nicely())
-        plot(cluster,g_,main = subTitle, layout = matrix(c(coords[,1], -coords[,2]), nrow = length(coords[,1]), ncol = 2, byrow = FALSE, dimnames = list()))
+        #print(igraph::crossing(cluster, g_))
+        #print(str(cluster))
+        #print(c("black","red")[igraph::crossing(cluster, g_) + 1])
+        #print(igraph::crossing(cluster, g_) + 1)
+        
+        #Print in console the id's of the edges identified as bridges 
+        print(cluster$bridges)
+        
+        e = length(E(g_)$id)
+        e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1
+      
+        
+        #print(e_bool)
+        
+        classical_edge_col = c("black","red")[igraph::crossing(cluster, g_) + 1]
+        bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]
+        
+        
+        new_cols <- node_colours[membership(cluster)]
+        plot(x=cluster,
+             y=g_,
+             col = new_cols, 
+             main = subTitle, 
+             layout = matrix(c(coords[,1], -coords[,2]), 
+                             nrow = length(coords[,1]), 
+                             ncol = 2, 
+                             byrow = FALSE, 
+                             dimnames = list()), 
+             edge.color = bridges_edge_col)
         })
     })
     return(plotOutput(outputId="cmnt_igp"))
