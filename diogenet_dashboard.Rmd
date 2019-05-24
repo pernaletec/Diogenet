@@ -636,6 +636,10 @@ h4("Visualization package")
 # Library for community visualization
 selectInput("cmnt_vsl_pck", "Library:", choices=c("visNetwork", "igraph"))
 br()
+radioButtons("edges_format", label = h4("Ties format"),
+    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2), 
+    selected = 2)
+br()
 # Plot Height
 h4("Appearance")
 # Nodes/Label sizes
@@ -713,6 +717,20 @@ network_cmnt =  reactive({
                " could not identify communities given the current Phylosophers and Relations"," . ",  message)
          )
   )
+  
+  # This code is on hold until the requirement for bridges detection is 
+  # addressed
+  #if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") {
+    #Print in console the id's of the edges identified as bridges 
+    #print(cluster$bridges)
+    #e = length(E(g_)$id)
+    #e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1
+    #print(e_bool)
+    #bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]  
+  #} else 
+  
+  # In the meanwhile overwriting the default behaviour
+  bridges_edge_col  = c("gray","red")[igraph::crossing(cluster, g_) + 1]
     
   if (input$cmnt_vsl_pck == "visNetwork") {
     
@@ -753,26 +771,33 @@ network_cmnt =  reactive({
       
       data$nodes$color.border = rep("#000000",length(data$nodes$community))
       
-      # Setting parameters straight in the data frame for visNetwork
-      data$edges$color.color = case_when(
-        data$edges$Relation == "is teacher of" ~ '#0000FF',
-        data$edges$Relation == "is friend of" ~ '#228B22',
-        data$edges$Relation == "is family of" ~ '#FF0000', 
-        data$edges$Relation == "studied the work of" ~ '#ff01d9',
-        data$edges$Relation == "sent letters to" ~ '#ffbf00',
-        #data$edges$Relation == "is associated with" ~ '#14ff03',
-        data$edges$Relation == "is benefactor of" ~ '#fff23c'
-      )
+      if (input$edges_format == 1) {
+        data$edges$color.color = bridges_edge_col
+        data$edges$color.highlight = bridges_edge_col
+      } else {
+        # Setting parameters straight in the data frame for visNetwork
+        data$edges$color.color = case_when(
+          data$edges$Relation == "is teacher of" ~ '#0000FF',
+          data$edges$Relation == "is friend of" ~ '#228B22',
+          data$edges$Relation == "is family of" ~ '#FF0000', 
+          data$edges$Relation == "studied the work of" ~ '#ff01d9',
+          data$edges$Relation == "sent letters to" ~ '#ffbf00',
+          #data$edges$Relation == "is associated with" ~ '#14ff03',
+          data$edges$Relation == "is benefactor of" ~ '#fff23c'
+        )
+        
+        data$edges$color.highlight = case_when(
+          data$edges$Relation == "is teacher of" ~ '#00ffff',
+          data$edges$Relation == "is friend of" ~ '#568b22',
+          data$edges$Relation == "is family of" ~ '#ff4000',
+          data$edges$Relation == "studied the work of" ~ '#d9ff01',
+          data$edges$Relation == "sent letters to" ~ '#8400ff',
+          #data$edges$Relation == "is associated with" ~ '#ff0314',
+          data$edges$Relation == "is benefactor of" ~ '#e53cff'
+        )
+      }
       
-      data$edges$color.highlight = case_when(
-        data$edges$Relation == "is teacher of" ~ '#00ffff',
-        data$edges$Relation == "is friend of" ~ '#568b22',
-        data$edges$Relation == "is family of" ~ '#ff4000',
-        data$edges$Relation == "studied the work of" ~ '#d9ff01',
-        data$edges$Relation == "sent letters to" ~ '#8400ff',
-        #data$edges$Relation == "is associated with" ~ '#ff0314',
-        data$edges$Relation == "is benefactor of" ~ '#e53cff'
-      )
+
     
       # nodes data.frame for legend
       lnodes <- data.frame(label = c("Male", "Female"),
@@ -853,6 +878,21 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       # Assign membership ids to vertex
       V(g_)$community  <- cluster$membership
       
+      data <- toVisNetworkData(g_)
+      
+      if (input$edges_format == 2) {
+        # Setting parameters straight in the data frame for visNetwork
+        bridges_edge_col = case_when(
+          data$edges$Relation == "is teacher of" ~ '#0000FF',
+          data$edges$Relation == "is friend of" ~ '#228B22',
+          data$edges$Relation == "is family of" ~ '#FF0000', 
+          data$edges$Relation == "studied the work of" ~ '#ff01d9',
+          data$edges$Relation == "sent letters to" ~ '#ffbf00',
+          #data$edges$Relation == "is associated with" ~ '#14ff03',
+          data$edges$Relation == "is benefactor of" ~ '#fff23c'
+        )
+      }
+      
       # Set node size
       if (is.null(input$nodeUI_igp[1])) min_node = rescaled_value(4.0,9.0,4)
       else min_node = rescaled_value(4.0,9.0,input$nodeUI_igp[1])
@@ -864,6 +904,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
       V(g_)$size <- nodesize
     
+      
       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
         Sys.sleep(0.25)
         incProgress(0.6, detail = paste("Running igraph"))
@@ -872,20 +913,6 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
         # Setting seed is important so the graph is always with the same configuration when starts
         set.seed(123)
         coords <- layout_(g_, nicely())
-        #print(igraph::crossing(cluster, g_))
-        #print(str(cluster))
-        #print(c("black","red")[igraph::crossing(cluster, g_) + 1])
-        #print(igraph::crossing(cluster, g_) + 1)
-        
-        if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") {
-          #Print in console the id's of the edges identified as bridges 
-          print(cluster$bridges)
-          e = length(E(g_)$id)
-          e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1
-          #print(e_bool)
-          bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]  
-        } else bridges_edge_col  = c("black","red")[igraph::crossing(cluster, g_) + 1]
-        
         new_cols <- node_colours[membership(cluster)]
         plot(x=cluster,
              y=g_,
