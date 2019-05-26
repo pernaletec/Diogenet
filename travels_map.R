@@ -23,11 +23,6 @@ read_georef = FALSE
 nodes = read.csv(file="old_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 places <- nodes$Name[nodes$Groups=="Place"]
 
-# Create a gazetteer from pleiades. 
-# This step should probaly be done only once and saved afterwards
-# because we can modify this table as required. 
-# For axample, we can add coordinates that are not in pleiades to the new gazetteer
-
 ##############################
 # Reading data from pleiades #
 ##############################
@@ -49,8 +44,8 @@ j = 1
 h = 1
 for (k in 1:length(places)) {
   if (det_pleiades[[k]][1] == 0) {
-     lack_data[j] = as.character(places[as.integer(k)])
-     j = j+1
+    lack_data[j] = as.character(places[as.integer(k)])
+    j = j+1
   } else {
     for (w in 1:det_pleiades[[k]][1]){
       #browser()
@@ -100,10 +95,10 @@ if (read_georef){
     res_georef_df[j,4]=as.character("georef")
   }
   
-# Combining all data 
-# These are the available places
-avail_data = rbind(avail_data, res_georef_df)
-avail_data = avail_data[order(avail_data$name),]
+  # Combining all data 
+  # These are the available places
+  avail_data = rbind(avail_data, res_georef_df)
+  avail_data = avail_data[order(avail_data$name),]
 }
 
 itsct_ii = lapply(places, function(i) any(grepl(i, avail_data$name)))
@@ -181,6 +176,9 @@ all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasin
 all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 
 for (k in 1:length(travel_edges$source)) {
+  print(paste0(k, " ", knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])]))
+  print(paste0(k, " ", travel_edges$name[k]))
+  
   travel_edges$source[k] = (knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])])
   travel_edges$lat_source[k] = (all_places_full_data$lat[which(all_places_full_data$name == travel_edges$source[k])])
   travel_edges$lon_source[k] = (all_places_full_data$lon[which(all_places_full_data$name == travel_edges$source[k])])
@@ -203,23 +201,30 @@ node_count = as.data.frame(table(node_count))
 
 all_places_full_data$degree = node_count$Freq[which(node_count$node_count == all_places_full_data$name)]
 
+tcu_map = "https://api.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ"
+
+map_attr = "Map data &copy<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a> Imagery © <a href='http://mapbox.com'>Mapbox</a>"
 
 m <- leaflet(avail_data_tb) %>% 
-  addProviderTiles(providers$Esri.WorldPhysical) %>%
+  addTiles(urlTemplate = tcu_map, attribution = map_attr, options = list(maxZoom = 10, 
+                                                                         id = 'isawnyu.map-knmctlkh',
+                                                                         accessToken =  'pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ'))%>%
   setView(lng= 24.92, lat = 35.255, zoom = 5) 
 
   for(i in 1:length(travel_edges$source)) {
     arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
                            p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
-                           n=10000, addStartEnd=TRUE )
+                           n=100, addStartEnd=TRUE )
     m <- addPolylines(m, 
                       data=arc, 
-                      color="#1a00ff", 
-                      weight=2, 
+                      color="black", 
+                      weight=1,
+                      stroke = TRUE,
+                      smoothFactor = 5,
                       fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i], 
                                                          "</b><br/><small><i>From: </i>", 
                                                           travel_edges$source[i],
-                                                          "<br/><i>To :</i>",
+                                                          "<br/><i>To: </i>",
                                                           travel_edges$target[i], 
                                                           "<br/></small></center></p>")
                       )
@@ -233,15 +238,14 @@ m <- leaflet(avail_data_tb) %>%
                                      "<br/><i>Long: </i>",
                                      all_places_full_data$lon, 
                                      "<br/></small></center></p>"),
-                        radius=all_places_full_data$degree*20/max(all_places_full_data$degree), 
+                        radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree), 
                         color="#ff0d00", 
                         stroke =FALSE, 
                         fillOpacity = 0.75)
   
 m
 
-saveWidget(m, file = map.hmtl)
-
+saveWidget(m, file = "map.html", selfcontained = TRUE)
 
 
 
