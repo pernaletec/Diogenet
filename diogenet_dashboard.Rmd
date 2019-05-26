@@ -635,10 +635,11 @@ br()
 h4("Visualization package")
 # Library for community visualization
 selectInput("cmnt_vsl_pck", "Library:", choices=c("visNetwork", "igraph"))
-br()
-radioButtons("edges_format", label = h4("Ties format"),
-    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2), 
-    selected = 2)
+#br()
+checkboxInput("edges_format", label = "Highlight crossing ties", value = FALSE)
+#radioButtons("edges_format", label = h4("Ties format"),
+#    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2), 
+#    selected = 2)
 br()
 # Plot Height
 h4("Appearance")
@@ -730,7 +731,7 @@ network_cmnt =  reactive({
   #} else 
   
   # In the meanwhile overwriting the default behaviour
-  bridges_edge_col  = c("gray","red")[igraph::crossing(cluster, g_) + 1]
+  bridges_edge_col  = c("#dddde6","#e80c00")[igraph::crossing(cluster, g_) + 1]
     
   if (input$cmnt_vsl_pck == "visNetwork") {
     
@@ -771,7 +772,7 @@ network_cmnt =  reactive({
       
       data$nodes$color.border = rep("#000000",length(data$nodes$community))
       
-      if (input$edges_format == 1) {
+      if (input$edges_format == TRUE) {
         data$edges$color.color = bridges_edge_col
         data$edges$color.highlight = bridges_edge_col
       } else {
@@ -880,7 +881,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       
       data <- toVisNetworkData(g_)
       
-      if (input$edges_format == 2) {
+      if (input$edges_format == FALSE) {
         # Setting parameters straight in the data frame for visNetwork
         bridges_edge_col = case_when(
           data$edges$Relation == "is teacher of" ~ '#0000FF',
