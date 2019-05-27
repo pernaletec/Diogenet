@@ -731,7 +731,7 @@ network_cmnt =  reactive({
   #} else 
   
   # In the meanwhile overwriting the default behaviour
-  bridges_edge_col  = c("#dddde6","#e80c00")[igraph::crossing(cluster, g_) + 1]
+  bridges_edge_col  = c("#030000","#ff0400")[igraph::crossing(cluster, g_) + 1]
     
   if (input$cmnt_vsl_pck == "visNetwork") {
     
