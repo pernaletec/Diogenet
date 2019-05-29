@@ -1,50 +1,55 @@
 Name,Groups
+ Lyceum (Athens),Place
 Abdera,Place
-Academy,Place
-Achileis,Place
+Academy of Plato (Athens),Place
+Adramyttium,Place
 Aegina,Place
 Aegospotami,Place
 Aeolis,Place
 Aethiopia,Place
+Aetna M.,Place
 Agrigentum,Place
-Alexandria,Place
-Alpheus,Place
+Akkon,Place
+Alexandria at Egypt,Place
+Alpheios river,Place
 Amastris,Place
 Ambracia,Place
+Amphiareion,Place
 Amphipolis,Place
-Apollonia,Place
+Ancient Egypt (region),Place
+Apollonia Pontica,Place
 Apulia,Place
-Arcadia,Place
-Areopagus,Place
+Areiopagos (Athens),Place
 Argos,Place
+Arkadia region,Place
 Asia,Place
+Aspendos/Primoupolis,Place
 Assos,Place
 Atarneus,Place
-Athens,Place
+Athenae,Place
 Attica,Place
 Babylon,Place
+Bargylia,Place
 Bithynia,Place
 Boeotia,Place
-Borborus,Place
-Borysthenes,Place
+Borboros,Place
+Borysthenes (Olbia),Place
 Bosphorus,Place
 Bosporus,Place
-Brachidae,Place
 Byzantium,Place
 Calauria,Place
 Callatia,Place
-Carthage,Place
+Callatis,Place
+Cappadocia,Place
+Carthago,Place
 Carystus,Place
-Casandrea,Place
-Catana,Place
 Ceos,Place
 Chalcedon,Place
 Chalcidice,Place
 Chalcis,Place
-Chen,Place
-Chios,Place
+Chenai,Place
+Chios (island),Place
 Cilicia,Place
-Citium,Place
 Clazomenae,Place
 Cnidos,Place
 Cnidus,Place
@@ -52,15 +57,14 @@ Cnossos,Place
 Colchis,Place
 Colophon,Place
 Corcyra,Place
+Corcyrian Cave,Place
 Corinth,Place
 Cos,Place
 Cranon,Place
-Crete,Place
-Croto,Place
-Croton,Place
+Creta,Place
+Crotone,Place
 Cyme,Place
 Cyprus,Place
-Cyrenaica,Place
 Cyrene,Place
 Cythera,Place
 Cyzicus,Place
@@ -68,87 +72,83 @@ Dardanus,Place
 Delium,Place
 Delos,Place
 Delphi,Place
-Demetrias,Place
-Didyma,Place
-Dionysia,Place
+Demetrias (Magnesia),Place
+Didyma/Branchidai/Ioustinianopolis,Place
 Doris,Place
-Egypt,Place
 Elea,Place
-Eleusis_geo,Place
+Eleusis in Attica,Place
 Elis,Place
 Ephesus,Place
 Epidaurus,Place
 Eresus,Place
 Eretria,Place
+Erythrae,Place
 Etis,Place
-Etna,Place
+Europe region,Place
+Gaul,Place
 Gela,Place
-Greece,Place
-Hades,Place
+Hades (Place),Place
 Halicarnassus,Place
 Halys,Place
 Heliopolis,Place
 Hellas,Place
 Heraclea,Place
-Hermione,Place
-Hyba,Place
+Hermion(e),Place
+Hybadai,Place
 Hyele,Place
 Ida,Place
-Ilium,Place
+Ilium/Troia,Place
 India,Place
-Ionia,Place
+Ionia region (Asia Minor),Place
 Isthmus,Place
 Italy,Place
-Lacedaemon,Place
-Laconia,Place
+Kassandreia,Place
+Katane,Place
+Kition (Cyprus),Place
+Lacedaemon/Laconia,Place
 Lamia,Place
 Lampsacus,Place
-Larissa,Place
-Lebedus,Place
+Larissa (Thessaly),Place
+Lebedos/Ptolemais,Place
 Lemnos,Place
-Lenaea,Place
 Leontini,Place
 Lepreum,Place
 Leros,Place
 Lesbos,Place
 Libya,Place
+Liguria,Place
 Lindus,Place
 Lucania,Place
-Lyceum,Place
 Lydia,Place
 Lysimachia,Place
-Macedon,Place
 Macedonia,Place
 Magnesia,Place
 Mantinea,Place
 Marathon,Place
-Mausolus,Place
 Media,Place
-Megara,Place
-Memphis,Place
+Megara (Attica),Place
+Megara Hyblaea,Place
+Memphis (Egypt),Place
 Mende,Place
 Messene,Place
 Messenia,Place
 Metapontum,Place
 Miletus,Place
-Milo,Place
 Mitylene,Place
-Mount Corycus,Place
+Mt. Oita,Place
 Munichia,Place
 Myndus,Place
 Myra,Place
+Myrlea,Place
 Nemea,Place
-Nessus,Place
+Nestos (river),Place
 Nile,Place
-Odrysia,Place
-Oeta,Place
-Olympia,Place
+Odrysians tribe,Place
+Olympian Zeus sanctuary (Eleia),Place
 Olynthus,Place
 Orchomenus,Place
 Oropus,Place
-Orthomenes,Place
 Paros,Place
-Peiraeus,Place
 Peloponnesus,Place
 Pergamum,Place
 Persia,Place
@@ -158,34 +158,34 @@ Phlius,Place
 Phocaea,Place
 Phocaean,Place
 Phoenicia,Place
-Phrygia,Place
+Phrygia region,Place
 Phthia,Place
 Piraeus,Place
 Pisa,Place
 Pitane,Place
+Pitthos,Place
 Pontus,Place
 Potidaea,Place
 Priene,Place
 Propontis,Place
 Prytaneum,Place
-Ptolemais,Place
-Ptolemas,Place
+Ptolemais/Barkes Limen,Place
 Red Sea,Place
 Rhegium,Place
-Rhodes,Place
+Rhodos (island),Place
 Rome,Place
 Salamis,Place
-Salento,Place
 Samos,Place
 Samothrace,Place
 Sardis,Place
-Scillus,Place
-Scythia,Place
+Scepsis,Place
 Selinus,Place
-Shrine of Amphiaraus,Place
+Selinus (river in Elis),Place
 Sicily,Place
 Sicyon,Place
 Sidon,Place
+Skillous,Place
+Skythai,Place
 Smyrna,Place
 Soli,Place
 Sparta,Place
@@ -194,18 +194,17 @@ Stagira,Place
 Syracuse,Place
 Syria,Place
 Syros,Place
-Tarentum,Place
+Taras/Tarentum/Neptunia,Place
 Tarsus,Place
-Teos,Place
+Temnus,Place
+Teos (Ionia),Place
 Thasos,Place
 Thebes,Place
 Thrace,Place
 Thurii,Place
 Tiberias,Place
-Tralles,Place
 Troas,Place
 Troezen,Place
-Troy,Place
 Tyre,Place
 Tyrrhenian Sea,Place
 Zancle,Place
@@ -315,8 +314,6 @@ Apsephion,Male
 Aratus,Male
 Arcesilaus,Male
 Arcesilaus II,Male
-Arcesilaus IV,Male
-Arcesilaus V,Male
 Archagoras,Male
 Archecrates,Male
 Archedemus,Male
@@ -337,6 +334,8 @@ Archytas III,Male
 Archytas IV,Male
 Archytas V,Male
 Areopagites,Male
+Ariarathes,Male
+Aridices,Male
 Arimnestus,Male
 Aristagoras,Male
 Aristides,Male
@@ -352,7 +351,6 @@ Aristocrates,Male
 Aristocreon,Male
 Aristodemus,Male
 Aristodemus II,Male
-Aristodicus,Male
 Aristogiton,Male
 Aristogoras,Male
 Aristomenes,Male
@@ -363,6 +361,7 @@ Aristophanes,Male
 Aristophon,Male
 Aristotle,Male
 Aristotle II,Male
+Aristotle III,Male
 Aristoxenus,Male
 Artaphernes,Male
 Artemidorus,Male
@@ -385,27 +384,18 @@ Athlius,Male
 Attalus,Male
 Autolycus,Male
 Babys,Male
-Bacchus,Male
 Bathycles,Male
 Bathyllus,Male
 Baton,Male
 Betion,Male
 Bias,Male
 Bion,Male
-Bion II,Male
-Bion III,Male
-Bion IV,Male
-Bion IX,Male
-Bion V,Male
-Bion VI,Male
-Bion VII,Male
-Bion VIII,Male
-Bion X,Male
 Bloson,Male
 Boethus,Male
 Boton,Male
 Brontinus,Male
 Bryson,Male
+Bugelus,Male
 Cabas,Male
 Caduidas,Male
 Caeneus,Male
@@ -420,20 +410,20 @@ Callidemides,Male
 Callimachus,Male
 Callippus II,Male
 Callisthenes,Male
+Cantor,Male
 Caphisius,Male
 Carcinus,Male
 Carneades,Male
-Carneades II,Male
 Casander,Male
 Cassius,Male
 Cebes,Male
 Cecrops,Male
-Cephalus,Male
 Cephisodorus,Male
 Cercops,Male
 Chabrinus,Male
 Chaerephon,Male
 Chaldaeans,Male
+Chamaeleon,Male
 Charinus,Male
 Charmantides,Male
 Charmides,Male
@@ -467,11 +457,6 @@ Crantor,Male
 Crates,Male
 Crates II,Male
 Crates III,Male
-Crates IV,Male
-Crates IX,Male
-Crates VI,Male
-Crates VII,Male
-Crates VIII,Male
 Crates XII,Male
 Cratinus,Male
 Creophylus,Male
@@ -481,7 +466,7 @@ Crito,Male
 Critobulus,Male
 Croesus,Male
 Cronos,Male
-Ctesibius,Male
+Ctesibius II,Male
 Ctesiclides,Male
 Ctesippus,Male
 Cybisthus,Male
@@ -498,7 +483,6 @@ Damasus,Male
 Damo,Male
 Damon,Male
 Darius,Male
-Daughter of Stilpo,Male
 Delphis,Male
 Demetrius,Male
 Demetrius III,Male
@@ -518,6 +502,7 @@ Demophilus,Male
 Demosthenes,Male
 Dexius,Male
 Dicaearchus,Male
+Didymus,Male
 Dieuchidas,Male
 Dinarchus,Male
 Dinon,Male
@@ -534,6 +519,7 @@ Diogenes III,Male
 Diogenes IV,Male
 Diogenes VII,Male
 Diogenes X,Male
+Diogenes XIII,Male
 Diomedon,Male
 Dion,Male
 Dionysius,Male
@@ -555,7 +541,7 @@ Draco,Male
 Duris,Male
 Echecrates,Male
 Egyptians,Male
-Eleusis,Male
+Eleusis (Person),Male
 Elians,Male
 Empedocles,Male
 Empedocles II,Male
@@ -588,6 +574,7 @@ Eudoxus II,Male
 Eudoxus III,Male
 Eudoxus IV,Male
 Eudromus,Male
+Eugamus,Male
 Eumelus,Male
 Eumenes,Male
 Eunomus,Male
@@ -604,6 +591,7 @@ Eurymenes,Male
 Eurystratus,Male
 Eurytus,Male
 Euthyphro,Male
+Euthyphro II,Male
 Euthyphro IV,Male
 Euthyrphro III,Male
 Eutychides,Male
@@ -638,7 +626,7 @@ Hegesinus,Male
 Hegesipolis,Male
 Hegesistratus,Male
 Helothales,Male
-Hera,Male
+Hemon,Male
 Heraclides,Male
 Heraclides II,Male
 Heraclides IV,Male
@@ -659,7 +647,6 @@ Hermogenes II,Male
 Hermolaus,Male
 Hermotimus,Male
 Herodotus,Male
-Herophilus,Male
 Hesiod,Male
 Hicetas,Male
 Hierocles,Male
@@ -668,12 +655,12 @@ Hipparchus,Male
 Hippasus,Male
 Hippasus III,Male
 Hippias,Male
-Hippionicus,Male
 Hippobotus,Male
 Hippocrates,Male
 Hippocrates II,Male
 Hipponax,Male
 Hipponicus,Male
+Hipponicus II,Male
 Homer,Male
 Hypsicrates,Male
 Hyrrhadius,Male
@@ -683,6 +670,7 @@ Idomeneus,Male
 Ion,Male
 Iphicrates,Male
 Isidorus,Male
+Ismenias,Male
 Isocrates,Male
 Istrus,Male
 Ithaegenes,Male
@@ -712,7 +700,6 @@ Lycon III,Male
 Lycophron,Male
 Lycophron II,Male
 Lycurgus,Male
-Lysander,Male
 Lysanias,Male
 Lysias,Male
 Lysicles,Male
@@ -725,12 +712,14 @@ Maeandrius,Male
 Magas,Male
 Magi,Male
 Marmacus,Male
+Mausolus,Male
 Meandrius,Male
 Medes,Male
 Megabyzus,Male
 Megaclides,Male
 Melantes,Male
 Melanthius,Male
+Melanthius II,Male
 Melantho,Male
 Meleager,Male
 Meletus,Male
@@ -738,7 +727,7 @@ Meletus II,Male
 Melissus,Male
 Menander,Male
 Menedemus,Male
-Menedemus' Daughters,Male
+Menedemus II,Male
 Menedemus' Wife,Male
 Menelaus,Male
 Menexenus,Male
@@ -755,6 +744,7 @@ Metrodorus,Male
 Metrodorus II,Male
 Midias,Male
 Midon,Male
+Milo,
 Miltiades II,Male
 Miltiades III,Male
 Mimnermus,Male
@@ -769,6 +759,7 @@ Moereas,Male
 Moeris,Male
 Moschus,Male
 Myrmex,Male
+Myroianus,Male
 Myronianus,Male
 Myrto,Male
 Myson,Male
@@ -795,6 +786,7 @@ Olympius,Male
 Onetor,Male
 Orestades,Male
 Orpheus,Male
+Orthomenes,Male
 Paeonius,Male
 Pamphila,Male
 Pamphylus,Male
@@ -814,6 +806,7 @@ Peisianax,Male
 Pelopidas,Male
 Penelope,Male
 Periander,Male
+Periander II,
 Pericles,Male
 Permenides,Male
 Persaeus,Male
@@ -853,6 +846,7 @@ Philtis,Male
 Phlegon,Male
 Phocus,Male
 Phrasidemus,Male
+Phrynicus,Male
 Phrynon,Male
 Phylopidas,Male
 Pindar,Male
@@ -860,7 +854,6 @@ Pirithous,Male
 Pisianax,Male
 Pisistratus,Male
 Pittacus,Male
-Pitthos,Male
 Plato,Male
 Pleistarchus,Male
 Plistanus,Male
@@ -928,6 +921,7 @@ Selinuntines,Male
 Semele,Male
 Serapion,Male
 Seuthes,Male
+Seuthes II,Male
 Seven Sages,Male
 Sicilian,Male
 Silenus,Male
@@ -944,6 +938,7 @@ Socrates II,Male
 Socrates III,Male
 Socrates IV,Male
 Socrates V,Male
+Socratides,Male
 Solon,Male
 Son of Aristippus II,Male
 Sophilus,Male
@@ -969,6 +964,7 @@ Syllus,Male
 Syracusans,Male
 Telauges,Male
 Telecles,Male
+Telesphorus,Male
 Teleutagoras,Male
 Terpander,Male
 Teucer,Male
@@ -982,6 +978,7 @@ The Thirty,Male
 Theaetetus,Male
 Theaetetus II,Male
 Theano,Male
+Theatetus II,Male
 Themistoclea,Male
 Theocritus,Male
 Theodorus,Male
@@ -1039,11 +1036,6 @@ Xanthus,Male
 Xanthus II,Male
 Xenaenetus,Male
 Xenocrates,Male
-Xenocrates II,Male
-Xenocrates III,Male
-Xenocrates IV,Male
-Xenocrates V,Male
-Xenocrates VI,Male
 Xenophanes,Male
 Xenophanes II,Male
 Xenophilus,Male
@@ -1069,26 +1061,32 @@ Achilles,God
 Athena,God
 Demeter,God
 Eumenides,God
-Graces,God
+Hades,God
+Hera,God
 Heracles,God
 Hermes,God
 Leda,God
 Muses,God
 Nemesis,God
 Nymphs,God
+Sarapis,God
 Ambracis,Female
 Arete,Female
 Arsinoe,Female
 Axiothea,Female
+Berenice,Female
 Cleobulina,Female
 Cleobuline II,Female
 Concubine of Hermias,Female
 Crateia,Female
+Daughter of Stilpo,Female
 Eristheneia,Female
+Eurydice,Female
 Herpyllis,Female
 Lais,Female
 Lasthenia,Female
 Lysida,Female
+Menedemus' Daughters,Female
 Nicanor's mother,Female
 Nicarete,Female
 Phaenarete,Female
