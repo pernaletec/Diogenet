@@ -29,6 +29,6 @@ table(edges_ %in% nodes$Name)
 # Discard edges whith unknown nodes 
 
 if (length(missing_indx)>0) {
-  edges = edges[-unique(c(which(edges$Source == edges_[missing_indx]), which(edges$Target == edges_[missing_indx]))),]
+  edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
   message = paste("WARNING: Check data. ", length(missing_indx)," edges removed") 
   } else message = ""
