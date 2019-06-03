@@ -1,10 +1,10 @@
 # Reading data saved as .csv
 
-edgesFile = "Code–Code Link Manager (2).csv"
-nodesFile = "MasterProjectFile 05242019 - Code Manager.csv"
+edgesFile = "Edges.csv"
+nodesFile = "Nodes.csv"
   
-edges = read.csv(file = edgesFile, header = TRUE , encoding = "UTF-8",sep = ";", stringsAsFactors = FALSE)
-nodes = read.csv(file = nodesFile, header = TRUE , encoding = "UTF-8",sep = ";", stringsAsFactors = FALSE)
+edges = read.csv(file = edgesFile, header = TRUE , encoding = "UTF-8",sep = ",", stringsAsFactors = FALSE)
+nodes = read.csv(file = nodesFile, header = TRUE , encoding = "UTF-8",sep = ",", stringsAsFactors = FALSE)
 
 # Subsetting 
 edges = subset(x = edges,select = c(Source,Target,Relation))
