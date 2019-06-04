@@ -2036,14 +2036,6 @@ Wife of Asclepiades,Menedemus' Wife,is family of
 Wife of Asclepiades,Wife of Menedemus,is family of
 Wife of Menedemus,Oropus,is from
 Xanthippe,Sophroniscus II,is family of
-NDemetrius X,Callatis,is from
-NDemetrius XII,Adramyttium,is from
-NDemetrius XV,Erythrae,is from
-NDemetrius XV,Temnus,is from
-NDemetrius XXIII,Erythrae,is from
-NHeraclides VI,Bargylia,is from
-NHeraclides XII,Liguria,is from
-NLysander,Hybadai,is from
 Aristippus,Arete,is teacher of
 Xenophon,Socrates,refers to
 Plato,Socrates,refers to
@@ -2066,11 +2058,11 @@ Mitylene,Pittacus,is benefactor of
 Thrasybulus,Periander,sent letters to
 Epimenides,Solon,sent letters to
 Pherecydes,Thales,sent letters to
-Zeno,Persaeus,is friend of
-Zeno,Antigonus,sent letters to
-Antigonus,Zeno,sent letters to
-Cleanthes,Antigonus,is teacher of
-Zeno,Ariston,Is adversary of
-Herillus,Zeno,Is adversary of
+Zeno II,Persaeus,is friend of
+Zeno II,AntigonusIII,sent letters to
+Antigonus III,Zeno II,sent letters to
+Cleanthes,Antigonus II,is teacher of
+Zeno,Ariston IV,Is adversary of
+Herillus,Zeno II,Is adversary of
 Chrysippus,Cleanthes,Is adversary of
 Zeno,Chrysippus,is teacher of
