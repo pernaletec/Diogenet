@@ -23,96 +23,8 @@ read_georef = FALSE
 nodes = read.csv(file="old_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 places <- nodes$Name[nodes$Groups=="Place"]
 
-# Create a gazetteer from pleiades. 
-# This step should probaly be done only once and saved afterwards
-# because we can modify this table as required. 
-# For axample, we can add coordinates that are not in pleiades to the new gazetteer
-
-##############################
-# Reading data from pleiades #
-##############################
-
-# A key here is to use "%hellenistic-republican%". Different periods are combined with commas in the data base
-# hence it is necessary to check for the string as part of the "timePeriodsKeys" string
-gz <- as.data.frame(pleiades::pl_search('SELECT * FROM names WHERE "timePeriodsKeys" LIKE "%hellenistic-republican%"')) 
-itsct = sapply(places, function(i) grepl(i, gz$nameTransliterated))
-numRepPlaces = apply(itsct, 2, FUN = function(x) length(x[x == TRUE]))
-det_pleiades = apply(itsct, 2, FUN = function(x) return(c(length(x[x == TRUE]),which(x == TRUE))))
-
-###################
-# Organizing data #
-###################
-
-lack_data = c()
-avail_data = data.frame(name = c(0), lat = c(0), lon = c(0), source = c(0))
-j = 1
-h = 1
-for (k in 1:length(places)) {
-  if (det_pleiades[[k]][1] == 0) {
-     lack_data[j] = as.character(places[as.integer(k)])
-     j = j+1
-  } else {
-    for (w in 1:det_pleiades[[k]][1]){
-      #browser()
-      pos_gz = det_pleiades[[k]][w+1]
-      avail_data[h,1]=as.character(places[as.integer(k)])
-      avail_data[h,2]=gz$reprLat[pos_gz]
-      avail_data[h,3]=gz$reprLong[pos_gz]
-      avail_data[h,4]= as.character("pleiades")
-      h = h+1
-    }
-  }
-}
-
-avail_data = na.omit(avail_data)
-
-#################################
-# Reading data from Jacobo file #
-#################################
-
-# Look up places that are in the dataframe 'locations' in gz and add lon to them
-# write_csv(locations, "data/locations.csv")
-
-given_loc = read.csv("locations.csv", stringsAsFactors = FALSE)
-given_loc_ = data.frame(name = given_loc$name, 
-                        lat=given_loc$lat, 
-                        lon = given_loc$lon, 
-                        source=rep("Jacobo", length(given_loc$name)))
-
-# Combining all data 
-
-avail_data = rbind(avail_data, given_loc_)
-
-############################
-# Reading data from georef #
-############################
-
-if (read_georef){
-  res_georef = list()
-  res_georef_df  = data.frame = data.frame(name = c(0), lat = c(0), lon = c(0), source = c(0))
-  for (j in 1:length(places)) res_georef[[j]] = georeference::georef(places[j], source = "pelagios")  
-  avail_georef <- which(sapply(res_georef, function(x) if (dim(x)[2] == 3) return(FALSE) else return(TRUE)))
-  res_georef = res_georef[avail_georef]
-  for (j in 1:length((res_georef))) {
-    res_georef_df[j,1]=as.character(res_georef[[j]]$name)
-    res_georef_df[j,2]=res_georef[[j]]$lat
-    res_georef_df[j,3]=res_georef[[j]]$lon
-    res_georef_df[j,4]=as.character("georef")
-  }
-  
-# Combining all data 
-# These are the available places
-avail_data = rbind(avail_data, res_georef_df)
-avail_data = avail_data[order(avail_data$name),]
-}
-
-itsct_ii = lapply(places, function(i) any(grepl(i, avail_data$name)))
-final_avail = as.logical(as.numeric(itsct_ii))
-
-# These are the available places!
-places_available = places[which(final_avail)]
-# These are the places that are not available in pleiades nor in georef nor in Jacobo's loc file
-places_unavailable = places[-which(final_avail)]
+all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+places_available = places[places %in% all_places_full_data$name]
 
 ##########################
 # Selecting travels data #
@@ -174,13 +86,17 @@ travel_edges = data.frame(source = rep("", length(knw_all_names_trav)),
                           lon_target = rep("", length(knw_all_names_trav)),
                           stringsAsFactors = FALSE)
 
-
 all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasing = FALSE)
 ## After getting all the places for which there IS at least one location identified 
 ## there was a "manual" search using the shiny app developed
-all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+#all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+
+# Some Phylosophers are identified with more that one "is from" Relation
+# Keep that in mind!
 
 for (k in 1:length(travel_edges$source)) {
+  print(paste0(k, " ", knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])]))
+  print(paste0(k, " ", travel_edges$name[k]))
   travel_edges$source[k] = (knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])])
   travel_edges$lat_source[k] = (all_places_full_data$lat[which(all_places_full_data$name == travel_edges$source[k])])
   travel_edges$lon_source[k] = (all_places_full_data$lon[which(all_places_full_data$name == travel_edges$source[k])])
@@ -203,23 +119,30 @@ node_count = as.data.frame(table(node_count))
 
 all_places_full_data$degree = node_count$Freq[which(node_count$node_count == all_places_full_data$name)]
 
+tcu_map = "https://api.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ"
+
+map_attr = "Map data &copy<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a> Imagery © <a href='http://mapbox.com'>Mapbox</a>"
 
 m <- leaflet(avail_data_tb) %>% 
-  addProviderTiles(providers$Esri.WorldPhysical) %>%
+  addTiles(urlTemplate = tcu_map, attribution = map_attr, options = list(maxZoom = 10, 
+                                                                         id = 'isawnyu.map-knmctlkh',
+                                                                         accessToken =  'pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ'))%>%
   setView(lng= 24.92, lat = 35.255, zoom = 5) 
 
   for(i in 1:length(travel_edges$source)) {
     arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
                            p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
-                           n=10000, addStartEnd=TRUE )
+                           n=100, addStartEnd=TRUE )
     m <- addPolylines(m, 
                       data=arc, 
-                      color="#1a00ff", 
-                      weight=2, 
+                      color="black", 
+                      weight=1,
+                      stroke = TRUE,
+                      smoothFactor = 5,
                       fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i], 
                                                          "</b><br/><small><i>From: </i>", 
                                                           travel_edges$source[i],
-                                                          "<br/><i>To :</i>",
+                                                          "<br/><i>To: </i>",
                                                           travel_edges$target[i], 
                                                           "<br/></small></center></p>")
                       )
@@ -233,15 +156,14 @@ m <- leaflet(avail_data_tb) %>%
                                      "<br/><i>Long: </i>",
                                      all_places_full_data$lon, 
                                      "<br/></small></center></p>"),
-                        radius=all_places_full_data$degree*20/max(all_places_full_data$degree), 
+                        radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree), 
                         color="#ff0d00", 
                         stroke =FALSE, 
                         fillOpacity = 0.75)
   
 m
 
-saveWidget(m, file = map.hmtl)
-
+saveWidget(m, file = "map.html", selfcontained = TRUE)
 
 
 
