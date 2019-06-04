@@ -594,7 +594,7 @@ visNetworkOutput(outputId="local_network")
 
 ```
 
-### Local Network Metrics
+### Tab Metrics
 
 ```{r}
 
