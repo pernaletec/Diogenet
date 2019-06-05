@@ -523,19 +523,39 @@ output$local_network = renderVisNetwork({
                               '</p></center>'
                               )
     
-    # Shows the relation when hovering over the edge
-    data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
-                              data$edges$from,
-                              '</p></center>', 
-                              '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
-                              data$edges$color.color, 
-                              ';">',
-                              data$edges$Relation,
-                              '</p></center>', 
-                              '<center><p style = "font-size:14px;font-family:verdana;">',
-                              data$edges$to, 
-                              '</p></center>'
-                              )
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
 
     withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
       Sys.sleep(0.25)
