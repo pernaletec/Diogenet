@@ -19,6 +19,7 @@ library(igraph)
 library(stringi)
 library(tidyverse)
 library(visNetwork)
+library(DT)
 ```
 
 Global Network
@@ -410,6 +411,26 @@ output$local_network = renderVisNetwork({
                         nodes = input$node_sel,
                         mode = c("all"),
                         mindist = 0)
+    
+    values =  data.frame(name = vertex_attr(d[[1]],"id"),
+                         degree = degree(d[[1]]), 
+                         betweenness = betweenness(d[[1]]),
+                         closeness = closeness(d[[1]]) , 
+                         eigenvector = eigen_centrality(d[[1]]))
+    
+    centr = data.frame(name = vertex_attr(d[[1]],"id"),
+                       centr_dgre = centralization.degree(d[[1]]),
+                       centr_btwn = centralization.betweenness(d[[1]]), 
+                       centr_clsn = centralization.closeness(d[[1]]), 
+                       centr_egcn = centralization.evcent(d[[1]]))
+    
+      output$table_values = renderDT({
+        return(values)
+      }, options = list(scrollX = TRUE, scrollY = TRUE))
+      
+      output$table_centr = renderDT({
+        return(centr)
+      }, options = list(scrollX = TRUE, scrollY = TRUE))
 
     #Set label size
     if (is.null(input$label_size_local[1])) min_label = rescaled_value(0.3,1.0,4)
@@ -597,6 +618,16 @@ visNetworkOutput(outputId="local_network")
 ### Tab Metrics
 
 ```{r}
+
+DTOutput(outputId = 'table_values')
+
+```
+
+### Tab Metrics II
+
+```{r}
+
+DTOutput(outputId = 'table_centr')
 
 ```
 
