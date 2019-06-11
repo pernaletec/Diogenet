@@ -1,6 +1,6 @@
 ---
 title: "Diogenet's Dashboard"
-subtitle: "Intellectual Networks from Ancient Greece"
+subtitle: "Intellectual Networks in Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
         favicon: iah_classicalstudies_logo_fv_pq.png
