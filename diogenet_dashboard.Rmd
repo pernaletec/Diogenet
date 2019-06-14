@@ -3,13 +3,14 @@ title: "Diogenet's Dashboard"
 subtitle: "Intellectual Networks from Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
+        orientation: rows
         favicon: iah_classicalstudies_logo_fv_pq.png
         navbar:
           - { icon: "fa-home", href: " http://diogenet.ucsd.edu", align: right }
 runtime: shiny
 ---
 
-```{r setup, include=FALSE}
+```{r global, include=FALSE}
 library(flexdashboard)
 library(shiny)
 library(rmarkdown)
@@ -20,6 +21,8 @@ library(stringi)
 library(tidyverse)
 library(visNetwork)
 library(DT)
+
+source("source_data.R")
 ```
 
 Global Network
@@ -29,9 +32,6 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
-source("source_data.R")
-
 # Re-scale sliders
 
 # a and b are the desired initial values in the original scale 
@@ -357,7 +357,7 @@ visNetworkOutput(outputId="global_network")
 
 ```
 
-Local Network
+Local Network {data-navmenu="Local Network"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -397,7 +397,7 @@ sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 1
 div(message, style = "color:red")
 ```
 
-Row {.tabset .tabset-fade}
+Row 
 -------------------------------------
 
 ### Local Network
@@ -437,7 +437,7 @@ output$local_network = renderVisNetwork({
                          degree = degree(d[[1]]), 
                          betweenness = betweenness(d[[1]]),
                          closeness = closeness(d[[1]]) , 
-                         eigenvector = eigen_centrality(d[[1]]))
+                         eigenvector = eigen_centrality(d[[1]])$vector)
     
     centr = data.frame(name = vertex_attr(d[[1]],"id"),
                        centr_dgre = centralization.degree(d[[1]]),
@@ -656,23 +656,420 @@ visNetworkOutput(outputId="local_network")
 
 ```
 
-### Tab Metrics
+<!-- ### Tab Metrics -->
+
+<!-- ```{r} -->
+
+<!-- DTOutput(outputId = 'table_values') -->
+
+<!-- ``` -->
+
+<!-- ### Tab Metrics II -->
+
+<!-- ```{r} -->
+
+<!-- DTOutput(outputId = 'table_centr') -->
+
+<!-- ``` -->
+
+Local Network Metrics {data-navmenu="Local Network"}
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
 
 ```{r}
 
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network
+checkboxGroupInput("edges_select_local_m",
+                   label = "Tie Type",
+                   choices = list("Is teacher of" = 1, 
+                                  "Is friend of" = 2, 
+                                  "Is family of" = 3, 
+                                  "Studied the work of" = 4, 
+                                  "Sent letters to" = 5, 
+                                  #"Is associated with" = 6, 
+                                  "Is benefactor of" = 7),
+                   selected = 1,
+                   inline = FALSE)
+br()
+# Egonet configuration
+h4("Egos")
+# Node selection
+uiOutput(outputId = "node_sel_m")
+br()
+# Order
+sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1)
+# Node and Label Size
+br()
+h4("Appearance")
+sliderInput(inputId = "label_size_local_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+#hr()
+#helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+div(message, style = "color:red")
+```
+
+Row 
+-------------------------------------
+
+### Centralization_degree {.value-box}
+
+```{r}
+valueBoxOutput("cent_degree")
+```
+
+### Centralization_betweenness {.value-box}
+
+```{r}
+valueBoxOutput("cent_betwns")
+```
+
+### Centralization_closeness {.value-box}
+
+```{r}
+valueBoxOutput("cent_clsnes")
+```
+
+### Centralization_evcentralities {.value-box}
+
+```{r}
+valueBoxOutput("cent_evcent")
+```
+
+Row 
+-------------------------------------
+
+### Centralization_degree_th_max {.value-box}
+
+```{r}
+valueBoxOutput("cent_degree_th_max")
+```
+
+### Centralization_betweenness_th_max {.value-box}
+
+```{r}
+valueBoxOutput("cent_betwns_th_max")
+```
+
+### Centralization_closeness_th_max {.value-box}
+
+```{r}
+valueBoxOutput("cent_clsnes_th_max")
+```
+
+### Centralization_evcentralities_th_max {.value-box}
+
+```{r}
+valueBoxOutput("cent_evcent_th_max")
+```
+
+Row 
+-------------------------------------
+
+### Local Network Graph
+
+```{r, echo = FALSE}
+
+output$local_network_m = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local_m)
+    
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local_m, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order_m,
+                        nodes = input$node_sel_m,
+                        mode = c("all"),
+                        mindist = 0)
+    
+    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
+    values =  data.frame(degree = degree(d[[1]]), 
+                         betweenness = betweenness(d[[1]]),
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
+                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+    
+    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
+                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
+                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
+                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
+                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
+                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
+                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
+                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
+    
+      # Centralization
+      output$cent_degree = renderValueBox({
+        valueBox(value = format(centr$centr_dgre, digits = 3, nsmall = 3),caption = "Centralization degree",icon = "fa-cloud-download-alt")  
+      }) 
+      
+      output$cent_betwns = renderValueBox({
+        valueBox(value = format(centr$centr_btwn, digits = 3, nsmall = 3),caption = "Centralization betweenness",icon = "fa-cloud-download-alt")  
+      }) 
+            
+      output$cent_clsnes = renderValueBox({
+        valueBox(value = format(centr$centr_clsn, digits = 3, nsmall = 3),caption = "Centralization closeness",icon = "fa-cloud-download-alt")  
+      }) 
+                  
+      output$cent_evcent = renderValueBox({
+        valueBox(value = format(centr$centr_egcn, digits = 3, nsmall = 3),caption = "Centralization eigenvector centralities",icon = "fa-cloud-download-alt")  
+      }) 
+      
+      #Theoretical max
+      
+      output$cent_degree_th_max = renderValueBox({
+        valueBox(value = centr$centr_dgre_th_max,caption = "<p>Centralization degree <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      }) 
+      
+      output$cent_betwns_th_max = renderValueBox({
+        valueBox(value = centr$centr_btwn_th_max,caption = "<p>Centralization betweenness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      }) 
+            
+      output$cent_clsnes_th_max = renderValueBox({
+        valueBox(value = format(centr$centr_clsn_th_max, digits = 3, nsmall = 3),caption = "<p>Centralization closeness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      }) 
+                  
+      output$cent_evcent_th_max = renderValueBox({
+        valueBox(value = centr$centr_egcn_th_max,caption = "<p>Centralization eigenvector centralities <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      }) 
+    
+      output$table_values = renderDT({
+        return(values)
+      }, options = list(paging = TRUE, scrollY = TRUE))
+      
+      output$table_centr = renderDT({
+        return(centr)
+      }, options = list(scrollX = TRUE, scrollY = TRUE))
+
+    #Set label size
+    if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+    if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
+    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
+    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    # Setting parameters straight in the data frame for visNetwork
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = case_when(
+      data$nodes$Group == "Male" ~ '#FF6347',
+      data$nodes$Group == "Female" ~ '#ffa500',
+      data$nodes$Group == "Place" ~ '#31e001',
+      data$nodes$Group == "God" ~ '#05e2ff'
+    )
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = case_when(
+      data$edges$Relation == "is teacher of" ~ '#0000FF',
+      data$edges$Relation == "is friend of" ~ '#228B22',
+      data$edges$Relation == "is family of" ~ '#FF0000', 
+      data$edges$Relation == "studied the work of" ~ '#ff01d9',
+      data$edges$Relation == "sent letters to" ~ '#ffbf00',
+      #data$edges$Relation == "is associated with" ~ '#14ff03',
+      data$edges$Relation == "is benefactor of" ~ '#fff23c'
+    )
+    
+    data$edges$color.highlight = case_when(
+      data$edges$Relation == "is teacher of" ~ '#00ffff',
+      data$edges$Relation == "is friend of" ~ '#568b22',
+      data$edges$Relation == "is family of" ~ '#ff4000',
+      data$edges$Relation == "studied the work of" ~ '#d9ff01',
+      data$edges$Relation == "sent letters to" ~ '#8400ff',
+      #data$edges$Relation == "is associated with" ~ '#ff0314',
+      data$edges$Relation == "is benefactor of" ~ '#e53cff'
+    )
+  
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows = arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$Group,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+        #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+	    })
+  }
+})
+
+# This function creates the selectInput object dynamically.
+# The options for nodes in the list depends on the edges selected
+output$node_sel_m <- renderUI({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Select at least one Tie")
+  )
+  
+  all_nodes = c()
+
+  if (1 %in% input$edges_select_local_m){
+      all_nodes = c(all_nodes, 
+                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
+      }
+
+  if (2 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
+                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
+    }
+      
+  if (3 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "is family of")]),
+                  as.character(edges$Target[which(edges$Relation == "is family of")]))
+  }
+  
+  if (4 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
+                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
+  }
+  
+  if (5 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
+                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
+  }
+  
+  if (7 %in% input$edges_select_local_m){
+  all_nodes = c(all_nodes, 
+                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
+                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
+  }
+    
+  all_nodes = sort(unique(all_nodes))
+    
+  if (!is.null(input$node_sel_m)) selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = input$node_sel_m)
+  else selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = "Plato")
+})
+
+visNetworkOutput(outputId="local_network_m")
+
+```
+
+### Metrics by Phylosopher
+
+```{r}
 DTOutput(outputId = 'table_values')
-
 ```
 
-### Tab Metrics II
-
-```{r}
-
-DTOutput(outputId = 'table_centr')
-
-```
-
-Communities
+Communities 
 ===================================== 
 
 Inputs {.sidebar}
@@ -682,15 +1079,15 @@ Inputs {.sidebar}
 
 br()
 h4("Network Ties")
-# Selection of the edges that will appear in the relation network 
+# Selection of the edges that will appear in the relation network
 checkboxGroupInput("edges_select_comm",
                    label = "Tie Type",
-                   choices = list("Is teacher of" = 1, 
-                                  "Is friend of" = 2, 
-                                  "Is family of" = 3, 
-                                  "Studied the work of" = 4, 
-                                  "Sent letters to" = 5, 
-                                  #"Is associated with" = 6, 
+                   choices = list("Is teacher of" = 1,
+                                  "Is friend of" = 2,
+                                  "Is family of" = 3,
+                                  "Studied the work of" = 4,
+                                  "Sent letters to" = 5,
+                                  #"Is associated with" = 6,
                                   "Is benefactor of" = 7),
                    selected = 1,
                    inline = FALSE)
@@ -716,7 +1113,7 @@ selectInput("cmnt_vsl_pck", "Library:", choices=c("visNetwork", "igraph"))
 #br()
 checkboxInput("edges_format", label = "Highlight crossing ties", value = FALSE)
 #radioButtons("edges_format", label = h4("Ties format"),
-#    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2), 
+#    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2),
 #    selected = 2)
 br()
 # Plot Height
