@@ -357,7 +357,7 @@ visNetworkOutput(outputId="global_network")
 
 ```
 
-Local Network {data-navmenu="Local Network"}
+View {data-navmenu="Local Network"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -672,7 +672,7 @@ visNetworkOutput(outputId="local_network")
 
 <!-- ``` -->
 
-Local Network Metrics {data-navmenu="Local Network"}
+Info {data-navmenu="Local Network"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -712,7 +712,7 @@ sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max =
 div(message, style = "color:red")
 ```
 
-Row 
+Row
 -------------------------------------
 
 ### Centralization_degree {.value-box}
@@ -739,32 +739,32 @@ valueBoxOutput("cent_clsnes")
 valueBoxOutput("cent_evcent")
 ```
 
-Row 
--------------------------------------
+<!-- Row  -->
+<!-- ------------------------------------- -->
 
-### Centralization_degree_th_max {.value-box}
+<!-- ### Centralization_degree_th_max {.value-box} -->
 
-```{r}
-valueBoxOutput("cent_degree_th_max")
-```
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_degree_th_max") -->
+<!-- ``` -->
 
-### Centralization_betweenness_th_max {.value-box}
+<!-- ### Centralization_betweenness_th_max {.value-box} -->
 
-```{r}
-valueBoxOutput("cent_betwns_th_max")
-```
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_betwns_th_max") -->
+<!-- ``` -->
 
-### Centralization_closeness_th_max {.value-box}
+<!-- ### Centralization_closeness_th_max {.value-box} -->
 
-```{r}
-valueBoxOutput("cent_clsnes_th_max")
-```
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_clsnes_th_max") -->
+<!-- ``` -->
 
-### Centralization_evcentralities_th_max {.value-box}
+<!-- ### Centralization_evcentralities_th_max {.value-box} -->
 
-```{r}
-valueBoxOutput("cent_evcent_th_max")
-```
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_evcent_th_max") -->
+<!-- ``` -->
 
 Row 
 -------------------------------------
@@ -836,21 +836,21 @@ output$local_network_m = renderVisNetwork({
       
       #Theoretical max
       
-      output$cent_degree_th_max = renderValueBox({
-        valueBox(value = centr$centr_dgre_th_max,caption = "<p>Centralization degree <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      }) 
-      
-      output$cent_betwns_th_max = renderValueBox({
-        valueBox(value = centr$centr_btwn_th_max,caption = "<p>Centralization betweenness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      }) 
-            
-      output$cent_clsnes_th_max = renderValueBox({
-        valueBox(value = format(centr$centr_clsn_th_max, digits = 3, nsmall = 3),caption = "<p>Centralization closeness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      }) 
-                  
-      output$cent_evcent_th_max = renderValueBox({
-        valueBox(value = centr$centr_egcn_th_max,caption = "<p>Centralization eigenvector centralities <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      }) 
+      # output$cent_degree_th_max = renderValueBox({
+      #   valueBox(value = centr$centr_dgre_th_max,caption = "<p>Centralization degree <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      # }) 
+      # 
+      # output$cent_betwns_th_max = renderValueBox({
+      #   valueBox(value = centr$centr_btwn_th_max,caption = "<p>Centralization betweenness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      # }) 
+      #       
+      # output$cent_clsnes_th_max = renderValueBox({
+      #   valueBox(value = format(centr$centr_clsn_th_max, digits = 3, nsmall = 3),caption = "<p>Centralization closeness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      # }) 
+      #             
+      # output$cent_evcent_th_max = renderValueBox({
+      #   valueBox(value = centr$centr_egcn_th_max,caption = "<p>Centralization eigenvector centralities <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+      # }) 
     
       output$table_values = renderDT({
         return(values)
@@ -1063,10 +1063,10 @@ visNetworkOutput(outputId="local_network_m")
 
 ```
 
-### Metrics by Phylosopher
+### Metrics by Phylosopher 
 
 ```{r}
-DTOutput(outputId = 'table_values')
+  DTOutput(outputId = 'table_values')
 ```
 
 Communities 
