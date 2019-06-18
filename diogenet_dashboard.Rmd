@@ -21,8 +21,13 @@ library(stringi)
 library(tidyverse)
 library(visNetwork)
 library(DT)
+library(viridis)
 
 source("source_data.R")
+
+
+
+
 ```
 
 Global Network
@@ -672,7 +677,7 @@ visNetworkOutput(outputId="local_network")
 
 <!-- ``` -->
 
-Info {data-navmenu="Local Network"}
+Info {data-navmenu="Local Network" data-orientation="columns"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -712,61 +717,7 @@ sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max =
 div(message, style = "color:red")
 ```
 
-Row
--------------------------------------
-
-### Centralization_degree {.value-box}
-
-```{r}
-valueBoxOutput("cent_degree")
-```
-
-### Centralization_betweenness {.value-box}
-
-```{r}
-valueBoxOutput("cent_betwns")
-```
-
-### Centralization_closeness {.value-box}
-
-```{r}
-valueBoxOutput("cent_clsnes")
-```
-
-### Centralization_evcentralities {.value-box}
-
-```{r}
-valueBoxOutput("cent_evcent")
-```
-
-<!-- Row  -->
-<!-- ------------------------------------- -->
-
-<!-- ### Centralization_degree_th_max {.value-box} -->
-
-<!-- ```{r} -->
-<!-- valueBoxOutput("cent_degree_th_max") -->
-<!-- ``` -->
-
-<!-- ### Centralization_betweenness_th_max {.value-box} -->
-
-<!-- ```{r} -->
-<!-- valueBoxOutput("cent_betwns_th_max") -->
-<!-- ``` -->
-
-<!-- ### Centralization_closeness_th_max {.value-box} -->
-
-<!-- ```{r} -->
-<!-- valueBoxOutput("cent_clsnes_th_max") -->
-<!-- ``` -->
-
-<!-- ### Centralization_evcentralities_th_max {.value-box} -->
-
-<!-- ```{r} -->
-<!-- valueBoxOutput("cent_evcent_th_max") -->
-<!-- ``` -->
-
-Row 
+Column {.tabset data-width=650}
 -------------------------------------
 
 ### Local Network Graph
@@ -804,9 +755,11 @@ output$local_network_m = renderVisNetwork({
     
     #values =  data.frame(name = vertex_attr(d[[1]],"id"),
     values =  data.frame(degree = degree(d[[1]]), 
-                         betweenness = betweenness(d[[1]]),
-                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
+                         betweenness = format(betweenness(d[[1]]), digits = 3, nsmall = 3),
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3), 
                          eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+    
+    values = values[order(values$degree, decreasing = TRUE),]
     
     centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
                        centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
@@ -817,48 +770,46 @@ output$local_network_m = renderVisNetwork({
                        centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
                        centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
     
-      # Centralization
-      output$cent_degree = renderValueBox({
-        valueBox(value = format(centr$centr_dgre, digits = 3, nsmall = 3),caption = "Centralization degree",icon = "fa-cloud-download-alt")  
-      }) 
-      
-      output$cent_betwns = renderValueBox({
-        valueBox(value = format(centr$centr_btwn, digits = 3, nsmall = 3),caption = "Centralization betweenness",icon = "fa-cloud-download-alt")  
-      }) 
-            
-      output$cent_clsnes = renderValueBox({
-        valueBox(value = format(centr$centr_clsn, digits = 3, nsmall = 3),caption = "Centralization closeness",icon = "fa-cloud-download-alt")  
-      }) 
-                  
-      output$cent_evcent = renderValueBox({
-        valueBox(value = format(centr$centr_egcn, digits = 3, nsmall = 3),caption = "Centralization eigenvector centralities",icon = "fa-cloud-download-alt")  
-      }) 
-      
-      #Theoretical max
-      
-      # output$cent_degree_th_max = renderValueBox({
-      #   valueBox(value = centr$centr_dgre_th_max,caption = "<p>Centralization degree <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      # }) 
-      # 
-      # output$cent_betwns_th_max = renderValueBox({
-      #   valueBox(value = centr$centr_btwn_th_max,caption = "<p>Centralization betweenness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      # }) 
-      #       
-      # output$cent_clsnes_th_max = renderValueBox({
-      #   valueBox(value = format(centr$centr_clsn_th_max, digits = 3, nsmall = 3),caption = "<p>Centralization closeness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      # }) 
-      #             
-      # output$cent_evcent_th_max = renderValueBox({
-      #   valueBox(value = centr$centr_egcn_th_max,caption = "<p>Centralization eigenvector centralities <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
-      # }) 
+    # Centralization
+    output$cent_degree = renderValueBox({
+      valueBox(value = format(centr$centr_dgre, digits = 3, nsmall = 3), caption = "Degree", icon = "fa-sitemap")  
+    }) 
     
-      output$table_values = renderDT({
-        return(values)
-      }, options = list(paging = TRUE, scrollY = TRUE))
-      
-      output$table_centr = renderDT({
-        return(centr)
-      }, options = list(scrollX = TRUE, scrollY = TRUE))
+    output$cent_betwns = renderValueBox({
+      valueBox(value = format(centr$centr_btwn, digits = 3, nsmall = 3), caption = "Betweenness", icon = "fa-users")  
+    }) 
+          
+    output$cent_clsnes = renderValueBox({
+      valueBox(value = format(centr$centr_clsn, digits = 3, nsmall = 3), caption = "Closeness", icon = "fa-link")  
+    }) 
+                
+    output$cent_evcent = renderValueBox({
+      valueBox(value = format(centr$centr_egcn, digits = 3, nsmall = 3), caption = "Eigenvector centralities", icon = "fa-user-circle")  
+    }) 
+    
+    #Theoretical max
+    
+    # output$cent_degree_th_max = renderValueBox({
+    #   valueBox(value = centr$centr_dgre_th_max,caption = "<p>Centralization degree <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+    # }) 
+    # 
+    # output$cent_betwns_th_max = renderValueBox({
+    #   valueBox(value = centr$centr_btwn_th_max,caption = "<p>Centralization betweenness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+    # }) 
+    #       
+    # output$cent_clsnes_th_max = renderValueBox({
+    #   valueBox(value = format(centr$centr_clsn_th_max, digits = 3, nsmall = 3),caption = "<p>Centralization closeness <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+    # }) 
+    #             
+    # output$cent_evcent_th_max = renderValueBox({
+    #   valueBox(value = centr$centr_egcn_th_max,caption = "<p>Centralization eigenvector centralities <br> <small>Theoretical Max</small><p>",icon = "fa-cloud-download-alt", color = "info")  
+    # }) 
+  
+    output$table_values = renderDT(return(values), options = list(pageLength = 5, paging = TRUE, scrollY = TRUE))
+    
+    output$table_centr = renderDT({
+      return(centr)
+    }, options = list(scrollX = TRUE, scrollY = TRUE))
 
     #Set label size
     if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
@@ -875,11 +826,11 @@ output$local_network_m = renderVisNetwork({
     data <- toVisNetworkData(d[[1]])
 
     # Set node size
-    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
-    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
 
-    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
-    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
 
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
@@ -1062,6 +1013,851 @@ output$node_sel_m <- renderUI({
 visNetworkOutput(outputId="local_network_m")
 
 ```
+
+### Degree
+
+```{r, echo = FALSE}
+
+output$local_network_degree = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local_m)
+    
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local_m, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order_m,
+                        nodes = input$node_sel_m,
+                        mode = c("all"),
+                        mindist = 0)
+    
+    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
+    values =  data.frame(degree = degree(d[[1]]), 
+                         betweenness = betweenness(d[[1]]),
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
+                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+    
+    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
+                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
+                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
+                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
+                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
+                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
+                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
+                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
+    
+
+    #Set label size
+    if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+    if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
+
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    min_deg = min(degree(d[[1]]))
+    max_deg = max(degree(d[[1]]))
+    n_col =  max_deg - min_deg + 1
+    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    
+    # x in this function is degree
+    col_index = function(x) {((n_col -1)/(max_deg - min_deg))*(x-min_deg)+1}
+  
+    returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+     
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = sapply(degree(d[[1]]), FUN = returnColor)
+    
+    data$nodes$degree = degree(d[[1]])
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = rep("lightgray",length(data$edges$Relation))
+    
+    data$edges$color.highlight = rep("lightgray",length(data$edges$Relation))
+  
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows = arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$degree,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+        #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+	    })
+  }
+})
+
+visNetworkOutput(outputId="local_network_degree")
+
+```
+
+
+### Betweenness
+
+```{r, echo = FALSE}
+
+output$local_network_betweenness = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local_m)
+    
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local_m, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order_m,
+                        nodes = input$node_sel_m,
+                        mode = c("all"),
+                        mindist = 0)
+    
+    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
+    values =  data.frame(degree = degree(d[[1]]), 
+                         betweenness = betweenness(d[[1]]),
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
+                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+    
+    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
+                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
+                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
+                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
+                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
+                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
+                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
+                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
+    
+
+    #Set label size
+    if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+    if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
+    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
+    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    # Setting parameters straight in the data frame for visNetwork
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = case_when(
+      data$nodes$Group == "Male" ~ '#FF6347',
+      data$nodes$Group == "Female" ~ '#ffa500',
+      data$nodes$Group == "Place" ~ '#31e001',
+      data$nodes$Group == "God" ~ '#05e2ff'
+    )
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = case_when(
+      data$edges$Relation == "is teacher of" ~ '#0000FF',
+      data$edges$Relation == "is friend of" ~ '#228B22',
+      data$edges$Relation == "is family of" ~ '#FF0000', 
+      data$edges$Relation == "studied the work of" ~ '#ff01d9',
+      data$edges$Relation == "sent letters to" ~ '#ffbf00',
+      #data$edges$Relation == "is associated with" ~ '#14ff03',
+      data$edges$Relation == "is benefactor of" ~ '#fff23c'
+    )
+    
+    data$edges$color.highlight = case_when(
+      data$edges$Relation == "is teacher of" ~ '#00ffff',
+      data$edges$Relation == "is friend of" ~ '#568b22',
+      data$edges$Relation == "is family of" ~ '#ff4000',
+      data$edges$Relation == "studied the work of" ~ '#d9ff01',
+      data$edges$Relation == "sent letters to" ~ '#8400ff',
+      #data$edges$Relation == "is associated with" ~ '#ff0314',
+      data$edges$Relation == "is benefactor of" ~ '#e53cff'
+    )
+  
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows = arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$Group,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+        #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+	    })
+  }
+})
+
+visNetworkOutput(outputId="local_network_betweenness")
+
+```
+
+### Closeness
+
+```{r, echo = FALSE}
+
+output$local_network_closeness = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local_m)
+    
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local_m, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order_m,
+                        nodes = input$node_sel_m,
+                        mode = c("all"),
+                        mindist = 0)
+    
+    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
+    values =  data.frame(degree = degree(d[[1]]), 
+                         betweenness = betweenness(d[[1]]),
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
+                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+    
+    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
+                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
+                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
+                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
+                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
+                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
+                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
+                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
+    
+
+    #Set label size
+    if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+    if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
+    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
+    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    # Setting parameters straight in the data frame for visNetwork
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = case_when(
+      data$nodes$Group == "Male" ~ '#FF6347',
+      data$nodes$Group == "Female" ~ '#ffa500',
+      data$nodes$Group == "Place" ~ '#31e001',
+      data$nodes$Group == "God" ~ '#05e2ff'
+    )
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = case_when(
+      data$edges$Relation == "is teacher of" ~ '#0000FF',
+      data$edges$Relation == "is friend of" ~ '#228B22',
+      data$edges$Relation == "is family of" ~ '#FF0000', 
+      data$edges$Relation == "studied the work of" ~ '#ff01d9',
+      data$edges$Relation == "sent letters to" ~ '#ffbf00',
+      #data$edges$Relation == "is associated with" ~ '#14ff03',
+      data$edges$Relation == "is benefactor of" ~ '#fff23c'
+    )
+    
+    data$edges$color.highlight = case_when(
+      data$edges$Relation == "is teacher of" ~ '#00ffff',
+      data$edges$Relation == "is friend of" ~ '#568b22',
+      data$edges$Relation == "is family of" ~ '#ff4000',
+      data$edges$Relation == "studied the work of" ~ '#d9ff01',
+      data$edges$Relation == "sent letters to" ~ '#8400ff',
+      #data$edges$Relation == "is associated with" ~ '#ff0314',
+      data$edges$Relation == "is benefactor of" ~ '#e53cff'
+    )
+  
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows = arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$Group,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+        #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+	    })
+  }
+})
+
+visNetworkOutput(outputId="local_network_closeness")
+
+```
+
+### Eigenvector centralities
+
+```{r, echo = FALSE}
+
+output$local_network_centralities = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local_m)
+    
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local_m, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order_m,
+                        nodes = input$node_sel_m,
+                        mode = c("all"),
+                        mindist = 0)
+    
+    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
+    values =  data.frame(degree = degree(d[[1]]), 
+                         betweenness = betweenness(d[[1]]),
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
+                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+    
+    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
+                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
+                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
+                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
+                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
+                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
+                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
+                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
+
+    #Set label size
+    if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+    if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
+    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
+    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    # Setting parameters straight in the data frame for visNetwork
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = case_when(
+      data$nodes$Group == "Male" ~ '#FF6347',
+      data$nodes$Group == "Female" ~ '#ffa500',
+      data$nodes$Group == "Place" ~ '#31e001',
+      data$nodes$Group == "God" ~ '#05e2ff'
+    )
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = case_when(
+      data$edges$Relation == "is teacher of" ~ '#0000FF',
+      data$edges$Relation == "is friend of" ~ '#228B22',
+      data$edges$Relation == "is family of" ~ '#FF0000', 
+      data$edges$Relation == "studied the work of" ~ '#ff01d9',
+      data$edges$Relation == "sent letters to" ~ '#ffbf00',
+      #data$edges$Relation == "is associated with" ~ '#14ff03',
+      data$edges$Relation == "is benefactor of" ~ '#fff23c'
+    )
+    
+    data$edges$color.highlight = case_when(
+      data$edges$Relation == "is teacher of" ~ '#00ffff',
+      data$edges$Relation == "is friend of" ~ '#568b22',
+      data$edges$Relation == "is family of" ~ '#ff4000',
+      data$edges$Relation == "studied the work of" ~ '#d9ff01',
+      data$edges$Relation == "sent letters to" ~ '#8400ff',
+      #data$edges$Relation == "is associated with" ~ '#ff0314',
+      data$edges$Relation == "is benefactor of" ~ '#e53cff'
+    )
+  
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows = arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$Group,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+        #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+	    })
+  }
+})
+
+visNetworkOutput(outputId="local_network_centralities")
+
+```
+
+Column {data-width=350}
+-------------------------------------
+
+### Centralization_degree {.value-box}
+
+```{r}
+valueBoxOutput("cent_degree")
+```
+
+### Centralization_betweenness {.value-box}
+
+```{r}
+valueBoxOutput("cent_betwns")
+```
+
+### Centralization_closeness {.value-box}
+
+```{r}
+valueBoxOutput("cent_clsnes")
+```
+
+### Centralization_evcentralities {.value-box}
+
+```{r}
+valueBoxOutput("cent_evcent")
+```
+
+<!-- Row  -->
+<!-- ------------------------------------- -->
+
+<!-- ### Centralization_degree_th_max {.value-box} -->
+
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_degree_th_max") -->
+<!-- ``` -->
+
+<!-- ### Centralization_betweenness_th_max {.value-box} -->
+
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_betwns_th_max") -->
+<!-- ``` -->
+
+<!-- ### Centralization_closeness_th_max {.value-box} -->
+
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_clsnes_th_max") -->
+<!-- ``` -->
+
+<!-- ### Centralization_evcentralities_th_max {.value-box} -->
+
+<!-- ```{r} -->
+<!-- valueBoxOutput("cent_evcent_th_max") -->
+<!-- ``` -->
 
 ### Metrics by Phylosopher 
 
