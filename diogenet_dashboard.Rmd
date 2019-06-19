@@ -769,22 +769,22 @@ output$local_network_m = renderVisNetwork({
                        centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
                        centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
                        centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
-    
+   
     # Centralization
     output$cent_degree = renderValueBox({
-      valueBox(value = format(centr$centr_dgre, digits = 3, nsmall = 3), caption = "Degree", icon = "fa-sitemap")  
+      valueBox(value = format(centr$centr_dgre, digits = 3, nsmall = 3), caption = "degree", icon = "fa-sitemap")  
     }) 
     
     output$cent_betwns = renderValueBox({
-      valueBox(value = format(centr$centr_btwn, digits = 3, nsmall = 3), caption = "Betweenness", icon = "fa-users")  
+      valueBox(value = format(centr$centr_btwn, digits = 3, nsmall = 3), caption = "betweenness", icon = "fa-users")  
     }) 
           
     output$cent_clsnes = renderValueBox({
-      valueBox(value = format(centr$centr_clsn, digits = 3, nsmall = 3), caption = "Closeness", icon = "fa-link")  
+      valueBox(value = format(centr$centr_clsn, digits = 3, nsmall = 3), caption = "closeness", icon = "fa-link")  
     }) 
                 
     output$cent_evcent = renderValueBox({
-      valueBox(value = format(centr$centr_egcn, digits = 3, nsmall = 3), caption = "Eigenvector centralities", icon = "fa-user-circle")  
+      valueBox(value = format(centr$centr_egcn, digits = 3, nsmall = 3), caption = "eigenvector", icon = "fa-user-circle")  
     }) 
     
     #Theoretical max
@@ -1606,7 +1606,7 @@ visNetworkOutput(outputId="local_network_closeness")
 
 ```
 
-### Eigenvector centralities
+### Eigenvector
 
 ```{r, echo = FALSE}
 
@@ -1859,7 +1859,7 @@ valueBoxOutput("cent_evcent")
 <!-- valueBoxOutput("cent_evcent_th_max") -->
 <!-- ``` -->
 
-### Metrics by Phylosopher 
+### Node Centrality Scores
 
 ```{r}
   DTOutput(outputId = 'table_values')
