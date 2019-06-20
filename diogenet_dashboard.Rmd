@@ -753,10 +753,10 @@ centr = reactive({
   
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
     d = d()
-    centr_ = data.frame(Degree = centralization.degree(d[[1]])$centralization[1],
-                     Betweenness = centralization.betweenness(d[[1]])$centralization[1],
-                     Closeness = centralization.closeness(d[[1]])$centralization[1],
-                     Eigenvector = centralization.evcent(d[[1]])$centralization[1]
+    centr_ = data.frame(degree = centralization.degree(d[[1]])$centralization[1],
+                     betweenness = centralization.betweenness(d[[1]])$centralization[1],
+                     closeness = centralization.closeness(d[[1]])$centralization[1],
+                     eigenvector = centralization.evcent(d[[1]])$centralization[1]
                      )
     return(centr_)
   }
@@ -1289,7 +1289,7 @@ visNetworkOutput(outputId="local_network_closeness")
 
 ```
 
-### Eigenvector centralities
+### Eigenvector
 
 ```{r, echo = FALSE}
 
@@ -1449,12 +1449,12 @@ visNetworkOutput(outputId="local_network_centralities")
 Column {data-width=350}
 -------------------------------------
 
-### Metrics data
+### Metrics 
 
 ```{r}
-  fillCol(h5("Graph metrics"),
+  fillCol(h5("Graph Scores"),
           tableOutput(outputId = 'table_centr'),
-          h5("Metrics by Phylosophers"),
+          h5("Node Centrality Scores"),
           DTOutput(outputId = 'table_values'), flex = c(0.5,1,0.5,5))
 ```
 
