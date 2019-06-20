@@ -362,7 +362,7 @@ visNetworkOutput(outputId="global_network")
 
 ```
 
-View {data-navmenu="Local Network"}
+Graph {data-navmenu="Local Network"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -642,7 +642,7 @@ visNetworkOutput(outputId="local_network")
 
 ```
 
-Info {data-navmenu="Local Network" data-orientation="columns"}
+Graph + Centrality {data-navmenu="Local Network" data-orientation="columns"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -1452,9 +1452,9 @@ Column {data-width=350}
 ### Metrics 
 
 ```{r}
-  fillCol(h5("Graph Scores"),
+  fillCol(h5("Centralization Scores"),
           tableOutput(outputId = 'table_centr'),
-          h5("Node Centrality Scores"),
+          h5("Centrality Scores"),
           DTOutput(outputId = 'table_values'), flex = c(0.5,1,0.5,5))
 ```
 
