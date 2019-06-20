@@ -22,6 +22,7 @@ library(tidyverse)
 library(visNetwork)
 library(DT)
 library(viridis)
+#library(heatmaply)
 
 source("source_data.R")
 
@@ -862,7 +863,7 @@ output$local_network_degree = renderVisNetwork({
 
     min_deg = min(degree(d[[1]]))
     max_deg = max(degree(d[[1]]))
-    n_col =  max_deg - min_deg + 1
+    n_col =  50
     node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
     
     # x in this function is degree
@@ -1007,18 +1008,18 @@ output$local_network_betweenness = renderVisNetwork({
     data <- toVisNetworkData(d[[1]])
 
     # Set node size
-    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
-    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
 
-    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
-    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
 
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
 
     min_bet = min(betweenness(d[[1]]))
     max_bet = max(betweenness(d[[1]]))
-    n_col =  20
+    n_col =  50
     node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
     
     # x in this function is degree
@@ -1173,7 +1174,7 @@ output$local_network_closeness = renderVisNetwork({
 
     min_close = min(closeness(d[[1]]))
     max_close = max(closeness(d[[1]]))
-    n_col =  20
+    n_col =  50
     node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
     
     # x in this function is degree
@@ -1328,34 +1329,25 @@ output$local_network_centralities = renderVisNetwork({
 
     min_eigen = min(eigen_centrality(d[[1]])$vector)
     max_eigen = max(eigen_centrality(d[[1]])$vector)
-    n_col =  20.00
+    n_col =  50
     node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
-    
-    # print(min_eigen)
     
     # x in this function is eigen_centrality
     col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
-  
-    returnColor_evc = function(x) {substr(node_vir_col[col_index_evc(x)],1,nchar(node_vir_col[col_index_evc(x)])-2)}
-  
-    # Setting parameters straight in the data frame for visNetwork
-    data$nodes$color.background = sapply(eigen_centrality(d[[1]])$vector, FUN = returnColor_evc)
     
-    # print(col_index(eigen_centrality(d[[1]])$vector))
-    # print(node_vir_col[col_index(eigen_centrality(d[[1]])$vector)])
-    # print(node_vir_col[1.00])
-    # 
-    # print(length(eigen_centrality(d[[1]])$vector))
-    # 
-    # print(data$nodes$color.background)
-    # print(eigen_centrality(d[[1]])$vector)
+    col_index_evc_data = col_index_evc(eigen_centrality(d[[1]])$vector)
+  
+    returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)}
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
     
     data$nodes$eigen = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
     
     # Setting group in visnetwork format
     data$nodes$group = data$nodes$Group
 
-    data$nodes$color.border = sapply(eigen_centrality(d[[1]])$vector, FUN = returnColor_evc)
+    data$nodes$color.border = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
 
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
