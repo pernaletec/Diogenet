@@ -161,7 +161,6 @@ is_directed = function(edges_selected) {
 }
 
 
-
 # network stores an object rendered by renderVisnetwork 
 output$global_network = renderVisNetwork({
   
@@ -438,26 +437,6 @@ output$local_network = renderVisNetwork({
                         mode = c("all"),
                         mindist = 0)
     
-    values =  data.frame(name = vertex_attr(d[[1]],"id"),
-                         degree = degree(d[[1]]), 
-                         betweenness = betweenness(d[[1]]),
-                         closeness = closeness(d[[1]]) , 
-                         eigenvector = eigen_centrality(d[[1]])$vector)
-    
-    centr = data.frame(name = vertex_attr(d[[1]],"id"),
-                       centr_dgre = centralization.degree(d[[1]]),
-                       centr_btwn = centralization.betweenness(d[[1]]), 
-                       centr_clsn = centralization.closeness(d[[1]]), 
-                       centr_egcn = centralization.evcent(d[[1]]))
-    
-      output$table_values = renderDT({
-        return(values)
-      }, options = list(scrollX = TRUE, scrollY = TRUE))
-      
-      output$table_centr = renderDT({
-        return(centr)
-      }, options = list(scrollX = TRUE, scrollY = TRUE))
-
     #Set label size
     if (is.null(input$label_size_local[1])) min_label = rescaled_value(0.3,1.0,4)
     else min_label = rescaled_value(0.3,1.0,input$label_size_local[1])
@@ -473,11 +452,11 @@ output$local_network = renderVisNetwork({
     data <- toVisNetworkData(d[[1]])
 
     # Set node size
-    if (is.null(input$node_size_local[1])) min_node = rescaled_value(3.0,30.0,4)
-    else min_node = rescaled_value(3.0,30.0,input$node_size_local[1])
+    if (is.null(input$node_size_local[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local[1])
 
-    if (is.null(input$node_size_local[2])) max_node = rescaled_value(3.0,30.0,6)
-    else max_node = rescaled_value(3.0,30.0,input$node_size_local[2])
+    if (is.null(input$node_size_local[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local[2])
 
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
@@ -607,6 +586,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
 
 # This function creates the selectInput object dynamically.
 # The options for nodes in the list depends on the edges selected
+
 output$node_sel <- renderUI({
 
   validate(
@@ -713,20 +693,18 @@ div(message, style = "color:red")
 Column {.tabset .tabset-fade data-width=650}
 -------------------------------------
 
-### Degree
-
 ```{r, echo = FALSE}
 
-output$local_network_degree = renderVisNetwork({
+directed = reactive({
+  return(is_directed(input$edges_select_local_m))
+})
 
-  validate(
-    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
-  )
-
+d = reactive({
+  
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
 
-    # Use function is_directed
-    directed = is_directed(input$edges_select_local_m)
+    # Use function is_directed in reactive directed
+    directed = directed()
     
     try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
@@ -740,37 +718,123 @@ output$local_network_degree = renderVisNetwork({
     g_ = subset_graph(input$edges_select_local_m, g)
 
     # Egonet
-    d <- make_ego_graph(g_,
+    local_ntwk <- make_ego_graph(g_,
                         order = input$order_m,
                         nodes = input$node_sel_m,
                         mode = c("all"),
                         mindist = 0)
+  return(local_ntwk)
+  }
+})
+
+values = reactive({
     
-    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
-    values =  data.frame(degree = degree(d[[1]]), 
+    validate(
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+    )
+  
+    if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+      d = d()
+      val =  data.frame(degree = degree(d[[1]]),
                          betweenness = format(betweenness(d[[1]]), digits = 3, nsmall = 3),
-                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3), 
+                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3),
                          eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
+      val = val[order(val$degree, decreasing = TRUE),]
+      return(val)
+    }
+})
+
+centr = reactive({
+  
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+  
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+    d = d()
+    centr_ = data.frame(Degree = centralization.degree(d[[1]])$centralization[1],
+                     Betweenness = centralization.betweenness(d[[1]])$centralization[1],
+                     Closeness = centralization.closeness(d[[1]])$centralization[1],
+                     Eigenvector = centralization.evcent(d[[1]])$centralization[1]
+                     )
+    return(centr_)
+  }
+})
+
+output$table_values = renderDT(return(values()), options = list(pageLength = 10))
+
+output$table_centr = renderTable({return(centr())}, align = 'c', width = NULL)
+
+# This function creates the selectInput object dynamically.
+# The options for nodes in the list depends on the edges selected
+
+output$node_sel_m <- renderUI({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Select at least one Tie")
+  )
+  
+  all_nodes = c()
+
+  if (1 %in% input$edges_select_local_m){
+      all_nodes = c(all_nodes, 
+                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
+      }
+
+  if (2 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
+                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
+    }
+      
+  if (3 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "is family of")]),
+                  as.character(edges$Target[which(edges$Relation == "is family of")]))
+  }
+  
+  if (4 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
+                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
+  }
+  
+  if (5 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes, 
+                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
+                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
+  }
+  
+  if (7 %in% input$edges_select_local_m){
+  all_nodes = c(all_nodes, 
+                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
+                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
+  }
     
-    values = values[order(values$degree, decreasing = TRUE),]
+  all_nodes = sort(unique(all_nodes))
     
-    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
-                       #centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
-                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
-                       #centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
-                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
-                       #centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
-                       centr_egcn = centralization.evcent(d[[1]])$centralization[1]
-                       #, 
-                       #centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1]
-                       )
+  if (!is.null(input$node_sel_m)) selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = input$node_sel_m)
+  else selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = "Plato")
+})
+
+```
+
+### Degree
+
+```{r, echo = FALSE}
+
+output$local_network_degree = renderVisNetwork({
+  
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
     
-    output$table_values = renderDT(return(values), options = list(pageLength = 10))
-    
-    output$table_centr = renderDT(return(centr), options = list(autoWidth = TRUE))
-    
-    output$table_centr_ = renderTable({return(centr)}, align = 'c', width = NULL)
-    
+    # Update reactive values
+    directed = directed()
+    d = d()
 
     #Set label size
     if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
@@ -778,7 +842,7 @@ output$local_network_degree = renderVisNetwork({
 
     if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
     else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
-
+    
     labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
     V(d[[1]])$label.cex <- labsize
 
@@ -811,11 +875,11 @@ output$local_network_degree = renderVisNetwork({
     data$nodes$color.background = sapply(degree(d[[1]]), FUN = returnColor)
     
     data$nodes$degree = degree(d[[1]])
-
+    
     # Setting group in visnetwork format
     data$nodes$group = data$nodes$Group
 
-    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+    data$nodes$color.border = sapply(degree(d[[1]]), FUN = returnColor)
 
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
@@ -910,111 +974,25 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
   }
 })
 
-# This function creates the selectInput object dynamically.
-# The options for nodes in the list depends on the edges selected
-output$node_sel_m <- renderUI({
-
-  validate(
-    need(try(!is.null(input$edges_select_local_m)), "Select at least one Tie")
-  )
-  
-  all_nodes = c()
-
-  if (1 %in% input$edges_select_local_m){
-      all_nodes = c(all_nodes, 
-                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
-                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
-      }
-
-  if (2 %in% input$edges_select_local_m){
-    all_nodes = c(all_nodes, 
-                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
-                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
-    }
-      
-  if (3 %in% input$edges_select_local_m){
-    all_nodes = c(all_nodes, 
-                  as.character(edges$Source[which(edges$Relation == "is family of")]),
-                  as.character(edges$Target[which(edges$Relation == "is family of")]))
-  }
-  
-  if (4 %in% input$edges_select_local_m){
-    all_nodes = c(all_nodes, 
-                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
-                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
-  }
-  
-  if (5 %in% input$edges_select_local_m){
-    all_nodes = c(all_nodes, 
-                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
-                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
-  }
-  
-  if (7 %in% input$edges_select_local_m){
-  all_nodes = c(all_nodes, 
-                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
-                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
-  }
-    
-  all_nodes = sort(unique(all_nodes))
-    
-  if (!is.null(input$node_sel_m)) selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = input$node_sel_m)
-  else selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = "Plato")
-})
-
 visNetworkOutput(outputId="local_network_degree")
 
 ```
-
 
 ### Betweenness
 
 ```{r, echo = FALSE}
 
 output$local_network_betweenness = renderVisNetwork({
-
+  
   validate(
     need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
   )
 
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
-
-    # Use function is_directed
-    directed = is_directed(input$edges_select_local_m)
     
-    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
-
-    # id en nodos es necesario para exportar al formato Pajek
-    V(g)$id = V(g)$name
-
-    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
-    E(g)$id = seq(1:length(E(g)))
-
-    # Subsetting according to edges selected
-    g_ = subset_graph(input$edges_select_local_m, g)
-
-    # Egonet
-    d <- make_ego_graph(g_,
-                        order = input$order_m,
-                        nodes = input$node_sel_m,
-                        mode = c("all"),
-                        mindist = 0)
-    
-    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
-    values =  data.frame(degree = degree(d[[1]]), 
-                         betweenness = betweenness(d[[1]]),
-                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
-                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
-    
-    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
-                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
-                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
-                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
-                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
-                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
-                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
-                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
-    
+    # Update reactive expressions
+    directed = directed()
+    d = d()
 
     #Set label size
     if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
@@ -1025,8 +1003,6 @@ output$local_network_betweenness = renderVisNetwork({
 
     labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
     V(d[[1]])$label.cex <- labsize
-
-    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
 
     data <- toVisNetworkData(d[[1]])
 
@@ -1040,19 +1016,25 @@ output$local_network_betweenness = renderVisNetwork({
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
 
+    min_bet = min(betweenness(d[[1]]))
+    max_bet = max(betweenness(d[[1]]))
+    n_col =  20
+    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    
+    # x in this function is degree
+    col_index = function(x) {((n_col -1)/(max_bet - min_bet))*(x-min_bet)+1}
+  
+    returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+     
     # Setting parameters straight in the data frame for visNetwork
-    # Setting parameters straight in the data frame for visNetwork
-    data$nodes$color.background = case_when(
-      data$nodes$Group == "Male" ~ '#FF6347',
-      data$nodes$Group == "Female" ~ '#ffa500',
-      data$nodes$Group == "Place" ~ '#31e001',
-      data$nodes$Group == "God" ~ '#05e2ff'
-    )
+    data$nodes$color.background = sapply(betweenness(d[[1]]), FUN = returnColor)
+    
+    data$nodes$betweenness = format(betweenness(d[[1]]), digits = 3, nsmall = 3) 
 
     # Setting group in visnetwork format
     data$nodes$group = data$nodes$Group
 
-    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+    data$nodes$color.border = sapply(betweenness(d[[1]]), FUN = returnColor)
 
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
@@ -1062,25 +1044,9 @@ output$local_network_betweenness = renderVisNetwork({
     )
     
     # Setting parameters straight in the data frame for visNetwork
-    data$edges$color.color = case_when(
-      data$edges$Relation == "is teacher of" ~ '#0000FF',
-      data$edges$Relation == "is friend of" ~ '#228B22',
-      data$edges$Relation == "is family of" ~ '#FF0000', 
-      data$edges$Relation == "studied the work of" ~ '#ff01d9',
-      data$edges$Relation == "sent letters to" ~ '#ffbf00',
-      #data$edges$Relation == "is associated with" ~ '#14ff03',
-      data$edges$Relation == "is benefactor of" ~ '#fff23c'
-    )
+    data$edges$color.color = rep("lightgray",length(data$edges$Relation))
     
-    data$edges$color.highlight = case_when(
-      data$edges$Relation == "is teacher of" ~ '#00ffff',
-      data$edges$Relation == "is friend of" ~ '#568b22',
-      data$edges$Relation == "is family of" ~ '#ff4000',
-      data$edges$Relation == "studied the work of" ~ '#d9ff01',
-      data$edges$Relation == "sent letters to" ~ '#8400ff',
-      #data$edges$Relation == "is associated with" ~ '#ff0314',
-      data$edges$Relation == "is benefactor of" ~ '#e53cff'
-    )
+    data$edges$color.highlight = rep("lightgray",length(data$edges$Relation))
   
     # nodes data.frame for legend
     lnodes <- data.frame(label = c("Male", "Female"),
@@ -1103,7 +1069,7 @@ output$local_network_betweenness = renderVisNetwork({
                               '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
                               data$nodes$color.background, 
                               ';">',
-                              data$nodes$Group,
+                              data$nodes$betweenness,
                               '</p></center>'
                               )
     
@@ -1178,43 +1144,10 @@ output$local_network_closeness = renderVisNetwork({
   )
 
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
-
-    # Use function is_directed
-    directed = is_directed(input$edges_select_local_m)
     
-    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
-
-    # id en nodos es necesario para exportar al formato Pajek
-    V(g)$id = V(g)$name
-
-    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
-    E(g)$id = seq(1:length(E(g)))
-
-    # Subsetting according to edges selected
-    g_ = subset_graph(input$edges_select_local_m, g)
-
-    # Egonet
-    d <- make_ego_graph(g_,
-                        order = input$order_m,
-                        nodes = input$node_sel_m,
-                        mode = c("all"),
-                        mindist = 0)
-    
-    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
-    values =  data.frame(degree = degree(d[[1]]), 
-                         betweenness = betweenness(d[[1]]),
-                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
-                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
-    
-    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
-                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
-                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
-                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
-                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
-                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
-                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
-                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
-    
+    # Update reactive expressions
+    directed = directed()
+    d = d()
 
     #Set label size
     if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
@@ -1226,33 +1159,37 @@ output$local_network_closeness = renderVisNetwork({
     labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
     V(d[[1]])$label.cex <- labsize
 
-    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
-
     data <- toVisNetworkData(d[[1]])
 
     # Set node size
-    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
-    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
 
-    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
-    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
 
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
 
+    min_close = min(closeness(d[[1]]))
+    max_close = max(closeness(d[[1]]))
+    n_col =  20
+    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    
+    # x in this function is degree
+    col_index = function(x) {((n_col -1)/(max_close - min_close))*(x-min_close)+1}
+  
+    returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+     
     # Setting parameters straight in the data frame for visNetwork
-    # Setting parameters straight in the data frame for visNetwork
-    data$nodes$color.background = case_when(
-      data$nodes$Group == "Male" ~ '#FF6347',
-      data$nodes$Group == "Female" ~ '#ffa500',
-      data$nodes$Group == "Place" ~ '#31e001',
-      data$nodes$Group == "God" ~ '#05e2ff'
-    )
-
+    data$nodes$color.background = sapply(closeness(d[[1]]), FUN = returnColor)
+    
+    data$nodes$closeness =  format(closeness(d[[1]]), digits = 3, nsmall = 3) 
+    
     # Setting group in visnetwork format
     data$nodes$group = data$nodes$Group
 
-    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+    data$nodes$color.border = sapply(closeness(d[[1]]), FUN = returnColor)
 
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
@@ -1262,25 +1199,9 @@ output$local_network_closeness = renderVisNetwork({
     )
     
     # Setting parameters straight in the data frame for visNetwork
-    data$edges$color.color = case_when(
-      data$edges$Relation == "is teacher of" ~ '#0000FF',
-      data$edges$Relation == "is friend of" ~ '#228B22',
-      data$edges$Relation == "is family of" ~ '#FF0000', 
-      data$edges$Relation == "studied the work of" ~ '#ff01d9',
-      data$edges$Relation == "sent letters to" ~ '#ffbf00',
-      #data$edges$Relation == "is associated with" ~ '#14ff03',
-      data$edges$Relation == "is benefactor of" ~ '#fff23c'
-    )
+    data$edges$color.color = rep("lightgray",length(data$edges$Relation))
     
-    data$edges$color.highlight = case_when(
-      data$edges$Relation == "is teacher of" ~ '#00ffff',
-      data$edges$Relation == "is friend of" ~ '#568b22',
-      data$edges$Relation == "is family of" ~ '#ff4000',
-      data$edges$Relation == "studied the work of" ~ '#d9ff01',
-      data$edges$Relation == "sent letters to" ~ '#8400ff',
-      #data$edges$Relation == "is associated with" ~ '#ff0314',
-      data$edges$Relation == "is benefactor of" ~ '#e53cff'
-    )
+    data$edges$color.highlight = rep("lightgray",length(data$edges$Relation))
   
     # nodes data.frame for legend
     lnodes <- data.frame(label = c("Male", "Female"),
@@ -1303,7 +1224,7 @@ output$local_network_closeness = renderVisNetwork({
                               '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
                               data$nodes$color.background, 
                               ';">',
-                              data$nodes$Group,
+                              data$nodes$closeness,
                               '</p></center>'
                               )
     
@@ -1379,42 +1300,10 @@ output$local_network_centralities = renderVisNetwork({
 
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
 
-    # Use function is_directed
-    directed = is_directed(input$edges_select_local_m)
+    # Update reactive expressions
+    directed = directed()
+    d = d()
     
-    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
-
-    # id en nodos es necesario para exportar al formato Pajek
-    V(g)$id = V(g)$name
-
-    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
-    E(g)$id = seq(1:length(E(g)))
-
-    # Subsetting according to edges selected
-    g_ = subset_graph(input$edges_select_local_m, g)
-
-    # Egonet
-    d <- make_ego_graph(g_,
-                        order = input$order_m,
-                        nodes = input$node_sel_m,
-                        mode = c("all"),
-                        mindist = 0)
-    
-    #values =  data.frame(name = vertex_attr(d[[1]],"id"),
-    values =  data.frame(degree = degree(d[[1]]), 
-                         betweenness = betweenness(d[[1]]),
-                         closeness = format(closeness(d[[1]]), digits = 3, nsmall = 3) , 
-                         eigenvector = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))
-    
-    centr = data.frame(centr_dgre = centralization.degree(d[[1]])$centralization[1],
-                       centr_dgre_th_max = centralization.degree(d[[1]])$theoretical_max[1],
-                       centr_btwn = centralization.betweenness(d[[1]])$centralization[1], 
-                       centr_btwn_th_max = centralization.betweenness(d[[1]])$theoretical_max[1], 
-                       centr_clsn = centralization.closeness(d[[1]])$centralization[1], 
-                       centr_clsn_th_max = centralization.closeness(d[[1]])$theoretical_max[1], 
-                       centr_egcn = centralization.evcent(d[[1]])$centralization[1], 
-                       centr_egcn_th_max = centralization.evcent(d[[1]])$theoretical_max[1])
-
     #Set label size
     if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
     else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
@@ -1425,33 +1314,48 @@ output$local_network_centralities = renderVisNetwork({
     labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
     V(d[[1]])$label.cex <- labsize
 
-    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
-
     data <- toVisNetworkData(d[[1]])
 
     # Set node size
-    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(3.0,30.0,4)
-    else min_node = rescaled_value(3.0,30.0,input$node_size_local_m[1])
+    if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
 
-    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(3.0,30.0,6)
-    else max_node = rescaled_value(3.0,30.0,input$node_size_local_m[2])
+    if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
 
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
 
+    min_eigen = min(eigen_centrality(d[[1]])$vector)
+    max_eigen = max(eigen_centrality(d[[1]])$vector)
+    n_col =  20.00
+    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    
+    # print(min_eigen)
+    
+    # x in this function is eigen_centrality
+    col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
+  
+    returnColor_evc = function(x) {substr(node_vir_col[col_index_evc(x)],1,nchar(node_vir_col[col_index_evc(x)])-2)}
+  
     # Setting parameters straight in the data frame for visNetwork
-    # Setting parameters straight in the data frame for visNetwork
-    data$nodes$color.background = case_when(
-      data$nodes$Group == "Male" ~ '#FF6347',
-      data$nodes$Group == "Female" ~ '#ffa500',
-      data$nodes$Group == "Place" ~ '#31e001',
-      data$nodes$Group == "God" ~ '#05e2ff'
-    )
-
+    data$nodes$color.background = sapply(eigen_centrality(d[[1]])$vector, FUN = returnColor_evc)
+    
+    # print(col_index(eigen_centrality(d[[1]])$vector))
+    # print(node_vir_col[col_index(eigen_centrality(d[[1]])$vector)])
+    # print(node_vir_col[1.00])
+    # 
+    # print(length(eigen_centrality(d[[1]])$vector))
+    # 
+    # print(data$nodes$color.background)
+    # print(eigen_centrality(d[[1]])$vector)
+    
+    data$nodes$eigen = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
+    
     # Setting group in visnetwork format
     data$nodes$group = data$nodes$Group
 
-    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+    data$nodes$color.border = sapply(eigen_centrality(d[[1]])$vector, FUN = returnColor_evc)
 
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
@@ -1461,25 +1365,9 @@ output$local_network_centralities = renderVisNetwork({
     )
     
     # Setting parameters straight in the data frame for visNetwork
-    data$edges$color.color = case_when(
-      data$edges$Relation == "is teacher of" ~ '#0000FF',
-      data$edges$Relation == "is friend of" ~ '#228B22',
-      data$edges$Relation == "is family of" ~ '#FF0000', 
-      data$edges$Relation == "studied the work of" ~ '#ff01d9',
-      data$edges$Relation == "sent letters to" ~ '#ffbf00',
-      #data$edges$Relation == "is associated with" ~ '#14ff03',
-      data$edges$Relation == "is benefactor of" ~ '#fff23c'
-    )
+    data$edges$color.color = rep("lightgray",length(data$edges$Relation))
     
-    data$edges$color.highlight = case_when(
-      data$edges$Relation == "is teacher of" ~ '#00ffff',
-      data$edges$Relation == "is friend of" ~ '#568b22',
-      data$edges$Relation == "is family of" ~ '#ff4000',
-      data$edges$Relation == "studied the work of" ~ '#d9ff01',
-      data$edges$Relation == "sent letters to" ~ '#8400ff',
-      #data$edges$Relation == "is associated with" ~ '#ff0314',
-      data$edges$Relation == "is benefactor of" ~ '#e53cff'
-    )
+    data$edges$color.highlight = rep("lightgray",length(data$edges$Relation))
   
     # nodes data.frame for legend
     lnodes <- data.frame(label = c("Male", "Female"),
@@ -1502,7 +1390,7 @@ output$local_network_centralities = renderVisNetwork({
                               '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
                               data$nodes$color.background, 
                               ';">',
-                              data$nodes$Group,
+                              data$nodes$eigen,
                               '</p></center>'
                               )
     
@@ -1573,7 +1461,7 @@ Column {data-width=350}
 
 ```{r}
   fillCol(h5("Graph metrics"),
-          tableOutput(outputId = 'table_centr_'),
+          tableOutput(outputId = 'table_centr'),
           h5("Metrics by Phylosophers"),
           DTOutput(outputId = 'table_values'), flex = c(0.5,1,0.5,5))
 ```
