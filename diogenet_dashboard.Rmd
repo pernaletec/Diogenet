@@ -864,7 +864,7 @@ output$local_network_degree = renderVisNetwork({
     min_deg = min(degree(d[[1]]))
     max_deg = max(degree(d[[1]]))
     n_col =  50
-    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    node_vir_col = viridis(n = n_col, begin = 0.9, end = 0.2, direction = -1, option = "A")
     
     # x in this function is degree
     col_index = function(x) {((n_col -1)/(max_deg - min_deg))*(x-min_deg)+1}
@@ -1020,7 +1020,7 @@ output$local_network_betweenness = renderVisNetwork({
     min_bet = min(betweenness(d[[1]]))
     max_bet = max(betweenness(d[[1]]))
     n_col =  50
-    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    node_vir_col = viridis(n = n_col, begin = 0.9, end = 0.2, direction = -1, option = "A")
     
     # x in this function is degree
     col_index = function(x) {((n_col -1)/(max_bet - min_bet))*(x-min_bet)+1}
@@ -1175,7 +1175,7 @@ output$local_network_closeness = renderVisNetwork({
     min_close = min(closeness(d[[1]]))
     max_close = max(closeness(d[[1]]))
     n_col =  50
-    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    node_vir_col = viridis(n = n_col, begin = 0.9, end = 0.2, direction = -1, option = "A")
     
     # x in this function is degree
     col_index = function(x) {((n_col -1)/(max_close - min_close))*(x-min_close)+1}
@@ -1330,7 +1330,7 @@ output$local_network_centralities = renderVisNetwork({
     min_eigen = min(eigen_centrality(d[[1]])$vector)
     max_eigen = max(eigen_centrality(d[[1]])$vector)
     n_col =  50
-    node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+    node_vir_col = viridis(n = n_col, begin = 0.9, end = 0.2, direction = -1, option = "A")
     
     # x in this function is eigen_centrality
     col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
