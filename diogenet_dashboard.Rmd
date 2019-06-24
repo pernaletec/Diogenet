@@ -359,7 +359,7 @@ visNetworkOutput(outputId="global_network")
 
 ```
 
-View {data-navmenu="Local Network"}
+Graph {data-navmenu="Local Network"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -639,7 +639,7 @@ visNetworkOutput(outputId="local_network")
 
 ```
 
-Info {data-navmenu="Local Network" data-orientation="columns"}
+Graph + Centrality {data-navmenu="Local Network" data-orientation="columns"}
 ===================================== 
 
 Inputs {.sidebar}
@@ -863,7 +863,7 @@ degree_graph_local = reactive({
         min_deg = min(degree(d[[1]]))
         max_deg = max(degree(d[[1]]))
         n_col =  50
-        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = 1, option = "A")
         
         # x in this function is degree
         col_index = function(x) {((n_col -1)/(max_deg - min_deg))*(x-min_deg)+1}
@@ -1004,7 +1004,7 @@ betweenness_graph_local = reactive({
       validate(
         need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
       )
-    
+
       if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
         
         # Update reactive expressions
@@ -1036,7 +1036,7 @@ betweenness_graph_local = reactive({
         min_bet = min(betweenness(d[[1]]))
         max_bet = max(betweenness(d[[1]]))
         n_col =  50
-        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = 1, option = "A")
         
         # x in this function is degree
         col_index = function(x) {((n_col -1)/(max_bet - min_bet))*(x-min_bet)+1}
@@ -1209,7 +1209,7 @@ closeness_graph_local = reactive({
         min_close = min(closeness(d[[1]]))
         max_close = max(closeness(d[[1]]))
         n_col =  50
-        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = 1, option = "A")
         
         # x in this function is degree
         col_index = function(x) {((n_col -1)/(max_close - min_close))*(x-min_close)+1}
@@ -1343,7 +1343,7 @@ uiOutput(outputId = 'closeness_local')
 ```{r, echo = FALSE}
 
 eigenvector_graph_local = reactive({
-  
+
   if (input$plot_type == 'graph'){
     output$local_network_centralities = renderVisNetwork({
     
@@ -1375,14 +1375,14 @@ eigenvector_graph_local = reactive({
     
         if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
         else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
-    
+
         nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
         data$nodes$size = nodesize
     
         min_eigen = min(eigen_centrality(d[[1]])$vector)
         max_eigen = max(eigen_centrality(d[[1]])$vector)
         n_col =  50
-        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = -1, option = "A")
+        node_vir_col = viridis(n = n_col, begin = 0.2, end = 0.9, direction = 1, option = "A")
         
         # x in this function is eigen_centrality
         col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
@@ -1396,9 +1396,6 @@ eigenvector_graph_local = reactive({
         
         data$nodes$eigen = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
         
-        # Setting group in visnetwork format
-        data$nodes$group = data$nodes$Group
-    
         data$nodes$color.border = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
     
         data$nodes$color.highlight = case_when(
@@ -1494,7 +1491,7 @@ eigenvector_graph_local = reactive({
       }
     })
     return(visNetworkOutput(outputId="local_network_centralities"))
-  } 
+  }
   
   if (input$plot_type == 'heatmap'){
     
@@ -1519,9 +1516,9 @@ Column {data-width=350}
 ### Metrics 
 
 ```{r}
-  fillCol(h5("Graph Scores"),
+  fillCol(h5("Centralization Scores"),
           tableOutput(outputId = 'table_centr'),
-          h5("Node Centrality Scores"),
+          h5("Centrality Scores"),
           DTOutput(outputId = 'table_values'), flex = c(0.5,1,0.5,5))
 ```
 
