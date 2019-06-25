@@ -758,9 +758,16 @@ centr = reactive({
   }
 })
 
-output$table_values = renderDT(return(values()), options = list(pageLength = 10))
+output$table_values = DT::renderDT({return(values())}, 
+                                   options = list(pageLength = 10,
+                                                  scrollX = TRUE,
+                                                  scrollY = TRUE,
+                                                  autoWidth = TRUE,
+                                                  columnDefs = list(list(width = '20px', targets = c(1, 2, 3, 4)),
+                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4)))), 
+                                   selection = c("none"))
 
-output$table_centr = renderTable({return(centr())}, align = 'c', width = NULL)
+output$table_centr = renderTable({return(centr())}, align = 'c', width = 'auto')
 
 # This function creates the selectInput object dynamically.
 # The options for nodes in the list depends on the edges selected
@@ -1387,9 +1394,17 @@ visNetworkOutput(outputId="local_network_monitor")
 ```{r, echo = FALSE}
 
 output$local_heatmap = renderPlotly({
-      values = values()
-      heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"))
-      })
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+  )
+  
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+    
+  values = values()
+  heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"))
+  }
+})
 
 plotlyOutput(outputId="local_heatmap")
 
@@ -1404,7 +1419,7 @@ Column {data-width=400}
   fillCol(h5("Centralization Scores"),
           tableOutput(outputId = 'table_centr'),
           h5("Centrality Scores"),
-          DTOutput(outputId = 'table_values'), flex = c(0.5,1,0.5,5))
+          DT::DTOutput(outputId = 'table_values'), flex = c(0.5,1,0.5,5))
 ```
 
 Communities 
