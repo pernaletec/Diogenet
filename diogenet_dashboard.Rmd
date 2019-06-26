@@ -687,7 +687,7 @@ selectInput("variable_type", "Variable:",
 div(message, style = "color:red")
 ```
 
-Column {.tabset .tabset-fade data-width=600}
+Column {.tabset .tabset-fade}
 -------------------------------------
 
 ```{r, echo = FALSE}
@@ -769,22 +769,26 @@ output$table_values = DT::renderDataTable(datatable(values(), selection = 'none'
                                                   pageLength = 10,
                                                   lengthChange = FALSE,
                                                   processing = FALSE,
-                                                  scrollX = TRUE,
+                                                  scrollX = TRUE
+                                                  #,
                                                   #scrollY = TRUE,
-                                                  autoWidth = TRUE,
                                                   #scrollCollapse = TRUE,
+                                                  #autoWidth = TRUE
+                                                  ,
                                                   columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
-                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4))))))
+                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                  )))
 
 output$table_centr = DT::renderDataTable(datatable(centr(), selection = 'none', caption = 'Centralization scores',
                                   options = list(lengthChange = FALSE,
                                                  processing = FALSE,
                                                  ordering = FALSE,
-                                                 autoWidth = TRUE,
+                                                 #autoWidth = TRUE,
                                                  scrollX = TRUE,
                                                  searching = FALSE,
                                                  paging = FALSE,
-                                                 info = FALSE,
+                                                 info = FALSE
+                                                 ,
                                                  columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4)))
                                                  ,
@@ -1437,10 +1441,7 @@ plotlyOutput(outputId="local_heatmap")
 
 ```
 
-Column {data-width=400}
--------------------------------------
-
-### Metrics 
+### Metrics
 
 ```{r}
 fillCol(DT::DTOutput(outputId = 'table_centr'),
