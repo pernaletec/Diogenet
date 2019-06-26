@@ -759,7 +759,7 @@ centr = reactive({
   }
 })
 
-output$table_values = DT::renderDataTable(datatable(values(), selection = 'none', caption = 'Centrality scores', 
+output$table_values = DT::renderDataTable({datatable(values(), selection = 'none', caption = 'Centrality scores', 
                                    options = list(
                                                  initComplete = JS(
                                                   "function(settings, json){",
@@ -777,9 +777,9 @@ output$table_values = DT::renderDataTable(datatable(values(), selection = 'none'
                                                   ,
                                                   columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
                                                                     list(className = 'dt-center', targets = c(1, 2, 3, 4)))
-                                                  )))
+                                                  ))})
 
-output$table_centr = DT::renderDataTable(datatable(centr(), selection = 'none', caption = 'Centralization scores',
+output$table_centr = DT::renderDataTable({datatable(centr(), selection = 'none', caption = 'Centralization scores',
                                   options = list(lengthChange = FALSE,
                                                  processing = FALSE,
                                                  ordering = FALSE,
@@ -798,7 +798,7 @@ output$table_centr = DT::renderDataTable(datatable(centr(), selection = 'none', 
                                                     "$(this.api().table().header()).css({'font-size': '12px'});",
                                                     "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});",
                                                     "}")
-                                                 )))
+                                                 ))})
 
 # This function creates the selectInput object dynamically.
 # The options for nodes in the list depends on the edges selected
@@ -1425,16 +1425,21 @@ visNetworkOutput(outputId="local_network_monitor")
 ```{r, echo = FALSE}
 
 output$local_heatmap = renderPlotly({
-
-  validate(
-    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
-  )
   
-  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
-    values = values()
-    heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"))
+  withProgress(message = 'Creating heatmap', style = 'notification', value = 0.1, {
+    Sys.sleep(0.25)
+
+    incProgress(1, detail = paste("Running Heatmapply"))
+  
+    validate(
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+    )
     
-  }
+    if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+      values = values()
+      heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"))
+      }
+  })
 })
 
 plotlyOutput(outputId="local_heatmap")
