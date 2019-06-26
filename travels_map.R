@@ -163,10 +163,4 @@ m <- leaflet(avail_data_tb) %>%
   
 m
 
-saveWidget(m, file = "map.html", selfcontained = TRUE)
-
-
-
-
-
-
+# saveWidget(m, file = "map.html", selfcontained = TRUE)
