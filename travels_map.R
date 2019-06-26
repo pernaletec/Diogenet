@@ -72,6 +72,41 @@ knw_all_names_trav = names_traveler[intsect_condition]
 # Destinations with joint condition
 knw_all_travl_trgt = traveler_target[intsect_condition]
 
+################################################################################
+## In the following lines a table will be built for nodes in "travelled to"   ##
+## but not in "is from". A column will be added to show weather or not these  ##
+## places have an identified location                                         ##
+################################################################################
+
+# nodes in "travelled to" but not in "is from"
+id_travelers_in_is_from = which(names_traveler %in% names_origin)
+travelers_not_in_is_from = unique(names_traveler[-id_travelers_in_is_from])
+write.table(x = travelers_not_in_is_from, file = "travelers_not_in_is_from.txt", fileEncoding = "UTF-8")
+
+travelers_names = unique(names_traveler)
+
+full_travel_edges = list(name = travelers_names,
+                         from = rep("", length(travelers_names)),
+                         to = rep("", length(travelers_names)))
+
+traveler_source = function (x) {
+  id = which(names_origin %in% x) 
+  return(origin_places[id])
+  }
+
+traveler_destiny = function (x) {
+  id = which(names_traveler %in% x) 
+  return(traveler_target[id])
+  }
+
+full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
+full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
+
+# Table with all sources and detinations for each node (...only travelers)
+write.table(x = full_travel_edges, file = "full_travel_edges.txt", fileEncoding = "UTF-8")
+
+################################################################################
+
 
 ## 3. turn it into something like this:
 ##   source   target  name
