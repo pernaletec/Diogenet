@@ -13,14 +13,14 @@ library(sp)
 library(htmlwidgets)
 
 
-install_github("editio/georeference")
+#install_github("editio/georeference")
 
 read_georef = FALSE
 
 # select nodes with attribute Place from newNodes.csv
 # create new dataframe with places only = locations
 
-nodes = read.csv(file="old_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+nodes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 places <- nodes$Name[nodes$Groups=="Place"]
 
 all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
@@ -33,7 +33,7 @@ places_available = places[places %in% all_places_full_data$name]
 ## 1. create new table from newNodes and newEdges.
 ## 2. identify nodes that are in both relations "is from" and "travelled to"
 
-edges = read.csv(file="old_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+edges = read.csv(file="new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 
 # Origin of phylosophers 
 names_origin <- edges$Source[which(edges$Relation == "is from")]
@@ -103,7 +103,7 @@ full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
 full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
 
 # Table with all sources and detinations for each node (...only travelers)
-write.table(x = full_travel_edges, file = "full_travel_edges.txt", fileEncoding = "UTF-8")
+write.table(x = as.matrix(full_travel_edges), file = "full_travel_edges.txt", fileEncoding = "UTF-8")
 
 ################################################################################
 
@@ -121,7 +121,6 @@ travel_edges = data.frame(source = rep("", length(knw_all_names_trav)),
                           lon_target = rep("", length(knw_all_names_trav)),
                           stringsAsFactors = FALSE)
 
-all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasing = FALSE)
 ## After getting all the places for which there IS at least one location identified 
 ## there was a "manual" search using the shiny app developed
 #all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
@@ -139,6 +138,8 @@ for (k in 1:length(travel_edges$source)) {
   travel_edges$lon_target[k] = (all_places_full_data$lon[which(all_places_full_data$name == travel_edges$target[k])])
   }
 
+all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasing = FALSE)
+all_places = data.frame(places = all_places)
 
 ###########################################
 #########                     #############  
@@ -152,7 +153,9 @@ avail_data_tb = as_tibble(travel_edges)
 node_count = c(travel_edges$source, travel_edges$target)
 node_count = as.data.frame(table(node_count))
 
-all_places_full_data$degree = node_count$Freq[which(node_count$node_count == all_places_full_data$name)]
+all_places_full_data = all_places_full_data[(all_places_full_data$name %in% all_places$places),]
+
+all_places_full_data$degree = node_count$Freq[node_count$node_count %in% all_places_full_data$name]
 
 tcu_map = "https://api.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ"
 
