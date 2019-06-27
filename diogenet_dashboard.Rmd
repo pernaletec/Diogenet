@@ -1593,6 +1593,10 @@ network_cmnt =  reactive({
   
   # In the meanwhile overwriting the default behaviour
   bridges_edge_col  = c("#030000","#ff0400")[igraph::crossing(cluster, g_) + 1]
+  
+  # Crossing nodes detection
+  crossing_nodes = ends(g_, seq(1:length(igraph::crossing(cluster, g_)))[igraph::crossing(cluster, g_)], names = FALSE)
+  crossing_nodes = unique(c(crossing_nodes[,1],crossing_nodes[,2]))
     
   if (input$cmnt_vsl_pck == "visNetwork") {
     
@@ -1636,6 +1640,9 @@ network_cmnt =  reactive({
       if (input$edges_format == TRUE) {
         data$edges$color.color = bridges_edge_col
         data$edges$color.highlight = bridges_edge_col
+        data$nodes$color.background[-crossing_nodes]= "gray"
+        data$nodes$color.border[-crossing_nodes]= "gray"
+        
       } else {
         # Setting parameters straight in the data frame for visNetwork
         data$edges$color.color = case_when(
@@ -1761,6 +1768,8 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       
       data <- toVisNetworkData(g_)
       
+      new_cols <- node_colours[membership(cluster)]
+      
       if (input$edges_format == FALSE) {
         # Setting parameters straight in the data frame for visNetwork
         bridges_edge_col = case_when(
@@ -1772,6 +1781,8 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
           #data$edges$Relation == "is associated with" ~ '#14ff03',
           data$edges$Relation == "is benefactor of" ~ '#fff23c'
         )
+      } else {
+          new_cols[-crossing_nodes] <- "gray"
       }
       
       # Set node size
@@ -1794,10 +1805,10 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
         # Setting seed is important so the graph is always with the same configuration when starts
         set.seed(123)
         coords <- layout_(g_, nicely())
-        new_cols <- node_colours[membership(cluster)]
         plot(x=cluster,
              y=g_,
-             col = new_cols, 
+             col = new_cols,
+             vertext.frame.color = new_cols,
              main = subTitle, 
              layout = matrix(c(coords[,1], -coords[,2]), 
                              nrow = length(coords[,1]), 
