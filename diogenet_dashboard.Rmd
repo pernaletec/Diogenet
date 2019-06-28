@@ -733,7 +733,7 @@ values = reactive({
     if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
       d = d()
       val =  data.frame(degree = degree(d[[1]]),
-                         betweenness = as.numeric(format(betweenness(d[[1]]), digits = 3, nsmall = 3)),
+                         betweenness = as.numeric(format(betweenness(d[[1]], normalized =TRUE), digits = 3, nsmall = 3)),
                          closeness = as.numeric(format(closeness(d[[1]]), digits = 3, nsmall = 3)),
                          eigenvector = as.numeric(format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)))
       val = val[order(val$degree, decreasing = TRUE),]
