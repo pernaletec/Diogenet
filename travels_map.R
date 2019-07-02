@@ -112,7 +112,8 @@ full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
 full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
 
 # Table with all sources and detinations for each node (...only travelers)
-write.table(x = as.matrix(full_travel_edges), file = "full_travel_edges.txt", fileEncoding = "UTF-8")
+write.csv(x = as.matrix(full_travel_edges$from), file = paste0("full_travel_edges_from.csv"), fileEncoding = "UTF-8")
+write.csv(x = as.matrix(full_travel_edges$to), file = paste0("full_travel_edges_to.csv"), fileEncoding = "UTF-8")
 
 ################################################################################
 
