@@ -1,3 +1,4 @@
+library(stringi)
 # Import node list: contains nodes$Name, nodes$Group
 nodes <- read.csv('new_Nodes.csv', 
                   sep=",", 
@@ -26,9 +27,13 @@ missing = edges_ %in% nodes$Name
 missing_indx = which(missing == FALSE)
 edges_[missing_indx]
 table(edges_ %in% nodes$Name)
-# Discard edges whith unknown nodes 
 
+# Discard edges whith unknown nodes 
 if (length(missing_indx)>0) {
-  edges = edges[-unique(c(which(edges$Source == edges_[missing_indx]), which(edges$Target == edges_[missing_indx]))),]
-  message = paste("WARNING: Check data. ", length(missing_indx)," edges removed") 
+  missing_edges = edges[unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
+  edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
+  message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ") 
+  for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
   } else message = ""
+#print(missing_edges)
+

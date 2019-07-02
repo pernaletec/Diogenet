@@ -1,5 +1,4 @@
 Name,Groups
- Lyceum (Athens),Place
 Abdera,Place
 Academy of Plato (Athens),Place
 Adramyttium,Place
@@ -41,6 +40,7 @@ Calauria,Place
 Callatia,Place
 Callatis,Place
 Cappadocia,Place
+Caria,Place
 Carthago,Place
 Carystus,Place
 Ceos,Place
@@ -96,6 +96,7 @@ Heraclea,Place
 Hermion(e),Place
 Hybadai,Place
 Hyele,Place
+Iasos,Place
 Ida,Place
 Ilium/Troia,Place
 India,Place
@@ -119,12 +120,14 @@ Libya,Place
 Liguria,Place
 Lindus,Place
 Lucania,Place
+Lyceum (Athens),Place
 Lydia,Place
 Lysimachia,Place
 Macedonia,Place
 Magnesia,Place
 Mantinea,Place
 Marathon,Place
+Maronea,Place
 Media,Place
 Megara (Attica),Place
 Megara Hyblaea,Place
@@ -540,6 +543,7 @@ Dosiadas,Male
 Draco,Male
 Duris,Male
 Echecrates,Male
+Egyptian Priests,Male
 Egyptians,Male
 Eleusis (Person),Male
 Elians,Male
@@ -611,7 +615,7 @@ Gnurus,Male
 Gorgiadas,Male
 Gorgias,Male
 Gryllion,Male
-Gryllus,Male
+Gryllus II,Male
 Gryllus III?,Male
 Gymnosophists,Male
 Halcyoneus,Male
@@ -729,7 +733,6 @@ Menander,Male
 Menedemus,Male
 Menedemus II,Male
 Menedemus' Wife,Male
-Menelaus,Male
 Menexenus,Male
 Meno,Male
 Menodorus,Male
@@ -825,7 +828,6 @@ Phanton,Male
 Pherecydes,Male
 Phidias,Male
 Philemon,Male
-Philesia,Male
 Philetaerus,Male
 Philip,Male
 Philip IV,Male
@@ -1007,7 +1009,6 @@ Theophanes,Male
 Theophantus,Male
 Theophrastus,Male
 Theopompus,Male
-Thesmophoria,Male
 Thespis,Male
 Thracian,Male
 Thraso II,Male
@@ -1093,6 +1094,7 @@ Phaenarete,Female
 Phaestis,Female
 Phemonoe,Female
 Phila,Female
+Philesia,Female
 Phryne,Female
 Potone,Female
 Theodete,Female
