@@ -21,6 +21,9 @@ read_georef = FALSE
 # create new dataframe with places only = locations
 
 nodes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+
+
 places <- nodes$Name[nodes$Groups=="Place"]
 
 all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
@@ -53,7 +56,13 @@ unk_origin_phy = names_origin[-id_knw_orig]
 
 # Travelers!
 names_traveler <- edges$Source[which(edges$Relation == "traveled to")]
+# Travelers in black list
+trav_in_BL = names_traveler %in% black_list
+names_traveler = names_traveler[!trav_in_BL]
+
+# Traveler target in black list  
 traveler_target <- edges$Target[which(edges$Relation == "traveled to")]
+traveler_target = traveler_target[!trav_in_BL]
 
 # Validations!!!!
 # Which travelers are from known origin??
