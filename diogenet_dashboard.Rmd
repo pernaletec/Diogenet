@@ -168,7 +168,7 @@ output$global_network = renderVisNetwork({
   # Use function is_directed
   directed = is_directed(input$edges_select_global)
   
-  try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+  try(g <- igraph::graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 	
   # ids in nodes are es required to export to Pajek format. Just in case!
   V(g)$id = V(g)$name
@@ -735,10 +735,10 @@ values = reactive({
   
     if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
       d = d()
-      val =  data.frame(degree = degree(d[[1]]),
-                         betweenness = as.numeric(format(betweenness(d[[1]], normalized =TRUE), digits = 3, nsmall = 3)),
-                         closeness = as.numeric(format(closeness(d[[1]]), digits = 3, nsmall = 3)),
-                         eigenvector = as.numeric(format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)))
+      val =  data.frame(degree = igraph::degree(d[[1]]),
+                         betweenness = as.numeric(format(igraph::betweenness(d[[1]], normalized =TRUE), digits = 3, nsmall = 3)),
+                         closeness = as.numeric(format(igraph::closeness(d[[1]]), digits = 3, nsmall = 3)),
+                         eigenvector = as.numeric(format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)))
       val = val[order(val$degree, decreasing = TRUE),]
       return(val)
     }
@@ -752,10 +752,14 @@ centr = reactive({
   
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
     d = d()
-    centr_ = data.frame(degree = as.numeric(format(centralization.degree(d[[1]])$centralization[1], digits = 3, nsmall = 3)),
-                     betweenness = as.numeric(format(centralization.betweenness(d[[1]])$centralization[1], digits = 3, nsmall = 3)),
-                     closeness = as.numeric(format(centralization.closeness(d[[1]])$centralization[1], digits = 3, nsmall = 3)),
-                     eigenvector = as.numeric(format(centralization.evcent(d[[1]])$centralization[1], digits = 3, nsmall = 3))
+    centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(d[[1]])$centralization[1], 
+                                                   digits = 3, nsmall = 3)),
+                     betweenness = as.numeric(format(igraph::centralization.betweenness(d[[1]])$centralization[1], 
+                                                     digits = 3, nsmall = 3)),
+                     closeness = as.numeric(format(igraph::centralization.closeness(d[[1]])$centralization[1], 
+                                                   digits = 3, nsmall = 3)),
+                     eigenvector = as.numeric(format(igraph::centralization.evcent(d[[1]])$centralization[1], 
+                                                     digits = 3, nsmall = 3))
                      )
     row.names(centr_) = c("Graph")
     return(centr_)
