@@ -139,8 +139,8 @@ travel_edges = data.frame(source = rep("", length(knw_all_names_trav)),
 # Keep that in mind!
 
 for (k in 1:length(travel_edges$source)) {
-  print(paste0(k, " ", knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])]))
-  print(paste0(k, " ", travel_edges$name[k]))
+  # print(paste0(k, " ", knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])]))
+  # print(paste0(k, " ", travel_edges$name[k]))
   travel_edges$source[k] = (knw_origin_loc[which(knw_origin_phy == travel_edges$name[k])])
   travel_edges$lat_source[k] = (all_places_full_data$lat[which(all_places_full_data$name == travel_edges$source[k])])
   travel_edges$lon_source[k] = (all_places_full_data$lon[which(all_places_full_data$name == travel_edges$source[k])])
@@ -149,7 +149,17 @@ for (k in 1:length(travel_edges$source)) {
   }
 
 all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasing = FALSE)
+# These are the nodes in the graph
 all_places = data.frame(places = all_places)
+
+###########################################
+#########                     #############  
+########    GRAPH CREATION     ############
+#########                     #############
+###########################################
+
+try(graph <- igraph::graph_from_data_frame(d = travel_edges[,1:2], directed=FALSE, vertices = all_places$places), silent = TRUE)
+plot(graph)
 
 ###########################################
 #########                     #############  
@@ -194,21 +204,20 @@ m <- leaflet(avail_data_tb) %>%
                                                           travel_edges$target[i], 
                                                           "<br/></small></center></p>")
                       )
-  }
+    }
 
-  m <- addCircleMarkers(map = m, all_places_full_data$lon, 
-                        all_places_full_data$lat, 
-                        popup=paste0("<p><center><b>", all_places_full_data$name, 
-                                     "</b><br/><small><i>Lat: </i>", 
-                                     all_places_full_data$lat,
-                                     "<br/><i>Long: </i>",
-                                     all_places_full_data$lon, 
-                                     "<br/></small></center></p>"),
-                        radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree), 
-                        color="#ff0d00", 
-                        stroke =FALSE, 
-                        fillOpacity = 0.75)
-  
+    m <- addCircleMarkers(map = m, all_places_full_data$lon, 
+                          all_places_full_data$lat, 
+                          popup=paste0("<p><center><b>", all_places_full_data$name, 
+                                       "</b><br/><small><i>Lat: </i>", 
+                                       all_places_full_data$lat,
+                                       "<br/><i>Long: </i>",
+                                       all_places_full_data$lon, 
+                                       "<br/></small></center></p>"),
+                          radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree), 
+                          color="#ff0d00", 
+                          stroke =FALSE, 
+                          fillOpacity = 0.75)
 m
 
 # saveWidget(m, file = "map.html", selfcontained = TRUE)
