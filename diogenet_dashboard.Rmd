@@ -887,7 +887,10 @@ output$local_network_monitor = renderVisNetwork({
       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
       
-      labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+      labsize <- rescale(igraph::degree(d[[1]]), 
+                         min(igraph::degree(d[[1]])), 
+                         max(igraph::degree(d[[1]])), 
+                         min_label, max_label)
       V(d[[1]])$label.cex <- labsize
   
       #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
@@ -901,7 +904,10 @@ output$local_network_monitor = renderVisNetwork({
       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
   
-      nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+      nodesize <- rescale(igraph::degree(d[[1]]), 
+                          min(igraph::degree(d[[1]])), 
+                          max(igraph::degree(d[[1]])), 
+                          min_node, max_node)
       data$nodes$size = nodesize
   
       min_deg = min(degree(d[[1]]))
@@ -916,9 +922,9 @@ output$local_network_monitor = renderVisNetwork({
        
       
       # Setting parameters straight in the data frame for visNetwork
-      data$nodes$color.background = sapply(degree(d[[1]]), FUN = returnColor)
+      data$nodes$color.background = sapply(igraph::degree(d[[1]]), FUN = returnColor)
       
-      data$nodes$degree = degree(d[[1]])
+      data$nodes$degree = igraph::degree(d[[1]])
       
       # Setting group in visnetwork format
       data$nodes$group = data$nodes$Group
@@ -1025,7 +1031,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
   
-      labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+      labsize <- rescale(igraph::betweenness(d[[1]]), 
+                         min(igraph::betweenness(d[[1]])), 
+                         max(igraph::betweenness(d[[1]])), 
+                         min_label, 
+                         max_label)
       V(d[[1]])$label.cex <- labsize
   
       data <- toVisNetworkData(d[[1]])
@@ -1037,7 +1047,10 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
   
-      nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+      nodesize <- rescale(igraph::betweenness(d[[1]]), 
+                          min(igraph::betweenness(d[[1]])), 
+                          max(igraph::betweenness(d[[1]])), 
+                          min_node, max_node)
       data$nodes$size = nodesize
   
       min_bet = min(betweenness(d[[1]]))
@@ -1160,7 +1173,10 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
   
-      labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+      labsize <- rescale(igraph::closeness(d[[1]]), 
+                         min(igraph::closeness(d[[1]])), 
+                         max(igraph::closeness(d[[1]])), 
+                         min_label, max_label)
       V(d[[1]])$label.cex <- labsize
   
       data <- toVisNetworkData(d[[1]])
@@ -1172,11 +1188,14 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
   
-      nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+      nodesize <- rescale(igraph::closeness(d[[1]]), 
+                          min(igraph::closeness(d[[1]])), 
+                          max(igraph::closeness(d[[1]])),
+                          min_node, max_node)
       data$nodes$size = nodesize
   
-      min_close = min(closeness(d[[1]]))
-      max_close = max(closeness(d[[1]]))
+      min_close = min(igraph::closeness(d[[1]]))
+      max_close = max(igraph::closeness(d[[1]]))
       n_col =  50
       node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
       
@@ -1294,8 +1313,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
   
       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
-  
-      labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+      
+      labsize <- rescale(igraph::eigen_centrality(d[[1]])$vector, 
+                         min(igraph::eigen_centrality(d[[1]])$vector), 
+                         max(igraph::eigen_centrality(d[[1]])$vector), 
+                         min_label, max_label)
       V(d[[1]])$label.cex <- labsize
   
       data <- toVisNetworkData(d[[1]])
@@ -1307,25 +1329,28 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
 
-      nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+      nodesize <- rescale(igraph::eigen_centrality(d[[1]])$vector, 
+                          min(igraph::eigen_centrality(d[[1]])$vector), 
+                          max(igraph::eigen_centrality(d[[1]])$vector), 
+                          min_node, max_node)
       data$nodes$size = nodesize
   
-      min_eigen = min(eigen_centrality(d[[1]])$vector)
-      max_eigen = max(eigen_centrality(d[[1]])$vector)
+      min_eigen = min(igraph::eigen_centrality(d[[1]])$vector)
+      max_eigen = max(igraph::eigen_centrality(d[[1]])$vector)
       n_col =  50
       node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
       
       # x in this function is eigen_centrality
       col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
       
-      col_index_evc_data = col_index_evc(eigen_centrality(d[[1]])$vector)
+      col_index_evc_data = col_index_evc(igraph::eigen_centrality(d[[1]])$vector)
     
       returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)}
       
       # Setting parameters straight in the data frame for visNetwork
       data$nodes$color.background = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
       
-      data$nodes$eigen = format(eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
+      data$nodes$eigen = format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
       
       data$nodes$color.border = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
   
