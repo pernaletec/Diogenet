@@ -71,7 +71,7 @@ Row {.tabset}
 
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
-  if (input$phylosopher != "All Phylosophers") {
+  if ((input$phylosopher != "All Phylosophers") && !is.null(input$phylosopher)) {
     travel_edges_selected = travel_edges$name %in% input$phylosopher
     return(travel_edges[travel_edges_selected,])
   } else  return(travel_edges)
@@ -84,6 +84,14 @@ all_places_reactive = reactive({
                     decreasing = FALSE)
   # These are the nodes in the graph
   return(data.frame(places = all_places))
+})
+
+all_places_full_data_reactive = reactive({
+  
+  all_places = all_places_reactive()
+  drawn_places = all_places_full_data$name %in% all_places
+  return(all_places_full_data[drawn_places,])
+  
 })
 
 
@@ -107,70 +115,79 @@ graph_reactive = reactive({
 # network stores an object rendered by renderVisnetwork 
 output$travels_network = renderLeaflet({
   
-  travel_edges = travel_edges_reactive()
-  all_places = all_places_reactive()
-  graph = graph_reactive()
-    
-  ###############################################################################################
-  ###################################                     #######################################  
-  ##################################     LEAFLET MAP       ######################################
-  ###################################                     #######################################
-  ###############################################################################################
-  
-  
-  avail_data_tb = as_tibble(travel_edges)
-  
-  node_count = c(travel_edges$source, travel_edges$target)
-  node_count = as.data.frame(table(node_count))
-  
-  all_places_full_data = all_places_full_data[(all_places_full_data$name %in% all_places$places),]
-  
-  all_places_full_data$degree = node_count$Freq[node_count$node_count %in% all_places_full_data$name]
-  
   tcu_map = "https://api.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ"
   
   map_attr = "Map data &copy<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a> Imagery © <a href='http://mapbox.com'>Mapbox</a>"
   
-  m <- leaflet(avail_data_tb) %>% 
+  # This line is not requiered
+  #m <- leaflet(avail_data_tb) %>% 
+  m <- leaflet() %>% 
     addTiles(urlTemplate = tcu_map, attribution = map_attr, options = list(maxZoom = 10, 
                                                                            id = 'isawnyu.map-knmctlkh',
                                                                            accessToken =  'pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ'))%>%
     setView(lng= 24.92, lat = 35.255, zoom = 5) 
-  
-    for(i in 1:length(travel_edges$source)) {
-      arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
-                             p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
-                             n=100, addStartEnd=TRUE )
-      m <- addPolylines(m, 
-                        data=arc, 
-                        color="black", 
-                        weight=1,
-                        stroke = TRUE,
-                        smoothFactor = 5,
-                        fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i], 
-                                                           "</b><br/><small><i>From: </i>", 
-                                                            travel_edges$source[i],
-                                                            "<br/><i>To: </i>",
-                                                            travel_edges$target[i], 
-                                                            "<br/></small></center></p>")
-                        )
-      }
-  
-      m <- addCircleMarkers(map = m, all_places_full_data$lon, 
-                            all_places_full_data$lat, 
-                            popup=paste0("<p><center><b>", all_places_full_data$name, 
-                                         "</b><br/><small><i>Lat: </i>", 
-                                         all_places_full_data$lat,
-                                         "<br/><i>Long: </i>",
-                                         all_places_full_data$lon, 
-                                         "<br/></small></center></p>"),
-                            radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree), 
-                            color="#ff0d00", 
-                            stroke =FALSE, 
-                            fillOpacity = 0.75)
   m
   
   # saveWidget(m, file = "map.html", selfcontained = TRUE)
+})
+
+observe({
+  
+  travel_edges = travel_edges_reactive()
+  all_places = all_places_reactive()
+  graph = graph_reactive()
+  #all_places_full_data = all_places_full_data_reactive()
+
+  ###############################################################################################
+  ###################################                     #######################################
+  ##################################     LEAFLET MAP       ######################################
+  ###################################                     #######################################
+  ###############################################################################################
+
+  avail_data_tb = as_tibble(travel_edges)
+
+  node_count = c(travel_edges$source, travel_edges$target)
+  node_count = as.data.frame(table(node_count))
+
+  all_places_full_data = all_places_full_data[(all_places_full_data$name %in% all_places$places),]
+
+  all_places_full_data$degree = node_count$Freq[node_count$node_count %in% all_places_full_data$name]
+
+  leafletProxy("travels_network") %>%
+      clearShapes() %>%
+      clearMarkers()
+
+  for(i in 1:length(travel_edges$source)) {
+    arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
+                           p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
+                           n=100, addStartEnd=TRUE )
+      leafletProxy("travels_network") %>% addPolylines(
+                        data=arc,
+                        color="black",
+                        weight=1,
+                        stroke = TRUE,
+                        smoothFactor = 5,
+                        fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i],
+                                                           "</b><br/><small><i>From: </i>",
+                                                            travel_edges$source[i],
+                                                            "<br/><i>To: </i>",
+                                                            travel_edges$target[i],
+                                                            "<br/></small></center></p>")
+                        )
+  }
+  
+  leafletProxy("travels_network") %>% addCircleMarkers(all_places_full_data$lon,
+                        all_places_full_data$lat,
+                        popup=paste0("<p><center><b>", all_places_full_data$name,
+                                     "</b><br/><small><i>Lat: </i>",
+                                     all_places_full_data$lat,
+                                     "<br/><i>Long: </i>",
+                                     all_places_full_data$lon,
+                                     "<br/></small></center></p>"),
+                        radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree),
+                        color="#ff0d00",
+                        stroke =FALSE,
+                        fillOpacity = 0.75)
 })
 
 # Use the visnetworkOutput function for visnetwork objects
@@ -202,18 +219,17 @@ centr = reactive({
   
   graph = graph_reactive()
   
-    centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(graph)$centralization[1], 
+  centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(graph)$centralization[1], 
+                                                 digits = 3, nsmall = 3)),
+                   betweenness = as.numeric(format(igraph::centralization.betweenness(graph)$centralization[1], 
                                                    digits = 3, nsmall = 3)),
-                     betweenness = as.numeric(format(igraph::centralization.betweenness(graph)$centralization[1], 
-                                                     digits = 3, nsmall = 3)),
-                     closeness = as.numeric(format(igraph::centralization.closeness(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3)),
-                     eigenvector = as.numeric(format(igraph::centralization.evcent(graph)$centralization[1], 
-                                                     digits = 3, nsmall = 3))
-                     )
-    row.names(centr_) = c("Graph")
-    return(centr_)
-  
+                   closeness = as.numeric(format(igraph::centralization.closeness(graph)$centralization[1], 
+                                                 digits = 3, nsmall = 3)),
+                   eigenvector = as.numeric(format(igraph::centralization.evcent(graph)$centralization[1], 
+                                                   digits = 3, nsmall = 3))
+                   )
+  row.names(centr_) = c("Graph")
+  return(centr_)
 })
 
 output$table_values = DT::renderDataTable({datatable(values(), selection = 'none', caption = 'Centrality scores', 
