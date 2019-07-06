@@ -150,9 +150,12 @@ observe({
   node_count = as.data.frame(table(node_count))
 
   all_places_full_data = all_places_full_data[(all_places_full_data$name %in% all_places$places),]
-
-  all_places_full_data$degree = node_count$Freq[node_count$node_count %in% all_places_full_data$name]
-
+  all_places_full_data = all_places_full_data[order(all_places_full_data$name, decreasing = TRUE),]
+  
+  values = values()
+  
+  all_places_full_data$degree = values$degree
+  
   leafletProxy("travels_network") %>%
       clearShapes() %>%
       clearMarkers()
@@ -210,7 +213,7 @@ values = reactive({
                                                    digits = 3, nsmall = 3)),
                      eigenvector = as.numeric(format(igraph::eigen_centrality(graph)$vector, 
                                                      digits = 3, nsmall = 3)))
-  val = val[order(val$degree, decreasing = TRUE),]
+  #val = val[order(val$degree, decreasing = TRUE),]
   return(val)
 
 })
@@ -232,7 +235,7 @@ centr = reactive({
   return(centr_)
 })
 
-output$table_values = DT::renderDataTable({datatable(values(), selection = 'none', caption = 'Centrality scores', 
+output$table_values = DT::renderDataTable({datatable(values()[order(values(), decreasing = TRUE),], selection = 'none', caption = 'Centrality scores', 
                                    options = list(
                                                  initComplete = JS(
                                                   "function(settings, json){",
