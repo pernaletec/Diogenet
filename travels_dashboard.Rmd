@@ -158,7 +158,7 @@ observe({
   node_count = as.data.frame(table(node_count))
 
   all_places_full_data = all_places_full_data[(all_places_full_data$name %in% all_places$places),]
-  all_places_full_data = all_places_full_data[order(all_places_full_data$name, decreasing = TRUE),]
+  all_places_full_data = all_places_full_data[order(all_places_full_data$name, decreasing = FALSE),]
   
   values = values()
   
@@ -168,7 +168,7 @@ observe({
   all_places_full_data$eigenvector = values$eigenvector
   
   n_col =  50
-  node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+  node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "magma")
   
   if (!is.null(input$centrality_type)) {
   
@@ -187,13 +187,14 @@ observe({
     }
     
     all_places_full_data$centrality = centrality
+    print(all_places_full_data)
     
     min = min(centrality)
     max = max(centrality)
     
     col_index_vector = col_index(centrality, n_col = n_col, min = min, max = max)
     
-    pal  = colorNumeric(palette = "plasma", domain = centrality)
+    pal  = colorNumeric(palette = "magma", domain = centrality)
     
     text_title = input$centrality_type
   
@@ -221,22 +222,23 @@ observe({
                           )
     }
 
-    str(viridis_pal(option = "plasma")(length(centrality)))
+    #str(viridis_pal(option = "plasma")(length(centrality)))
     
-    leafletProxy("travels_network") %>% addCircleMarkers(data = all_places_full_data, 
-                                                         all_places_full_data$lon,
-                          all_places_full_data$lat,
-                          popup=paste0("<p><center><b>", all_places_full_data$name,
-                                       "</b><br/><small><i>Lat: </i>",
-                                       all_places_full_data$lat,
-                                       "<br/><i>Long: </i>",
-                                       all_places_full_data$lon,
-                                       "<br/></small></center></p>"),
-                          radius=sapply(X = centrality, FUN = rescale_radius, min = min, max = max),
-                          #color=node_vir_col[col_index_vector],
-                          color = ~pal(centrality),
-                          stroke =TRUE,
-                          fillOpacity = 0.75)%>%
+    leafletProxy("travels_network") %>% 
+      addCircleMarkers(data = all_places_full_data, 
+                       all_places_full_data$lon,
+                       all_places_full_data$lat,
+                       popup=paste0("<p><center><b>",
+                                    all_places_full_data$name,
+                                    "</b><br/><small><i>Lat: </i>",
+                                    all_places_full_data$lat,
+                                    "<br/><i>Long: </i>",
+                                    all_places_full_data$lon,
+                                    "<br/></small></center></p>"),
+                       radius=sapply(X = centrality, FUN = rescale_radius, min = min, max = max),
+                       color = ~pal(centrality),
+                       stroke =TRUE,
+                       fillOpacity = 0.75)%>%
       addLegend(position = 'bottomright',pal = pal, values = centrality, title = text_title)
   
   }
