@@ -66,8 +66,7 @@ Row {.tabset}
 
 ### Map
 
-```{r, echo=FALSE}
-
+```{r, echo = FALSE, message = FALSE}
 
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
@@ -93,7 +92,6 @@ all_places_full_data_reactive = reactive({
   return(all_places_full_data[drawn_places,])
   
 })
-
 
 graph_reactive = reactive({
   
@@ -131,12 +129,22 @@ output$travels_network = renderLeaflet({
   # saveWidget(m, file = "map.html", selfcontained = TRUE)
 })
 
+# rescale the radius of the marker to the 5-20 scale
+rescale_radius = function(x, min, max){
+  y = ((20-5)/(max-min))*(x-min)+5
+  return(y)
+}
+
+# x in this function is centrality vector
+col_index = function(x, n_col, min, max) {((n_col -1)/(max - min))*(x-min)+1}
+
+returnColor = function(char_col) {substr(char_col,1,nchar(char_col)-2)}
+
 observe({
   
   travel_edges = travel_edges_reactive()
   all_places = all_places_reactive()
   graph = graph_reactive()
-  #all_places_full_data = all_places_full_data_reactive()
 
   ###############################################################################################
   ###################################                     #######################################
@@ -155,42 +163,83 @@ observe({
   values = values()
   
   all_places_full_data$degree = values$degree
+  all_places_full_data$betweenness = values$betweenness
+  all_places_full_data$closeness = values$closeness
+  all_places_full_data$eigenvector = values$eigenvector
   
-  leafletProxy("travels_network") %>%
-      clearShapes() %>%
-      clearMarkers()
+  n_col =  50
+  node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+  
+  if (!is.null(input$centrality_type)) {
+  
+    if (input$centrality_type == "degree") {
+      centrality = all_places_full_data$degree
 
-  for(i in 1:length(travel_edges$source)) {
-    arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
-                           p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
-                           n=100, addStartEnd=TRUE )
-      leafletProxy("travels_network") %>% addPolylines(
-                        data=arc,
-                        color="black",
-                        weight=1,
-                        stroke = TRUE,
-                        smoothFactor = 5,
-                        fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i],
-                                                           "</b><br/><small><i>From: </i>",
-                                                            travel_edges$source[i],
-                                                            "<br/><i>To: </i>",
-                                                            travel_edges$target[i],
-                                                            "<br/></small></center></p>")
-                        )
-  }
+    }
+    if (input$centrality_type == "betweenness") {
+      centrality = all_places_full_data$betweenness      
+    }
+    if (input$centrality_type == "closeness") {
+      centrality = all_places_full_data$closeness
+    }
+    if (input$centrality_type == "eigenvector") {
+      centrality = all_places_full_data$eigenvector
+    }
+    
+    all_places_full_data$centrality = centrality
+    
+    min = min(centrality)
+    max = max(centrality)
+    
+    col_index_vector = col_index(centrality, n_col = n_col, min = min, max = max)
+    
+    pal  = colorNumeric(palette = "plasma", domain = centrality)
+    
+    text_title = input$centrality_type
   
-  leafletProxy("travels_network") %>% addCircleMarkers(all_places_full_data$lon,
-                        all_places_full_data$lat,
-                        popup=paste0("<p><center><b>", all_places_full_data$name,
-                                     "</b><br/><small><i>Lat: </i>",
-                                     all_places_full_data$lat,
-                                     "<br/><i>Long: </i>",
-                                     all_places_full_data$lon,
-                                     "<br/></small></center></p>"),
-                        radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree),
-                        color="#ff0d00",
-                        stroke =FALSE,
-                        fillOpacity = 0.75)
+    leafletProxy("travels_network") %>%
+      clearShapes() %>%
+      clearMarkers() %>%
+      clearControls()
+  
+    for(i in 1:length(travel_edges$source)) {
+      arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
+                             p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
+                             n=100, addStartEnd=TRUE )
+        leafletProxy("travels_network") %>% addPolylines(
+                          data=arc,
+                          color="black",
+                          weight=1,
+                          stroke = TRUE,
+                          smoothFactor = 5,
+                          fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i],
+                                                             "</b><br/><small><i>From: </i>",
+                                                              travel_edges$source[i],
+                                                              "<br/><i>To: </i>",
+                                                              travel_edges$target[i],
+                                                              "<br/></small></center></p>")
+                          )
+    }
+
+    str(viridis_pal(option = "plasma")(length(centrality)))
+    
+    leafletProxy("travels_network") %>% addCircleMarkers(data = all_places_full_data, 
+                                                         all_places_full_data$lon,
+                          all_places_full_data$lat,
+                          popup=paste0("<p><center><b>", all_places_full_data$name,
+                                       "</b><br/><small><i>Lat: </i>",
+                                       all_places_full_data$lat,
+                                       "<br/><i>Long: </i>",
+                                       all_places_full_data$lon,
+                                       "<br/></small></center></p>"),
+                          radius=sapply(X = centrality, FUN = rescale_radius, min = min, max = max),
+                          #color=node_vir_col[col_index_vector],
+                          color = ~pal(centrality),
+                          stroke =FALSE,
+                          fillOpacity = 0.75)%>%
+      addLegend(position = 'bottomright',pal = pal, values = centrality, title = text_title)
+  
+  }
 })
 
 # Use the visnetworkOutput function for visnetwork objects
@@ -235,7 +284,7 @@ centr = reactive({
   return(centr_)
 })
 
-output$table_values = DT::renderDataTable({datatable(values()[order(values(), decreasing = TRUE),], selection = 'none', caption = 'Centrality scores', 
+output$table_values = DT::renderDataTable({datatable(values()[order(values()$degree, decreasing = TRUE),], selection = 'none', caption = 'Centrality scores', 
                                    options = list(
                                                  initComplete = JS(
                                                   "function(settings, json){",
