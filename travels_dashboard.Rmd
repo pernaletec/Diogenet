@@ -42,15 +42,15 @@ source("travels_data.R")
 ```{r}
 
 
-h4("Phylosoher Selection")
+h4("Traveler:")
 # Node selection
-selectInput(inputId = "phylosopher", 
-            label = "Phylosopher:", 
-            choices = c("All Phylosophers", travel_edges$name), 
-            selected = "All Phylosophers")
+selectInput(inputId = "philosopher", 
+            label = NULL, 
+            choices = c("All", travel_edges$name), 
+            selected = "All")
 br()
-h4("Centrality selection")
-selectInput("centrality_type", "Centrality:",
+h4("Centrality Index:")
+selectInput("centrality_type", NULL,
                 c("Degree" = "degree",
                   "Betweenness" = "betweenness",
                   "Closeness" = "closeness",
@@ -70,8 +70,8 @@ Row {.tabset}
 
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
-  if ((input$phylosopher != "All Phylosophers") && !is.null(input$phylosopher)) {
-    travel_edges_selected = travel_edges$name %in% input$phylosopher
+  if ((input$philosopher != "All") && !is.null(input$philosopher)) {
+    travel_edges_selected = travel_edges$name %in% input$philosopher
     return(travel_edges[travel_edges_selected,])
   } else  return(travel_edges)
 })
@@ -235,7 +235,7 @@ observe({
                           radius=sapply(X = centrality, FUN = rescale_radius, min = min, max = max),
                           #color=node_vir_col[col_index_vector],
                           color = ~pal(centrality),
-                          stroke =FALSE,
+                          stroke =TRUE,
                           fillOpacity = 0.75)%>%
       addLegend(position = 'bottomright',pal = pal, values = centrality, title = text_title)
   
