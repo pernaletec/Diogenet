@@ -17,13 +17,16 @@ library(igraph)
 # select nodes with attribute Place from newNodes.csv
 # create new dataframe with places only = locations
 
+# Reads the nodes file
 nodes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+# Reads the black list
 black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-
-
+# Filter the nodes that are places
 places <- nodes$Name[nodes$Groups=="Place"]
-
+# Reads the locations data
 all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+# Filter the places for whom location is available
+# Note that pipe the pipe operator %in% is used here 
 places_available = places[places %in% all_places_full_data$name]
 
 ##############################################################################
