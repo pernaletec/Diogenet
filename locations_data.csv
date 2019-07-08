@@ -1,204 +1,208 @@
-name,lat,lon,source
-Italy,43,12,http://betamasaheft.eu/places/LOC3940Italy
-Sicily,37.59995833,14.01537778,http://betamasaheft.eu/places/LOC5714Sicily
-Mount Corycus,35.3184,25.21053,http://dare.ht.lu.se/places/26147
-Media,46.165496,24.351452,http://dare.ht.lu.se/places/40685
-Calauria,37.52255,23.48041,http://dare.ht.lu.se/places/43035
-Akkon,32.920744,35.068626,http://gazetteer.dainst.org/place/2276866
-Sidon,33.560413,35.375272,http://gazetteer.dainst.org/place/2276906
-Thrace,42.5,27.5,http://pleiades.stoa.org/places/1001889
-Hellas,37.5,22.5,http://pleiades.stoa.org/places/1001896
-Gaul,50.5,3.5,http://pleiades.stoa.org/places/109156
-Skythai,47.5,27.5,http://pleiades.stoa.org/places/1273
-Tyrrhenian Sea,40.9,11.5,http://pleiades.stoa.org/places/1356
-Phocaean,43.305832,3.473132,http://pleiades.stoa.org/places/147985
-Europe region,47.39343982,13.26112992,http://pleiades.stoa.org/places/187490
-Apollonia Pontica,42.420355,27.694272,http://pleiades.stoa.org/places/216706
-Callatia,43.817152,28.58275,http://pleiades.stoa.org/places/216744
-Callatis,43.817152,28.58275,http://pleiades.stoa.org/places/216744
-Odrysians tribe,42.5,26.5,http://pleiades.stoa.org/places/216906
-Borysthenes (Olbia),46.691895,31.901597,http://pleiades.stoa.org/places/226546
-Cos,44.160628,1.54443,http://pleiades.stoa.org/places/246360
-Cyrene,32.8180895,21.8578913,http://pleiades.stoa.org/places/354239693
-Prytaneum,32.8180895,21.8578913,http://pleiades.stoa.org/places/354239693
-Liguria,44.3,8.3,http://pleiades.stoa.org/places/383698
-Red Sea,19,39.5,http://pleiades.stoa.org/places/39290
-Rome,41.891775,12.486137,http://pleiades.stoa.org/places/423025
-Apulia,41.25,15.75,http://pleiades.stoa.org/places/442469
-Lucania,40.75,15.75,http://pleiades.stoa.org/places/442639
-Metapontum,40.383868,16.824063,http://pleiades.stoa.org/places/442658
-Taras/Tarentum/Neptunia,40.469229,17.240045,http://pleiades.stoa.org/places/442810
-Crotone,39.080763,17.12708,http://pleiades.stoa.org/places/452317
-Heraclea,40.213021,16.678299,http://pleiades.stoa.org/places/452333
-Rhegium,38.109279,15.64393,http://pleiades.stoa.org/places/452416
-Thurii,39.715766,16.491255,http://pleiades.stoa.org/places/452457
-Hyele,40.160744,15.155092,http://pleiades.stoa.org/places/452488
-Aetna M.,37.755,14.995,http://pleiades.stoa.org/places/462077
-Agrigentum,37.289646,13.591997,http://pleiades.stoa.org/places/462086
-Gela,37.063156,14.258219,http://pleiades.stoa.org/places/462214
-Katane,37.502959,15.088142,http://pleiades.stoa.org/places/462270
-Leontini,37.285478,14.998115,http://pleiades.stoa.org/places/462279
-Megara Hyblaea,37.203717,15.181777,http://pleiades.stoa.org/places/462307
-Selinus,37.58406,12.8249,http://pleiades.stoa.org/places/462489
-Syracuse,37.05963,15.29382,http://pleiades.stoa.org/places/462503
-Zancle,38.192251,15.556634,http://pleiades.stoa.org/places/462538
-Nestos (river),41.5,23.5,http://pleiades.stoa.org/places/481923
-Borboros,40.75,22.75,http://pleiades.stoa.org/places/491552
-Chalcidice,40.25,23.25,http://pleiades.stoa.org/places/491561
-Macedonia,41.25,21.75,http://pleiades.stoa.org/places/491656
-Olynthus,40.292595,23.342665,http://pleiades.stoa.org/places/491678
-Kassandreia,40.193696,23.327812,http://pleiades.stoa.org/places/491701
-Potidaea,40.193696,23.327812,http://pleiades.stoa.org/places/491701
-India,22.5,77.5,http://pleiades.stoa.org/places/50004
-Abdera,40.95,24.983333,http://pleiades.stoa.org/places/501323
-Aegospotami,40.331504,26.599366,http://pleiades.stoa.org/places/501336
-Dardanus,40.079727,26.37442,http://pleiades.stoa.org/places/501393
-Mende,39.971454,23.39806,http://pleiades.stoa.org/places/501515
-Lampsacus,40.346685,26.699162,http://pleiades.stoa.org/places/501570
-Samothrace,40.453,25.582,http://pleiades.stoa.org/places/501597
-Stagira,40.593031,23.79204,http://pleiades.stoa.org/places/501625
-Thasos,40.777626,24.703702,http://pleiades.stoa.org/places/501634
-Myrlea,40.375556,28.882868,http://pleiades.stoa.org/places/511194
-Phrygia region,40.25,27.75,http://pleiades.stoa.org/places/511362
-Propontis,40.6666672,28.2499999,http://pleiades.stoa.org/places/511381
-Cyzicus,40.361304,27.927064,http://pleiades.stoa.org/places/511440
-Bosphorus,41.119444,29.075278,http://pleiades.stoa.org/places/520977
-Bosporus,41.119444,29.075278,http://pleiades.stoa.org/places/520977
-Byzantium,41.009795,28.970647,http://pleiades.stoa.org/places/520985
-Chalcedon,40.983393,29.025789,http://pleiades.stoa.org/places/520988
-Ambracia,39.154876,20.990258,http://pleiades.stoa.org/places/530794
-Corcyra,39.60444,19.924457,http://pleiades.stoa.org/places/530834
-Elea,39.444248,20.560388,http://pleiades.stoa.org/places/530860
-Lysimachia,38.535856,21.336882,http://pleiades.stoa.org/places/530986
-Syria,38.295542,20.592532,http://pleiades.stoa.org/places/531109
-Amphiareion,38.29388,23.855162,http://pleiades.stoa.org/places/540628
-Boeotia,38.35,23.25,http://pleiades.stoa.org/places/540689
-Chalcis,38.457139,23.621937,http://pleiades.stoa.org/places/540703
-Delium,38.351682,23.653589,http://pleiades.stoa.org/places/540725
-Delphi,38.482289,22.501169,http://pleiades.stoa.org/places/540726
-Eretria,39.29195,22.60593,http://pleiades.stoa.org/places/540767
-Cranon,39.497665,22.314142,http://pleiades.stoa.org/places/540886
-Lamia,38.902996,22.442593,http://pleiades.stoa.org/places/540902
-Larissa (Thessaly),39.63478,22.43931,http://pleiades.stoa.org/places/540905
-Orchomenus,38.49101,22.977336,http://pleiades.stoa.org/places/540987
-Pharsalus,39.292233,22.386103,http://pleiades.stoa.org/places/541042
-Phthia,39.25,22.25,http://pleiades.stoa.org/places/541052
-Thebes,38.319236,23.317355,http://pleiades.stoa.org/places/541138
-Chenai,38.8,22.2,http://pleiades.stoa.org/places/543669
-Mt. Oita,38.8,22.2,http://pleiades.stoa.org/places/543669
-Adramyttium,39.500699,26.938091,http://pleiades.stoa.org/places/550403
-Aeolis,39,27.1,http://pleiades.stoa.org/places/550406
-Assos,39.491621,26.339656,http://pleiades.stoa.org/places/550463
-Atarneus,39.093987,26.927974,http://pleiades.stoa.org/places/550469
-Chios (island),38.414,26.053,http://pleiades.stoa.org/places/550497
-Cyme,38.761848,26.942154,http://pleiades.stoa.org/places/550506
-Eresus,39.135504,25.931503,http://pleiades.stoa.org/places/550533
-Erythrae,38.381944,26.479047,http://pleiades.stoa.org/places/550535
-Ida,39.7,26.83333,http://pleiades.stoa.org/places/550592
-Clazomenae,38.3614,26.7703,http://pleiades.stoa.org/places/550651
-Lemnos,39.916667,25.25,http://pleiades.stoa.org/places/550693
-Lesbos,39.2074811,26.1342123,http://pleiades.stoa.org/places/550696
-Lydia,38.5,28,http://pleiades.stoa.org/places/550701
-Magnesia,38.604383,27.43864,http://pleiades.stoa.org/places/550706
-Mitylene,39.110475,26.547048,http://pleiades.stoa.org/places/550763
-Smyrna,38.463574,27.166791,http://pleiades.stoa.org/places/550771
-Pergamum,39.129049,27.185694,http://pleiades.stoa.org/places/550812
-Phocaea,38.670353,26.753208,http://pleiades.stoa.org/places/550823
-Pitane,38.928297,26.937453,http://pleiades.stoa.org/places/550833
-Sardis,38.488314,28.040286,http://pleiades.stoa.org/places/550867
-Scepsis,39.82554,26.688003,http://pleiades.stoa.org/places/550890
-Temnus,38.671912,27.196998,http://pleiades.stoa.org/places/550908
-Teos (Ionia),38.177262,26.785014,http://pleiades.stoa.org/places/550913
-Troas,39.915,26.27,http://pleiades.stoa.org/places/550944
-Arkadia region,37.5,22.3,http://pleiades.stoa.org/places/570102
-Corinth,37.906045,22.878721,http://pleiades.stoa.org/places/570182
-Cythera,36.25,23,http://pleiades.stoa.org/places/570186
-Elis,37.891781,21.375091,http://pleiades.stoa.org/places/570220
-Selinus (river in Elis),37.891781,21.375091,http://pleiades.stoa.org/places/570220
-Epidaurus,37.63328,23.160067,http://pleiades.stoa.org/places/570228
-Hermion(e),37.385218,23.243591,http://pleiades.stoa.org/places/570292
-Isthmus,37.911431,22.999944,http://pleiades.stoa.org/places/570316
-Carystus,38.016541,24.420381,http://pleiades.stoa.org/places/570336
-Ceos,37.616667,24.333333,http://pleiades.stoa.org/places/570348
-Lepreum,37.432321,21.726002,http://pleiades.stoa.org/places/570423
-Mantinea,37.616619,22.391896,http://pleiades.stoa.org/places/570459
-Messene,37.183107,21.922941,http://pleiades.stoa.org/places/570479
-Messenia,37.25,21.75,http://pleiades.stoa.org/places/570480
-Nemea,37.75,22.75,http://pleiades.stoa.org/places/570505
-Peloponnesus,37.54,22.15,http://pleiades.stoa.org/places/570577
-Phlius,37.831664,22.641069,http://pleiades.stoa.org/places/570602
-Alpheios river,37.331323,22.450723,http://pleiades.stoa.org/places/570610
-Pisa,37.639535,21.653041,http://pleiades.stoa.org/places/570612
-Sicyon,37.980475,22.722718,http://pleiades.stoa.org/places/570668
-Sparta,37.073678,22.430937,http://pleiades.stoa.org/places/570685
-Skillous,37.75,21.75,http://pleiades.stoa.org/places/570757
-Etis,36.489,23.066,http://pleiades.stoa.org/places/573215
-Troezen,37.496395,23.362444,http://pleiades.stoa.org/places/573576
-Aegina,37.75,23.433333,http://pleiades.stoa.org/places/579853
-Hybadai,38.118034,23.792451,http://pleiades.stoa.org/places/579854
-Athenae,37.971687,23.726464,http://pleiades.stoa.org/places/579885
-Attica,37.9,23.9,http://pleiades.stoa.org/places/579888
-Eleusis in Attica,38.041101,23.537401,http://pleiades.stoa.org/places/579920
-Marathon,38.137916,23.979372,http://pleiades.stoa.org/places/580021
-Munichia,37.875,23.625,http://pleiades.stoa.org/places/580029
-Oropus,38.319486,23.793064,http://pleiades.stoa.org/places/580044
-Piraeus,37.938183,23.645456,http://pleiades.stoa.org/places/580062
-Phalerum,37.937309,23.706248,http://pleiades.stoa.org/places/580072
-Salamis,37.94874,23.53379,http://pleiades.stoa.org/places/580100
-Cnossos,35.297847,25.163106,http://pleiades.stoa.org/places/589872
-Lindus,36.0913239,28.0881777,http://pleiades.stoa.org/places/589913
-Rhodos (island),36.195597,27.964125,http://pleiades.stoa.org/places/590031
-Syros,37.43,24.92,http://pleiades.stoa.org/places/590067
-Argos,36.579408,27.13944,http://pleiades.stoa.org/places/599516
-Bargylia,37.195722,27.586569,http://pleiades.stoa.org/places/599550
-Cnidos,36.730968,27.685848,http://pleiades.stoa.org/places/599576
-Cnidus,36.730968,27.685848,http://pleiades.stoa.org/places/599576
-Colophon,38.109632,27.14711,http://pleiades.stoa.org/places/599577
-Delos,37.397274,25.268194,http://pleiades.stoa.org/places/599587
-Didyma/Branchidai/Ioustinianopolis,37.384829,27.256115,http://pleiades.stoa.org/places/599593
-Ephesus,37.939581,27.340892,http://pleiades.stoa.org/places/599612
-Halicarnassus,37.032062,27.429126,http://pleiades.stoa.org/places/599636
-Ionia region (Asia Minor),37.474596,27.508324,http://pleiades.stoa.org/places/599670
-Leros,37.158037,26.854663,http://pleiades.stoa.org/places/599763
-Miletus,37.531526,27.279561,http://pleiades.stoa.org/places/599799
-Myndus,37.073691,27.242415,http://pleiades.stoa.org/places/599811
-Paros,37.08579,25.150728,http://pleiades.stoa.org/places/599867
-Priene,37.66,27.298333,http://pleiades.stoa.org/places/599905
-Samos,37.73,26.84,http://pleiades.stoa.org/places/599926
-Sporades,38.5984593,25.71077449,http://pleiades.stoa.org/places/599944
-Cappadocia,39.25,35.75,http://pleiades.stoa.org/places/628949
-Academy of Plato (Athens),37.971421,23.726166,http://pleiades.stoa.org/places/638356144
-Myra,36.259692,29.9829,http://pleiades.stoa.org/places/639005
-Tarsus,36.920059,34.900117,http://pleiades.stoa.org/places/648789
-Hades (Place),37.0325,31.6369,http://pleiades.stoa.org/places/6521703251216369
-Amphipolis,36.486032,38.234824,http://pleiades.stoa.org/places/658377
-Phoenicia,33.25,35.25,http://pleiades.stoa.org/places/678334
-Tiberias,32.775458,35.542011,http://pleiades.stoa.org/places/678431
-Tyre,33.271624,35.198329,http://pleiades.stoa.org/places/678437
-Kition (Cyprus),34.929597,33.629471,http://pleiades.stoa.org/places/707534
-Soli,35.136687,32.814175,http://pleiades.stoa.org/places/707624
-Libya,31.5,26.5,http://pleiades.stoa.org/places/716588
-Alexandria at Egypt,31.201435,29.909773,http://pleiades.stoa.org/places/727070
-Heliopolis,30.131757,31.284786,http://pleiades.stoa.org/places/727117
-Nile,29.7497813,31.2705999,http://pleiades.stoa.org/places/727172
-Memphis (Egypt),29.849491,31.255061,http://pleiades.stoa.org/places/736963
- Lyceum (Athens),37.975,23.7225,http://pleiades.stoa.org/places/807514119
-Areiopagos (Athens),37.975,23.7225,http://pleiades.stoa.org/places/807514119
-Amastris,41.746969,32.385648,http://pleiades.stoa.org/places/844856
-Doris,40.5,30.5,http://pleiades.stoa.org/places/844909
-Halys,41.6767598,35.9295291,http://pleiades.stoa.org/places/857148
-Pontus,40.5,36.5,http://pleiades.stoa.org/places/857287
-Colchis,38.52585,39.228819,http://pleiades.stoa.org/places/874432
-Babylon,32.53617,44.42082,http://pleiades.stoa.org/places/893951
-Persia,34.5,46.5,http://pleiades.stoa.org/places/903080
-Ancient Egypt (region),27.884516,28.39896735,http://pleiades.stoa.org/places/981503
-Asia,38.00339058,28.583242,http://pleiades.stoa.org/places/981509
-Cilicia,37.01602582,35.52573634,http://pleiades.stoa.org/places/981514
-Cyprus,35.14052197,33.40349071,http://pleiades.stoa.org/places/981516
-Creta,35.23189721,24.88625628,http://pleiades.stoa.org/places/991373
-Bithynia,40.66758723,30.81860388,http://pleiades.stoa.org/places/991389
-Megara (Attica),37.99471,23.34324,http://sws.geonames.org/257365
-Aethiopia,12.5,37.5,http://syriaca.org/place/630
-Olympian Zeus sanctuary (Eleia),37.63794,21.63042,http://topostext.org/place/376216SOZe
-Carthago,36.8501382,10.31556135,http://vici.org/vici/18120
-Demetrias (Magnesia),39.343875,22.9223395,https://pleiades.stoa.org/places/540730
+lat,lon,name
+38.192251,15.556634,Zancle
+40.9,11.5,Tyrrhenian Sea
+33.271624,35.198329,Tyre
+37.496395,23.362444,Troezen
+39.915,26.27,Troas
+32.775458,35.542011,Tiberias
+39.715766,16.491255,Thurii
+42.5,27.5,Thrace
+38.319236,23.317355,Thebes
+40.777626,24.703702,Thasos
+38.177262,26.785014,Teos (Ionia)
+38.671912,27.196998,Temnus
+36.920059,34.900117,Tarsus
+40.469229,17.240045,Taras/Tarentum/Neptunia
+37.43,24.92,Syros
+38.295542,20.592532,Syria
+37.05963,15.29382,Syracuse
+40.593031,23.79204,Stagira
+38.5984593,25.71077449,Sporades
+37.073678,22.430937,Sparta
+35.136687,32.814175,Soli
+38.463574,27.166791,Smyrna
+47.5,27.5,Skythai
+37.75,21.75,Skillous
+33.560413,35.375272,Sidon
+37.980475,22.722718,Sicyon
+37.59995833,14.01537778,Sicily
+37.58406,12.8249,Selinus
+39.82554,26.688003,Scepsis
+38.488314,28.040286,Sardis
+40.453,25.582,Samothrace
+37.73,26.84,Samos
+37.94874,23.53379,Salamis
+41.891775,12.486137,Rome
+36.195597,27.964125,Rhodos (island)
+38.109279,15.64393,Rhegium
+19,39.5,Red Sea
+40.6666672,28.2499999,Propontis
+37.66,27.298333,Priene
+40.5,36.5,Pontus
+38.0006,23.9006,Pitthos
+38.928297,26.937453,Pitane
+37.639535,21.653041,Pisa
+37.938183,23.645456,Piraeus
+39.25,22.25,Phthia
+40.25,27.75,Phrygia region
+33.25,35.25,Phoenicia
+43.305832,3.473132,Phocaean
+38.670353,26.753208,Phocaea
+37.831664,22.641069,Phlius
+39.292233,22.386103,Pharsalus
+37.937309,23.706248,Phalerum
+34.5,46.5,Persia
+39.129049,27.185694,Pergamum
+37.54,22.15,Peloponnesus
+37.08579,25.150728,Paros
+38.319486,23.793064,Oropus
+38.49101,22.977336,Orchomenus
+40.292595,23.342665,Olynthus
+37.63794,21.63042,Olympian Zeus sanctuary (Eleia)
+42.5,26.5,Odrysians tribe
+29.7497813,31.2705999,Nile
+41.5,23.5,Nestos (river)
+37.75,22.75,Nemea
+40.375556,28.882868,Myrlea
+36.259692,29.9829,Myra
+37.073691,27.242415,Myndus
+37.875,23.625,Munichia
+39.110475,26.547048,Mitylene
+37.531526,27.279561,Miletus
+40.383868,16.824063,Metapontum
+37.25,21.75,Messenia
+37.183107,21.922941,Messene
+39.971454,23.39806,Mende
+29.849491,31.255061,Memphis (Egypt)
+37.203717,15.181777,Megara Hyblaea
+37.99471,23.34324,Megara (Attica)
+46.165496,24.351452,Media
+40.874503,25.509974,Maronea
+38.137916,23.979372,Marathon
+37.616619,22.391896,Mantinea
+38.604383,27.43864,Magnesia
+41.25,21.75,Macedonia
+38.535856,21.336882,Lysimachia
+38.5,28,Lydia
+40.75,15.75,Lucania
+36.0913239,28.0881777,Lindus
+44.3,8.3,Liguria
+31.5,26.5,Libya
+39.2074811,26.1342123,Lesbos
+37.158037,26.854663,Leros
+37.432321,21.726002,Lepreum
+37.285478,14.998115,Leontini
+39.916667,25.25,Lemnos
+39.63478,22.43931,Larissa (Thessaly)
+40.346685,26.699162,Lampsacus
+38.902996,22.442593,Lamia
+36.894723,27.288034,Kos
+34.929597,33.629471,Kition (Cyprus)
+37.502959,15.088142,Katane
+40.193696,23.327812,Kassandreia
+40.193696,23.327812,Potidaea
+43,12,Italy
+37.911431,22.999944,Isthmus
+37.474596,27.508324,Ionia region (Asia Minor)
+22.5,77.5,India
+39.7,26.83333,Ida
+37.278149,27.585572,Iasos
+40.160744,15.155092,Hyele
+38.118034,23.792451,Hybadai
+37.385218,23.243591,Hermion(e)
+40.213021,16.678299,Heraclea
+37.5,22.5,Hellas
+30.131757,31.284786,Heliopolis
+41.6767598,35.9295291,Halys
+37.032062,27.429126,Halicarnassus
+37.0325,31.6369,Hades (Place)
+37.063156,14.258219,Gela
+50.5,3.5,Gaul
+47.39343982,13.26112992,Europe region
+36.489,23.066,Etis
+38.381944,26.479047,Erythrae
+39.29195,22.60593,Eretria
+39.135504,25.931503,Eresus
+37.63328,23.160067,Epidaurus
+37.939581,27.340892,Ephesus
+37.891781,21.375091,Elis
+37.891781,21.375091,Selinus (river in Elis)
+38.041101,23.537401,Eleusis in Attica
+39.444248,20.560388,Elea
+40.5,30.5,Doris
+37.384829,27.256115,Didyma/Branchidai/Ioustinianopolis
+38.482289,22.501169,Delphi
+37.397274,25.268194,Delos
+38.351682,23.653589,Delium
+40.079727,26.37442,Dardanus
+40.361304,27.927064,Cyzicus
+36.25,23,Cythera
+32.8180895,21.8578913,Cyrene
+32.8180895,21.8578913,Prytaneum
+35.14052197,33.40349071,Cyprus
+38.761848,26.942154,Cyme
+39.080763,17.12708,Crotone
+35.23189721,24.88625628,Creta
+39.497665,22.314142,Cranon
+37.906045,22.878721,Corinth
+35.318405,25.21053,Corcyrian Cave
+39.60444,19.924457,Corcyra
+38.109632,27.14711,Colophon
+38.52585,39.228819,Colchis
+35.297847,25.163106,Cnossos
+36.730968,27.685848,Cnidos
+36.730968,27.685848,Cnidus
+38.3614,26.7703,Clazomenae
+37.01602582,35.52573634,Cilicia
+38.414,26.053,Chios (island)
+38.8,22.2,Chenai
+38.8,22.2,Mt. Oita
+38.457139,23.621937,Chalcis
+40.25,23.25,Chalcidice
+40.983393,29.025789,Chalcedon
+37.616667,24.333333,Ceos
+38.016541,24.420381,Carystus
+36.8501382,10.31556135,Carthago
+37.2454182,28.28124501,Caria
+39.25,35.75,Cappadocia
+43.817152,28.58275,Callatia
+43.817152,28.58275,Callatis
+37.52255,23.48041,Calauria
+41.009795,28.970647,Byzantium
+41.119444,29.075278,Bosphorus
+41.119444,29.075278,Bosporus
+46.691895,31.901597,Borysthenes (Olbia)
+40.75,22.75,Borboros
+38.35,23.25,Boeotia
+40.66758723,30.81860388,Bithynia
+37.195722,27.586569,Bargylia
+32.53617,44.42082,Babylon
+37.9,23.9,Attica
+37.971687,23.726464,Athenae
+39.093987,26.927974,Atarneus
+39.491621,26.339656,Assos
+38.00339058,28.583242,Asia
+37.5,22.3,Arkadia region
+36.579408,27.13944,Argos
+37.975,23.7225,Areiopagos (Athens)
+37.975,23.7225,Lyceum (Athens)
+41.25,15.75,Apulia
+42.420355,27.694272,Apollonia Pontica
+27.884516,28.39896735,Ancient Egypt (region)
+36.486032,38.234824,Amphipolis
+38.29388,23.855162,Amphiareion
+39.154876,20.990258,Ambracia
+41.746969,32.385648,Amastris
+37.331323,22.450723,Alpheios river
+31.201435,29.909773,Alexandria at Egypt
+32.920744,35.068626,Akkon
+37.289646,13.591997,Agrigentum
+37.755,14.995,Aetna M.
+12.5,37.5,Aethiopia
+39,27.1,Aeolis
+40.331504,26.599366,Aegospotami
+37.75,23.433333,Aegina
+39.500699,26.938091,Adramyttium
+37.971421,23.726166,Academy of Plato (Athens)
+40.95,24.983333,Abdera
+39.343875,22.9223395,Demetrias
