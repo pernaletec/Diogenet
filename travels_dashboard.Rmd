@@ -168,7 +168,8 @@ observe({
   all_places_full_data$eigenvector = values$eigenvector
   
   n_col =  50
-  node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "magma")
+  node_vir_col = viridis(n = n_col, begin =  0.2, end = 1.0, direction = 1, option = "magma")
+  node_vir_col = returnColor(node_vir_col)
   
   if (!is.null(input$centrality_type)) {
   
@@ -187,14 +188,18 @@ observe({
     }
     
     all_places_full_data$centrality = centrality
-    print(all_places_full_data)
     
     min = min(centrality)
     max = max(centrality)
     
-    col_index_vector = col_index(centrality, n_col = n_col, min = min, max = max)
+    #La siguiente ecuación no se usa. 
+    #col_index_vector = col_index(centrality, n_col = n_col, min = min, max = max)
     
-    pal  = colorNumeric(palette = "magma", domain = centrality)
+    # pal  = colorNumeric(palette = "magma", domain = centrality)
+    # Cambio de enfoque
+    pal <- colorNumeric(node_vir_col, domain = centrality)
+    #print(node_vir_col)
+    
     
     text_title = input$centrality_type
   
