@@ -46,7 +46,7 @@ h4("Traveler:")
 # Node selection
 selectInput(inputId = "philosopher", 
             label = NULL, 
-            choices = c("All", travel_edges$name), 
+            choices = c("All", sort(travel_edges$name, decreasing = FALSE)), 
             selected = "All")
 br()
 h4("Centrality Index:")
