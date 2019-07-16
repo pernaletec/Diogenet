@@ -1,5 +1,5 @@
 ---
-title: "Diogenet's Map Dashboard"
+title: "Diogenet's Map"
 subtitle: "Intellectual Networks from Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
@@ -27,8 +27,7 @@ library(viridis)
 library(igraph)
 ```
 
-Travel's Map
-===================================== 
+
 
 Inputs {.sidebar}
 -------------------------------------
@@ -254,7 +253,7 @@ leafletOutput(outputId="travels_network")
 
 ```
 
-### Centralities
+### Metrics
 
 ```{r, echo=FALSE}
 
