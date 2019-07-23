@@ -1,5 +1,5 @@
 ---
-title: "Diogenet's Map Dashboard"
+title: "Diogenet's Map"
 subtitle: "Intellectual Networks from Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
@@ -13,10 +13,7 @@ runtime: shiny
 library(ggplot2)
 library(tidyverse)
 library(pleiades)
-library(sf)
 library(devtools)
-library(georeference)
-library(geosphere)
 library(leaflet)
 library(magrittr)
 library(shiny)
@@ -28,8 +25,7 @@ library(igraph)
 library(visNetwork)
 ```
 
-Travel's Map
-===================================== 
+
 
 Inputs {.sidebar}
 -------------------------------------
@@ -304,7 +300,7 @@ leafletOutput(outputId="travels_network")
 
 ```
 
-### Centralities
+### Metrics
 
 ```{r, echo=FALSE}
 
