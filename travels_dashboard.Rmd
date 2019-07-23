@@ -402,7 +402,7 @@ output$graph_map <- visNetwork::renderVisNetwork({
   
   d = graph_reactive()
   
-  print(d)
+  #print(d)
   
   directed = TRUE
   
@@ -802,7 +802,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
     
     if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
     
-    print("por aqui paso")
+    # print("por aqui paso")
     
     # edges data.frame for legend
     ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),

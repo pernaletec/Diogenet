@@ -192,7 +192,7 @@ output$global_network = renderVisNetwork({
   
   # Funtion to convert igraph format to visNetwork format
   data <- toVisNetworkData(g_)
-  
+   
   # Set node size
   if (is.null(input$node_size_global[1])) min_node = rescaled_value(20.0,30.0,4)
   else min_node = rescaled_value(20.0,30.0,input$node_size_global[1])
