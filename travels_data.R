@@ -111,6 +111,34 @@ traveler_destiny = function (x) {
 full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
 full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
 
+travels_to_edit = data.frame(name = c(0), from = c(0), to = c(0))
+
+i = 1
+falta = TRUE
+cum_index = 0
+
+while (falta  == TRUE) {
+  
+  from = full_travel_edges$from[[i]]
+  to = full_travel_edges$to[[i]]
+
+  l_from = length(from)
+  l_to = length(to)
+
+  max_val = max(c(l_from, l_to))
+
+  for (k in 1:max_val) {
+    if(!is.null(full_travel_edges$name[[i]])) travels_to_edit[cum_index+k,1] = full_travel_edges$name[[i]]
+    if(!is.null(from[k]) && !is.na(from[k])) travels_to_edit[cum_index+k,2] = from[k]
+    if(!is.null(to[k]) && !is.na(to[k])) travels_to_edit[cum_index+k,3] = to[k]
+  }
+  cum_index = cum_index + k
+  i = i+1
+  if (i > length(full_travel_edges$name)) falta = FALSE
+}
+
+write.csv(x = travels_to_edit, file = paste0("travels_to_edit.csv"), fileEncoding = "UTF-8")
+
 # Table with all sources and detinations for each node (...only travelers)
 write.csv(x = as.matrix(full_travel_edges$from), file = paste0("full_travel_edges_from.csv"), fileEncoding = "UTF-8")
 write.csv(x = as.matrix(full_travel_edges$to), file = paste0("full_travel_edges_to.csv"), fileEncoding = "UTF-8")
