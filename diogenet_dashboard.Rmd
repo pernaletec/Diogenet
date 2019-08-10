@@ -49,7 +49,7 @@ br()
 h4("Network Ties")
 # Selection of the edges that will appear in the relation network 
 checkboxGroupInput("edges_select_global",
-                   label = "Tie Type",
+                   label = NULL,
                    choices = list("Is teacher of" = 1, 
                                   "Is friend of" = 2, 
                                   "Is family of" = 3, 
@@ -63,13 +63,13 @@ br()
 
 h4("Graph Layout")
 selectInput(inputId = "layout_global", 
-            label = "Layout Type", 
+            label = NULL, 
             choices = list(
                           #"layout_as_bipartite" = "layout_as_bipartite",
                           #"layout_as_star" = "layout_as_star",
                           #"layout_as_tree" = "layout_as_tree",
                           #"layout_components" = "layout_components",
-                          "Nicely" = "layout_nicely",
+                          #"Nicely" = "layout_nicely",
                           "Fruchterman-Reingold" = "layout_with_fr",
                           "Kamada-Kawai" = "layout_with_kk",
                           "On sphere" = "layout_on_sphere",
@@ -163,7 +163,7 @@ is_directed = function(edges_selected) {
 output$global_network = renderVisNetwork({
   
   # First validate if there are edges (Ties) selected
-  validate(need(try(!is.null(input$edges_select_global)), "Please select at least one Tie Type"))  
+  validate(need(try(!is.null(input$edges_select_global)), "Please select at least one tie"))  
   
   # Use function is_directed
   directed = is_directed(input$edges_select_global)
@@ -370,7 +370,7 @@ Inputs {.sidebar}
 h4("Network Ties")
 # Selection of the edges that will appear in the relation network
 checkboxGroupInput("edges_select_local",
-                   label = "Tie Type",
+                   label = NULL,
                    choices = list("Is teacher of" = 1, 
                                   "Is friend of" = 2, 
                                   "Is family of" = 3, 
@@ -382,10 +382,10 @@ checkboxGroupInput("edges_select_local",
                    inline = FALSE)
 br()
 # Egonet configuration
-h4("Egos")
+h4("Egonet")
 # Node selection
 uiOutput(outputId = "node_sel")
-br()
+#br()
 # Order
 sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
 # Node and Label Size
@@ -409,7 +409,7 @@ Row
 output$local_network = renderVisNetwork({
 
   validate(
-    need(try(!is.null(input$edges_select_local)), "Please select at least one Tie Type")
+    need(try(!is.null(input$edges_select_local)), "Please select at least one tie")
   )
 
   if (!is.null(input$node_sel) && !is.null(input$order)) {
@@ -653,7 +653,7 @@ Inputs {.sidebar}
 h4("Network Ties")
 # Selection of the edges that will appear in the relation network
 checkboxGroupInput("edges_select_local_m",
-                   label = "Tie Type",
+                   label = NULL,
                    choices = list("Is teacher of" = 1, 
                                   "Is friend of" = 2, 
                                   "Is family of" = 3, 
@@ -665,10 +665,10 @@ checkboxGroupInput("edges_select_local_m",
                    inline = FALSE)
 br()
 # Egonet configuration
-h4("Egos")
+h4("Egonet")
 # Node selection
 uiOutput(outputId = "node_sel_m")
-br()
+#br()
 # Order
 sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1)
 # Node and Label Size
@@ -677,8 +677,8 @@ h4("Appearance")
 sliderInput(inputId = "label_size_local_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 br()
-h4("Visualization in Graph")
-selectInput("variable_type", "Variable:",
+h4("Centrality Index")
+selectInput("variable_type", NULL,
                 c("Degree" = "degree",
                   "Betweenness" = "betweenness",
                   "Closeness" = "closeness",
@@ -730,7 +730,7 @@ d = reactive({
 values = reactive({
     
     validate(
-      need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
     )
   
     if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
@@ -747,7 +747,7 @@ values = reactive({
 centr = reactive({
   
   validate(
-    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
   )
   
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
@@ -869,7 +869,7 @@ output$node_sel_m <- renderUI({
 output$local_network_monitor = renderVisNetwork({
   
   validate(
-    need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
   )
 
   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
@@ -1464,7 +1464,7 @@ output$local_heatmap = renderPlotly({
     incProgress(1, detail = paste("Running Heatmapply"))
   
     validate(
-      need(try(!is.null(input$edges_select_local_m)), "Please select at least one Tie Type")
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
     )
     
     if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
@@ -1499,7 +1499,7 @@ br()
 h4("Network Ties")
 # Selection of the edges that will appear in the relation network
 checkboxGroupInput("edges_select_comm",
-                   label = "Tie Type",
+                   label = NULL,
                    choices = list("Is teacher of" = 1,
                                   "Is friend of" = 2,
                                   "Is family of" = 3,
@@ -1511,9 +1511,9 @@ checkboxGroupInput("edges_select_comm",
                    inline = FALSE)
 br()
 # Plot Height
-h4("Community detection")
+h4("Community Detection")
 # Algorithm for community detection
-selectInput("cmnt_dtc_alg", "Algorithm:", choices=c(
+selectInput("cmnt_dtc_alg", "Algorithm", choices=c(
                                                     "Cluster Edge Betweenness",
                                                     "Cluster Fast Greedy",
                                                     "Cluster Infomap",
@@ -1525,11 +1525,11 @@ selectInput("cmnt_dtc_alg", "Algorithm:", choices=c(
                                                     "Cluster Walktrap"))
 
 br()
-h4("Visualization package")
+h4("Visualization")
 # Library for community visualization
-selectInput("cmnt_vsl_pck", "Library:", choices=c("visNetwork", "igraph"))
+selectInput("cmnt_vsl_pck", "Library", choices=c("visNetwork", "igraph"))
 #br()
-checkboxInput("edges_format", label = "Highlight crossing ties", value = FALSE)
+checkboxInput("edges_format", label = "Show Crossing Ties", value = FALSE)
 #radioButtons("edges_format", label = h4("Ties format"),
 #    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2),
 #    selected = 2)
@@ -1580,7 +1580,7 @@ network_cmnt =  reactive({
   
   # First validate if there are edges (Ties) selected
   validate(
-    need(try(!is.null(input$edges_select_comm)), "Please select at least one Tie Type")
+    need(try(!is.null(input$edges_select_comm)), "Please select at least one tie")
   )
 
   # Use function is_directed
