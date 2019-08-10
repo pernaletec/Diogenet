@@ -1,5 +1,5 @@
 ---
-title: "Diogenet's Dashboard"
+title: "Horus"
 subtitle: "Intellectual Networks in Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
