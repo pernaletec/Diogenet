@@ -665,7 +665,7 @@ checkboxGroupInput("edges_select_local_m",
                    inline = FALSE)
 br()
 # Egonet configuration
-h4("Egonet")
+h4("Egos")
 # Node selection
 uiOutput(outputId = "node_sel_m")
 #br()

@@ -187,7 +187,7 @@ observe({
   all_places_full_data$eigenvector = values$eigenvector
   
   n_col =  50
-  node_vir_col = viridis(n = n_col, begin =  0.2, end = 1.0, direction = 1, option = "magma")
+  node_vir_col = viridis(n = n_col, begin =  0.55, end = 1.0, direction = 1, option = "B")
   node_vir_col = returnColor(node_vir_col)
   
   if (!is.null(input$centrality_type)) {
