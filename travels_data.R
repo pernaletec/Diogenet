@@ -1,37 +1,30 @@
-
-library(ggplot2)
 library(tidyverse)
-library(pleiades)
-library(sf)
 library(devtools)
-library(georeference)
 library(geosphere)
 library(leaflet)
-library(magrittr)
 library(shiny)
-library(sp)
-library(htmlwidgets)
-
-
-#install_github("editio/georeference")
-
-read_georef = FALSE
+library(DT)
+library(viridis)
+library(igraph)
 
 # select nodes with attribute Place from newNodes.csv
 # create new dataframe with places only = locations
 
+# Reads the nodes file
 nodes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+# Reads the black list
 black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-
-
+# Filter the nodes that are places
 places <- nodes$Name[nodes$Groups=="Place"]
-
+# Reads the locations data
 all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+# Filter the places for whom location is available
+# Note that pipe the pipe operator %in% is used here 
 places_available = places[places %in% all_places_full_data$name]
 
-##########################
-# Selecting travels data #
-##########################
+##############################################################################
+########################### Selecting travels data ###########################
+##############################################################################
 
 ## 1. create new table from newNodes and newEdges.
 ## 2. identify nodes that are in both relations "is from" and "travelled to"
@@ -101,15 +94,43 @@ full_travel_edges = list(name = travelers_names,
 traveler_source = function (x) {
   id = which(names_origin %in% x) 
   return(origin_places[id])
-  }
+}
 
 traveler_destiny = function (x) {
   id = which(names_traveler %in% x) 
   return(traveler_target[id])
-  }
+}
 
 full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
 full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
+
+travels_to_edit = data.frame(name = c(0), from = c(0), to = c(0))
+
+i = 1
+falta = TRUE
+cum_index = 0
+
+while (falta  == TRUE) {
+  
+  from = full_travel_edges$from[[i]]
+  to = full_travel_edges$to[[i]]
+
+  l_from = length(from)
+  l_to = length(to)
+
+  max_val = max(c(l_from, l_to))
+
+  for (k in 1:max_val) {
+    if(!is.null(full_travel_edges$name[[i]])) travels_to_edit[cum_index+k,1] = full_travel_edges$name[[i]]
+    if(!is.null(from[k]) && !is.na(from[k])) travels_to_edit[cum_index+k,2] = from[k]
+    if(!is.null(to[k]) && !is.na(to[k])) travels_to_edit[cum_index+k,3] = to[k]
+  }
+  cum_index = cum_index + k
+  i = i+1
+  if (i > length(full_travel_edges$name)) falta = FALSE
+}
+
+write.csv(x = travels_to_edit, file = paste0("travels_to_edit.csv"), fileEncoding = "UTF-8")
 
 # Table with all sources and detinations for each node (...only travelers)
 write.csv(x = as.matrix(full_travel_edges$from), file = paste0("full_travel_edges_from.csv"), fileEncoding = "UTF-8")
@@ -146,78 +167,8 @@ for (k in 1:length(travel_edges$source)) {
   travel_edges$lon_source[k] = (all_places_full_data$lon[which(all_places_full_data$name == travel_edges$source[k])])
   travel_edges$lat_target[k] = (all_places_full_data$lat[which(all_places_full_data$name == travel_edges$target[k])])
   travel_edges$lon_target[k] = (all_places_full_data$lon[which(all_places_full_data$name == travel_edges$target[k])])
-  }
+}
 
 all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasing = FALSE)
 # These are the nodes in the graph
 all_places = data.frame(places = all_places)
-
-###########################################
-#########                     #############  
-########    GRAPH CREATION     ############
-#########                     #############
-###########################################
-
-try(graph <- igraph::graph_from_data_frame(d = travel_edges[,1:2], directed=FALSE, vertices = all_places$places), silent = TRUE)
-plot(graph)
-
-###########################################
-#########                     #############  
-########     LEAFLET MAP       ############
-#########                     #############
-###########################################
-
-
-avail_data_tb = as_tibble(travel_edges)
-
-node_count = c(travel_edges$source, travel_edges$target)
-node_count = as.data.frame(table(node_count))
-
-all_places_full_data = all_places_full_data[(all_places_full_data$name %in% all_places$places),]
-
-all_places_full_data$degree = node_count$Freq[node_count$node_count %in% all_places_full_data$name]
-
-tcu_map = "https://api.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ"
-
-map_attr = "Map data &copy<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a> Imagery © <a href='http://mapbox.com'>Mapbox</a>"
-
-m <- leaflet(avail_data_tb) %>% 
-  addTiles(urlTemplate = tcu_map, attribution = map_attr, options = list(maxZoom = 10, 
-                                                                         id = 'isawnyu.map-knmctlkh',
-                                                                         accessToken =  'pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ'))%>%
-  setView(lng= 24.92, lat = 35.255, zoom = 5) 
-
-  for(i in 1:length(travel_edges$source)) {
-    arc <- gcIntermediate( p1 = c(as.numeric(travel_edges$lon_source[i]), as.numeric(travel_edges$lat_source[i])),
-                           p2 = c(as.numeric(travel_edges$lon_target[i]), as.numeric(travel_edges$lat_target[i])),
-                           n=100, addStartEnd=TRUE )
-    m <- addPolylines(m, 
-                      data=arc, 
-                      color="black", 
-                      weight=1,
-                      stroke = TRUE,
-                      smoothFactor = 5,
-                      fillOpacity = 0.75, popup = paste0("<p><center><b>", travel_edges$name[i], 
-                                                         "</b><br/><small><i>From: </i>", 
-                                                          travel_edges$source[i],
-                                                          "<br/><i>To: </i>",
-                                                          travel_edges$target[i], 
-                                                          "<br/></small></center></p>")
-                      )
-    }
-
-    m <- addCircleMarkers(map = m, all_places_full_data$lon, 
-                          all_places_full_data$lat, 
-                          popup=paste0("<p><center><b>", all_places_full_data$name, 
-                                       "</b><br/><small><i>Lat: </i>", 
-                                       all_places_full_data$lat,
-                                       "<br/><i>Long: </i>",
-                                       all_places_full_data$lon, 
-                                       "<br/></small></center></p>"),
-                          radius=5+0.5*all_places_full_data$degree+log(all_places_full_data$degree), 
-                          color="#ff0d00", 
-                          stroke =FALSE, 
-                          fillOpacity = 0.75)
-m
-
-# saveWidget(m, file = "map.html", selfcontained = TRUE)

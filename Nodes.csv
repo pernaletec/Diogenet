@@ -1,5 +1,4 @@
 ﻿Color,Name,Groundedness,Density,Groups,Number of Groups,Comment,Creator,Creation Date,Modifier,Modification Date
-●,G_ Lyceum (Athens),3,1,Place,1,,Marina Vlahakis,9/30/18,jacobo,5/27/19
 ●,G_Abdera,8,5,Place,1,,Marina Vlahakis,9/28/18,jacobo,10/30/18
 ●,G_Academy of Plato (Athens),5,3,Place,1,"A sanctuary in Athens in which Plato founded a school, later headed by Xenocrates",Monte Johnson,10/19/18,jacobo,5/27/19
 ●,G_Adramyttium,1,1,Place,1,,Sydney,4/15/19,jacobo,5/7/19
@@ -26,7 +25,7 @@
 ●,G_Aspendos/Primoupolis,1,0,Place,1,,Sydney,4/15/19,Andrew,5/24/19
 ●,G_Assos,3,1,Place,1,,Andrew,1/28/19,Andrew,1/28/19
 ●,G_Atarneus,3,0,Place,1,,Sydney,12/11/18,jacobo,5/7/19
-●,G_Athenae,147,56,Place,1,,Colin Burke,7/2/18,Andrew,5/20/19
+●,G_Athenae,147,62,Place,1,,Colin Burke,7/2/18,Andrew,5/20/19
 ●,G_Attica,3,0,Place,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,G_Babylon,1,1,Place,1,,Panagiota Vlahakis,8/3/18,jacobo,10/30/18
 ●,G_Bargylia,1,1,Place,1,,Sydney,4/15/19,Andrew,5/20/19
@@ -41,6 +40,7 @@
 ●,G_Callatia,1,0,Place,1,,Sydney,10/13/18,jacobo,10/30/18
 ●,G_Callatis,2,2,Place,1,,Sydney,4/15/19,jacobo,5/7/19
 ●,G_Cappadocia,1,1,Place,1,,Andrew,5/4/19,Andrew,5/4/19
+○,G_Caria,0,1,Place,1,,jacobo,7/1/19,jacobo,7/1/19
 ●,G_Carthago,5,3,Place,1,,Panagiota Vlahakis,8/29/18,Andrew,5/20/19
 ●,G_Carystus,8,1,Place,1,,Marina Vlahakis,10/1/18,jacobo,10/30/18
 ●,G_Ceos,3,2,Place,1,,Marina Vlahakis,9/30/18,jacobo,10/30/18
@@ -51,7 +51,7 @@
 ●,G_Chios (island),12,7,Place,1,,Jamie Marvin,7/22/18,jacobo,5/27/19
 ●,G_Cilicia,1,1,Place,1,,Sydney,10/23/18,jacobo,10/30/18
 ●,G_Clazomenae,1,1,Place,1,,jacobo,7/16/18,jacobo,10/30/18
-●,G_Cnidos,3,2,Place,1,,Panagiota Vlahakis,8/31/18,jacobo,10/30/18
+●,G_Cnidos,3,3,Place,1,,Panagiota Vlahakis,8/31/18,jacobo,10/30/18
 ●,G_Cnidus,1,1,Place,1,,Andrew,4/8/19,Andrew,4/8/19
 ●,G_Cnossos,2,1,Place,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,G_Colchis,1,0,Place,1,,Sydney,12/11/18,jacobo,5/7/19
@@ -59,7 +59,6 @@
 ●,G_Corcyra,3,1,Place,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,G_Corcyrian Cave,1,0,Place,1,,Sydney,12/11/18,jacobo,5/27/19
 ●,G_Corinth,17,11,Place,1,,jacobo,7/5/18,jacobo,10/30/18
-●,G_Cos,9,3,Place,1,,Jacobo,7/28/18,jacobo,10/30/18
 ●,G_Cranon,1,1,Place,1,,Jamie Marvin,8/2/18,jacobo,10/30/18
 ●,G_Creta,16,5,Place,1,,Panagiota Vlahakis,7/24/18,Andrew,5/20/19
 ●,G_Crotone,11,8,Place,1,Italy,jacobo,7/24/18,Andrew,5/24/19
@@ -96,15 +95,17 @@
 ●,G_Hermion(e),2,1,Place,1,,Sydney,10/15/18,Andrew,5/20/19
 ●,G_Hybadai,1,1,Place,1,Greek text has  Ὑβάδης that should be translated as fro Hybadai,Andrew,5/24/19,jacobo,5/27/19
 ●,G_Hyele,1,1,Place,1,,Marina Vlahakis,9/28/18,jacobo,10/30/18
+●,G_Iasos,1,1,Place,1,,jacobo,7/1/19,jacobo,7/1/19
 ●,G_Ida,1,2,Place,1,Crete,Panagiota Vlahakis,8/3/18,jacobo,10/30/18
 ●,G_Ilium/Troia,5,1,Place,1,,Panagiota Vlahakis,8/3/18,Andrew,5/24/19
-●,G_India,1,1,Place,1,,Marina Vlahakis,9/29/18,jacobo,10/30/18
+●,G_India,2,3,Place,1,,Marina Vlahakis,9/29/18,jacobo,10/30/18
 ●,G_Ionia region (Asia Minor),9,3,Place,1,,Colin Burke,7/2/18,jacobo,5/27/19
 ●,G_Isthmus,3,2,Place,1,,Jamie Marvin,7/22/18,jacobo,10/30/18
 ●,G_Italy,5,2,Place,1,,jacobo,7/24/18,jacobo,10/30/18
 ●,G_Kassandreia,1,1,Place,1,"Acordig to the TLG Lexicon, Casandrea is alternative name of  Potidaea.Pleiades does not have Potideae but Potidaion",Jamie Marvin,9/10/18,jacobo,5/24/19
 ●,G_Katane,1,1,Place,1,,Marina Vlahakis,9/23/18,Andrew,5/20/19
 ●,G_Kition (Cyprus),14,3,Place,1,,Marina Vlahakis,9/29/18,jacobo,5/27/19
+●,G_Kos,9,3,Place,1,,Jacobo,7/28/18,jacobo,7/8/19
 ●,G_Lacedaemon/Laconia,16,4,Place,1,,Panagiota Vlahakis,8/31/18,Andrew,5/24/19
 ●,G_Lamia,1,1,Place,1,,Jamie Marvin,9/12/18,jacobo,10/30/18
 ●,G_Lampsacus,8,6,Place,1,,Colin Burke,7/3/18,jacobo,10/30/18
@@ -119,12 +120,14 @@
 ●,G_Liguria,1,1,Place,1,,Sydney,4/15/19,jacobo,5/7/19
 ●,G_Lindus,4,1,Place,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,G_Lucania,2,2,Place,1,In Southern Italy ,Panagiota Vlahakis,8/4/18,jacobo,10/30/18
+●,G_Lyceum (Athens),3,1,Place,1,,Marina Vlahakis,9/30/18,jacobo,6/27/19
 ●,G_Lydia,3,0,Place,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,G_Lysimachia,1,2,Place,1,,Jamie Marvin,9/12/18,jacobo,10/30/18
-●,G_Macedonia,8,9,Place,1,,Marina Vlahakis,9/23/18,Andrew,5/24/19
+●,G_Macedonia,8,10,Place,1,,Marina Vlahakis,9/23/18,Andrew,5/24/19
 ●,G_Magnesia,13,2,Place,1,,Jamie Marvin,8/10/18,jacobo,10/30/18
 ●,G_Mantinea,2,6,Place,1,,Jamie Marvin,7/22/18,jacobo,10/30/18
 ●,G_Marathon,1,0,Place,1,,Sydney,11/5/18,jacobo,5/7/19
+○,G_Maronea,0,1,Place,1,,jacobo,7/1/19,jacobo,7/1/19
 ●,G_Media,1,1,Place,1,,Panagiota Vlahakis,8/12/18,jacobo,10/30/18
 ●,G_Megara (Attica),15,8,Place,1,,jacobo,7/4/18,jacobo,5/27/19
 ●,G_Megara Hyblaea,1,1,Place,1,,Andrew,5/20/19,Andrew,5/20/19
@@ -162,7 +165,7 @@
 ●,G_Phthia,1,1,Place,1,,Jamie Marvin,8/2/18,jacobo,10/30/18
 ●,G_Piraeus,5,4,Place,1,,Panagiota Vlahakis,8/31/18,Andrew,5/20/19
 ●,G_Pisa,1,1,Place,1,,Sydney,11/5/18,jacobo,5/7/19
-●,G_Pitane,4,2,Place,1,,Sydney,4/7/19,Sydney,4/7/19
+●,G_Pitane,4,4,Place,1,,Sydney,4/7/19,Sydney,4/7/19
 ●,G_Pitthos,1,1,Place,1,,Jamie Marvin,8/4/18,jacobo,5/28/19
 ●,G_Pontus,7,2,Place,1,,Jacobo,8/7/18,jacobo,10/30/18
 ●,G_Potidaea,1,2,Place,1,,Jamie Marvin,7/22/18,jacobo,10/30/18
@@ -184,7 +187,7 @@
 ●,G_Sicily,11,10,Place,1,,jacobo,7/24/18,jacobo,10/30/18
 ●,G_Sicyon,2,1,Place,1,,Sydney,10/13/18,jacobo,10/30/18
 ●,G_Sidon,1,1,Place,1,,Andrew,1/28/19,Andrew,1/28/19
-●,G_Skillous,3,3,Place,1,,Jamie Marvin,7/22/18,Andrew,5/20/19
+●,G_Skillous,3,4,Place,1,,Jamie Marvin,7/22/18,Andrew,5/20/19
 ●,G_Skythai,9,2,Place,1,,Sydney,12/11/18,jacobo,5/27/19
 ●,G_Smyrna,2,1,Place,1,,Marina Vlahakis,9/30/18,jacobo,10/30/18
 ●,G_Soli,7,3,Place,1,,Sydney,10/23/18,jacobo,10/30/18
@@ -199,7 +202,7 @@
 ●,G_Temnus,1,1,Place,1,Τῆμνος in Dorandi. It seems that the name was mispelled in the translation. ,Sydney,4/15/19,jacobo,5/27/19
 ●,G_Teos (Ionia),3,2,Place,1,,Marina Vlahakis,9/30/18,jacobo,5/27/19
 ●,G_Thasos,1,0,Place,1,,Sydney,4/7/19,Sydney,4/7/19
-●,G_Thebes,7,5,Place,1,,Jamie Marvin,7/22/18,jacobo,10/30/18
+●,G_Thebes,7,6,Place,1,,Jamie Marvin,7/22/18,jacobo,10/30/18
 ●,G_Thrace,4,2,Place,1,,Marina Vlahakis,10/1/18,jacobo,10/30/18
 ●,G_Thurii,3,4,Place,1,,jacobo,7/4/18,jacobo,10/30/18
 ●,G_Tiberias,1,1,Place,1,,Jamie Marvin,8/2/18,jacobo,10/30/18
@@ -233,12 +236,12 @@
 ●,N_Agathocles,1,1,Male,1,,Panagiota Vlahakis,9/1/18,Panagiota Vlahakis,9/1/18
 ●,N_Agathon,1,2,Male,1,,Jamie Marvin,8/2/18,Jacobo,8/9/18
 ●,N_Agesarchus,1,1,Male,1,,Sydney,12/11/18,jacobo,5/7/19
-●,N_Agesilaus,4,3,Male,1,,Jamie Marvin,8/4/18,Jacobo,8/9/18
+●,N_Agesilaus,4,4,Male,1,,Jamie Marvin,8/4/18,Jacobo,8/9/18
 ●,N_Agetor,1,3,Male,1,,Jamie Marvin,9/12/18,Jamie Marvin,9/14/18
 ●,N_Agrigentines,3,4,Male,1,,Panagiota Vlahakis,8/4/18,Panagiota Vlahakis,8/4/18
 ●,N_Aidoneus,2,1,Male,1,,Panagiota Vlahakis,8/27/18,Panagiota Vlahakis,8/27/18
 ●,N_Alcaeus,5,1,Male,1,,Jamie Marvin,8/4/18,Jacobo,8/9/18
-●,N_Alcibiades,8,7,Male,1,,Jamie Marvin,7/29/18,Jacobo,8/9/18
+●,N_Alcibiades,8,8,Male,1,,Jamie Marvin,7/29/18,Jacobo,8/9/18
 ●,N_Alcidamas,2,0,Male,1,,Panagiota Vlahakis,8/20/18,Panagiota Vlahakis,8/20/18
 ●,N_Alcimus,1,1,Male,1,,jacobo,7/5/18,jacobo,7/16/18
 ●,N_Alcippus,1,2,Male,1,,Sydney,4/3/19,Sydney,4/3/19
@@ -293,7 +296,7 @@
 ●,N_Antishenes,17,12,Male,1,,Marina Vlahakis,9/23/18,Sydney,1/31/19
 ●,N_Antisthenes,1,0,Male,1,,Andrew,2/1/19,Andrew,2/1/19
 ●,N_Antisthenes II,4,5,Male,1,,Sydney,10/13/18,Sydney,10/13/18
-●,N_Anytus,6,6,Male,1,,Jamie Marvin,8/2/18,Jacobo,8/9/18
+●,N_Anytus,6,7,Male,1,,Jamie Marvin,8/2/18,Jacobo,8/9/18
 ●,N_Apollo,12,3,Male,1,,Panagiota Vlahakis,7/29/18,Sydney,2/24/19
 ●,N_Apollodorus,24,24,Male,1,"Source. Wrote the  Chronicle (Χρονικά), a Greek history in verse from the fall of Troy in the 12th century BC to roughly 143 BC c. 180 BC – after 120 BC",Colin Burke,6/18/18,Jacobo,10/3/18
 ●,N_Apollodorus II,1,1,Male,1,,Sydney,11/5/18,jacobo,5/7/19
@@ -382,7 +385,7 @@
 ●,N_Athenodorus II,2,1,Male,1,,Andrew,1/28/19,Andrew,1/28/19
 ●,N_Athlius,1,1,Male,1,,Panagiota Vlahakis,9/1/18,Panagiota Vlahakis,9/1/18
 ●,N_Attalus,3,2,Male,1,,Andrew,5/3/19,Andrew,5/3/19
-●,N_Autolycus,1,2,Male,1,,Andrew,5/3/19,Andrew,5/3/19
+●,N_Autolycus,1,3,Male,1,,Andrew,5/3/19,Andrew,5/3/19
 ●,N_Babys,2,1,Male,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,N_Bathycles,2,4,Male,1,,Sydney,10/8/18,Sydney,10/8/18
 ●,N_Bathyllus,1,1,Male,1,,Panagiota Vlahakis,8/31/18,Panagiota Vlahakis,8/31/18
@@ -412,17 +415,17 @@
 ●,N_Callisthenes,7,4,Male,1,,Monte Johnson,10/19/18,jacobo,10/30/18
 ●,N_Cantor,1,0,Male,1,,Andrew,5/3/19,Andrew,5/3/19
 ●,N_Caphisius,1,1,Male,1,,Andrew,1/28/19,Andrew,1/28/19
-●,N_Carcinus,1,3,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
+●,N_Carcinus,1,4,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
 ●,N_Carneades,11,12,Male,1,,Sydney,3/1/19,Sydney,3/1/19
 ●,N_Casander,1,2,Male,1,,Andrew,5/2/19,Andrew,5/2/19
 ●,N_Cassius,2,1,Male,1,,Andrew,1/28/19,Andrew,1/28/19
 ●,N_Cebes,1,1,Male,1,,Colin Burke,6/18/18,Colin Burke,6/20/18
 ●,N_Cecrops,1,0,Male,1,,Jamie Marvin,8/10/18,Jacobo,10/3/18
-●,N_Cephisodorus,1,5,Male,1,,Jamie Marvin,7/22/18,Jacobo,8/9/18
+●,N_Cephisodorus,1,6,Male,1,,Jamie Marvin,7/22/18,Jacobo,8/9/18
 ●,N_Cercops,1,1,Male,1,,Jamie Marvin,8/4/18,Jacobo,8/9/18
 ●,N_Chabrinus,1,1,Male,1,,Sydney,10/15/18,Sydney,10/15/18
 ●,N_Chaerephon,1,1,Male,1,,Jamie Marvin,8/2/18,Jacobo,8/9/18
-●,N_Chaldaeans,2,3,Male,1,,Panagiota Vlahakis,8/3/18,Panagiota Vlahakis,8/3/18
+●,N_Chaldaeans,3,4,Male,1,,Panagiota Vlahakis,8/3/18,Panagiota Vlahakis,8/3/18
 ●,N_Chamaeleon,1,1,Male,1,,Sydney,4/15/19,Sydney,4/15/19
 ●,N_Charinus,2,1,Male,1,,Jamie Marvin,8/3/18,Jacobo,8/9/18
 ●,N_Charmantides,1,1,Male,1,,Sydney,10/15/18,Sydney,10/15/18
@@ -489,9 +492,9 @@
 ●,N_Demetrius IV,3,3,Male,1,,Jamie Marvin,8/4/18,Jacobo,8/9/18
 ●,N_Demetrius XXV,1,3,Male,1,,Panagiota Vlahakis,8/27/18,Panagiota Vlahakis,8/27/18
 ●,N_Demetrius XXVI,2,1,Male,1,Father of Persaeus ,Andrew,11/14/18,Andrew,11/14/18
-●,N_Demetrius XXVIII,1,2,Male,1,,Andrew,5/3/19,Andrew,5/3/19
+●,N_Demetrius XXVIII,1,3,Male,1,,Andrew,5/3/19,Andrew,5/3/19
 ●,N_Demochares,2,4,Male,1,,Andrew,5/3/19,Andrew,5/3/19
-●,N_Democritus,22,35,Male,1,,Jacobo,7/28/18,Jacobo,10/3/18
+●,N_Democritus,22,39,Male,1,,Jacobo,7/28/18,Jacobo,10/3/18
 ●,N_Democritus II,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
 ●,N_Democritus III,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
 ●,N_Democritus IV,1,2,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
@@ -499,7 +502,7 @@
 ●,N_Democritus VI,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
 ●,N_Demodicus,1,1,Male,1,,Sydney,12/11/18,jacobo,5/7/19
 ●,N_Demophilus,1,3,Male,1,,Monte Johnson,10/23/18,jacobo,10/30/18
-●,N_Demosthenes,4,1,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
+●,N_Demosthenes,4,2,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
 ●,N_Dexius,1,1,Male,1,,Marina Vlahakis,9/23/18,Marina Vlahakis,9/23/18
 ●,N_Dicaearchus,3,12,Male,1,,Panagiota Vlahakis,7/29/18,Panagiota Vlahakis,7/29/18
 ●,N_Didymus,1,1,Male,1,,Sydney,4/15/19,Sydney,4/15/19
@@ -508,7 +511,7 @@
 ●,N_Dinon,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
 ●,N_Diochaetas,1,1,Male,1,,Marina Vlahakis,9/25/18,Marina Vlahakis,9/25/18
 ●,N_Diocles,10,14,Male,1,"Book II:   2X @2.54, 2.82  Merged comment from N_Diocles I on 10/30/18, 10:07 AMBook II:   2X @2.54, 2.82  ",Panagiota Vlahakis,8/5/18,Panagiota Vlahakis,8/5/18
-●,N_Diodorus,7,10,Male,1,,jacobo,7/4/18,Jacobo,10/3/18
+●,N_Diodorus,7,11,Male,1,,jacobo,7/4/18,Jacobo,10/3/18
 ●,N_Diodorus III,1,3,Male,1,,Panagiota Vlahakis,8/24/18,Panagiota Vlahakis,8/24/18
 ●,N_Diodorus IV,1,1,Male,1,,valli,10/10/18,valli,10/10/18
 ●,N_Diodorus V,2,8,Male,1,,Jamie Marvin,8/10/18,Jacobo,10/3/18
@@ -540,12 +543,13 @@
 ●,N_Draco,1,1,Male,1,,Sydney,11/3/18,jacobo,5/7/19
 ●,N_Duris,7,7,Male,1,,Jamie Marvin,7/26/18,Jamie Marvin,7/29/18
 ●,N_Echecrates,1,3,Male,1,,Panagiota Vlahakis,8/5/18,Panagiota Vlahakis,8/5/18
+○,N_Egyptian Priests,1,1,Male,1,,jacobo,6/3/19,jacobo,6/3/19
 ●,N_Egyptians,1,1,Male,1,,Panagiota Vlahakis,9/1/18,Jacobo,10/3/18
 ●,N_Eleusis (Person),1,1,Male,1,,Sydney,10/10/18,jacobo,5/7/19
 ●,N_Elians,1,2,Male,1,,Panagiota Vlahakis,8/12/18,Panagiota Vlahakis,8/12/18
 ●,N_Empedocles,40,52,Male,1,,Panagiota Vlahakis,8/4/18,Jacobo,10/3/18
 ●,N_Empedocles II,2,0,Male,1,,Panagiota Vlahakis,8/16/18,Panagiota Vlahakis,8/16/18
-●,N_Epaminondas,3,6,Male,1,"BOOK II=2x  @  2.54, 2.59  ",Panagiota Vlahakis,7/26/18,Panagiota Vlahakis,7/26/18
+●,N_Epaminondas,3,7,Male,1,"BOOK II=2x  @  2.54, 2.59  ",Panagiota Vlahakis,7/26/18,Panagiota Vlahakis,7/26/18
 ●,N_Ephectics,2,0,Male,1,,Marina Vlahakis,10/1/18,Marina Vlahakis,10/1/18
 ●,N_Ephesians,5,4,Male,1,,Marina Vlahakis,9/19/18,Marina Vlahakis,9/19/18
 ●,N_Ephorus,6,8,Male,1,,jacobo,7/4/18,jacobo,7/4/18
@@ -611,9 +615,9 @@
 ●,N_Gorgiadas,1,3,Male,1,,Sydney,10/15/18,Sydney,10/15/18
 ●,N_Gorgias,5,6,Male,1,,Panagiota Vlahakis,8/23/18,Panagiota Vlahakis,8/23/18
 ●,N_Gryllion,1,1,Male,1,,Monte Johnson,10/23/18,jacobo,10/30/18
-●,N_Gryllus,5,15,Male,1,,Jamie Marvin,7/29/18,Jacobo,8/9/18
-●,N_Gryllus III?,1,4,Male,1,,Jamie Marvin,8/24/18,Jamie Marvin,9/2/18
-●,N_Gymnosophists,1,2,Male,1,,Marina Vlahakis,9/29/18,Marina Vlahakis,9/29/18
+●,N_Gryllus II,5,15,Male,1,,Jamie Marvin,7/29/18,jacobo,7/1/19
+●,N_Gryllus III?,0,3,Male,1,,Jamie Marvin,8/24/18,Jamie Marvin,9/2/18
+●,N_Gymnosophists,2,3,Male,1,,Marina Vlahakis,9/29/18,Marina Vlahakis,9/29/18
 ●,N_Halcyoneus,2,3,Male,1,,Andrew,5/3/19,Andrew,5/3/19
 ●,N_Hannibal,1,1,Male,1,,Jamie Marvin,8/10/18,Jacobo,10/3/18
 ●,N_Hecataeus,2,3,Male,1,,Marina Vlahakis,9/19/18,Marina Vlahakis,9/19/18
@@ -646,10 +650,10 @@
 ●,N_Hermogenes II,1,5,Male,1,,Jacobo,7/30/18,Jacobo,8/7/18
 ●,N_Hermolaus,1,2,Male,1,,Monte Johnson,10/21/18,jacobo,10/30/18
 ●,N_Hermotimus,2,4,Male,1,,Panagiota Vlahakis,7/26/18,Panagiota Vlahakis,8/3/18
-●,N_Herodotus,6,9,Male,1,,Panagiota Vlahakis,8/3/18,Jacobo,10/3/18
+●,N_Herodotus,6,10,Male,1,,Panagiota Vlahakis,8/3/18,Jacobo,10/3/18
 ●,N_Hesiod,9,7,Male,1,,Panagiota Vlahakis,7/27/18,Panagiota Vlahakis,7/27/18
 ●,N_Hicetas,1,1,Male,1,,Panagiota Vlahakis,8/31/18,Panagiota Vlahakis,8/31/18
-●,N_Hierocles,4,5,Male,1,,Jamie Marvin,9/10/18,Jamie Marvin,9/17/18
+●,N_Hierocles,4,6,Male,1,,Jamie Marvin,9/10/18,Jamie Marvin,9/17/18
 ●,N_Hieronymus,13,12,Male,1,,Colin Burke,6/19/18,Colin Burke,6/20/18
 ●,N_Hipparchus,13,4,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
 ●,N_Hippasus,7,6,Male,1,,jacobo,7/24/18,Jacobo,10/3/18
@@ -710,7 +714,7 @@
 ●,N_Machaon,1,1,Male,1,,Monte Johnson,10/18/18,jacobo,10/30/18
 ●,N_Maeandrius,2,2,Male,1,,Sydney,10/15/18,Sydney,10/15/18
 ●,N_Magas,1,2,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/17/18
-●,N_Magi,2,3,Male,1,,Panagiota Vlahakis,8/3/18,Panagiota Vlahakis,8/3/18
+●,N_Magi,3,4,Male,1,,Panagiota Vlahakis,8/3/18,Panagiota Vlahakis,8/3/18
 ●,N_Marmacus,2,4,Male,1,,jacobo,7/24/18,jacobo,7/24/18
 ●,N_Mausolus,1,1,Male,1,Persian Satrap ,Andrew,5/20/19,Andrew,5/20/19
 ●,N_Meandrius,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
@@ -729,7 +733,6 @@
 ●,N_Menedemus,30,37,Male,1,"book II: 25x    Merged comment from N_Menedemus I on 10/30/18, 10:08 AMbook II: 25x    ",Colin Burke,6/18/18,Colin Burke,6/20/18
 ●,N_Menedemus II,2,1,Male,1,,Andrew,5/4/19,Andrew,5/4/19
 ●,N_Menedemus' Wife,2,2,Male,1,,Jamie Marvin,9/12/18,Sydney,2/24/19
-●,N_Menelaus,3,3,Male,1,,Panagiota Vlahakis,7/26/18,Panagiota Vlahakis,8/3/18
 ●,N_Menexenus,1,6,Male,1,,Jamie Marvin,8/2/18,Jamie Marvin,8/5/18
 ●,N_Meno,1,2,Male,1,,Jamie Marvin,8/10/18,Jacobo,10/3/18
 ●,N_Menodorus,1,2,Male,1,,Andrew,5/3/19,Andrew,5/3/19
@@ -739,7 +742,7 @@
 ●,N_Metallus,1,1,Male,1,,jacobo,7/4/18,jacobo,7/4/18
 ●,N_Metapontines,1,1,Male,1,,Panagiota Vlahakis,8/4/18,Panagiota Vlahakis,8/4/18
 ●,N_Meton,2,1,Male,1,,Panagiota Vlahakis,8/16/18,Panagiota Vlahakis,8/16/18
-●,N_Metrocles,1,2,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
+●,N_Metrocles,1,3,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
 ●,N_Metrodorus,2,6,Male,1,,Colin Burke,6/19/18,Jacobo,10/3/18
 ●,N_Metrodorus II,1,2,Male,1,,jacobo,7/26/18,jacobo,7/26/18
 ●,N_Midias,1,1,Male,1,,Jamie Marvin,8/2/18,Sydney,1/31/19
@@ -825,7 +828,6 @@
 ●,N_Pherecydes,14,17,Male,1,Pherecydes of Syros,Panagiota Vlahakis,7/24/18,Jacobo,10/3/18
 ●,N_Phidias,2,0,Male,1,,jacobo,7/16/18,jacobo,7/16/18
 ●,N_Philemon,1,1,Male,1,,Andrew,1/28/19,Andrew,1/28/19
-●,N_Philesia,1,6,Male,1,,Jamie Marvin,8/10/18,Sydney,2/24/19
 ●,N_Philetaerus,1,2,Male,1,,Andrew,5/3/19,Andrew,5/3/19
 ●,N_Philip,10,5,Male,1,book II=1x  @  2.56 ,Jamie Marvin,8/10/18,Jacobo,10/3/18
 ●,N_Philip IV,1,1,Male,1,,Jamie Marvin,8/27/18,Jamie Marvin,8/27/18
@@ -854,7 +856,7 @@
 ●,N_Pisianax,1,1,Male,1,,Panagiota Vlahakis,8/24/18,Panagiota Vlahakis,8/24/18
 ●,N_Pisistratus,25,6,Male,1,,Jamie Marvin,8/10/18,Jacobo,10/3/18
 ●,N_Pittacus,16,16,Male,1,,Jamie Marvin,8/4/18,Jacobo,8/9/18
-●,N_Plato,203,48,Male,1,,jacobo,7/4/18,jacobo,7/4/18
+●,N_Plato,203,49,Male,1,,jacobo,7/4/18,jacobo,7/4/18
 ●,N_Pleistarchus,1,2,Male,1,,Marina Vlahakis,10/1/18,Marina Vlahakis,10/1/18
 ●,N_Plistanus,1,4,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
 ●,N_Plutarch,2,2,Male,1,,Marina Vlahakis,10/1/18,Marina Vlahakis,10/1/18
@@ -884,10 +886,10 @@
 ●,N_Ptolemy II,4,3,Male,1,Ptolemy II Philadelphos ,Sydney,4/7/19,Sydney,4/7/19
 ●,N_Ptolemy III,3,1,Male,1,,Andrew,3/1/19,Andrew,3/1/19
 ●,N_Pylades,2,0,Male,1,,Jamie Marvin,9/12/18,jacobo,10/30/18
-●,N_Pylades II,2,3,Male,1,,Andrew,5/3/19,Andrew,5/3/19
+●,N_Pylades II,2,4,Male,1,,Andrew,5/3/19,Andrew,5/3/19
 ●,N_Pyres,2,1,Male,1,,Marina Vlahakis,9/23/18,Marina Vlahakis,9/25/18
 ●,N_Pyrrhaeus,1,2,Male,1,,Monte Johnson,10/23/18,jacobo,10/30/18
-●,N_Pyrrho,19,31,Male,1,,Marina Vlahakis,10/1/18,Jacobo,10/3/18
+●,N_Pyrrho,19,33,Male,1,,Marina Vlahakis,10/1/18,Jacobo,10/3/18
 ●,N_Pyrrhoneans,2,2,Male,1,,Marina Vlahakis,10/1/18,Marina Vlahakis,10/1/18
 ●,N_Pyrrhus,1,3,Male,1,,Panagiota Vlahakis,7/26/18,Panagiota Vlahakis,8/3/18
 ●,N_Pythagoras,56,91,Male,1,,Colin Burke,6/18/18,Jacobo,10/3/18
@@ -1002,12 +1004,11 @@
 ●,N_Theodorus XX,1,0,Male,1,,Jamie Marvin,9/2/18,Sydney,2/24/19
 ●,N_Theodosius,1,1,Male,1,,Marina Vlahakis,10/1/18,Marina Vlahakis,10/1/18
 ●,N_Theodotus,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
-●,N_Theomedon,2,3,Male,1,,Panagiota Vlahakis,8/31/18,Panagiota Vlahakis,8/31/18
+●,N_Theomedon,2,4,Male,1,,Panagiota Vlahakis,8/31/18,Panagiota Vlahakis,8/31/18
 ●,N_Theophanes,1,0,Male,1,,Jamie Marvin,9/2/18,Jamie Marvin,9/2/18
 ●,N_Theophantus,1,1,Male,1,,Andrew,2/25/19,Andrew,2/25/19
 ●,N_Theophrastus,23,28,Male,1,,jacobo,7/5/18,jacobo,7/16/18
 ●,N_Theopompus,5,2,Male,1,,Sydney,12/11/18,jacobo,5/7/19
-●,N_Thesmophoria,1,1,Male,1,,Marina Vlahakis,9/30/18,Marina Vlahakis,9/30/18
 ●,N_Thespis,1,1,Male,1,,Sydney,11/5/18,jacobo,5/7/19
 ●,N_Thracian,0,1,Male,1,,Panagiota Vlahakis,8/5/18,Jacobo,8/9/18
 ●,N_Thraso II,3,2,Male,1,Thraso junior. His father is Thraso I ,Andrew,11/14/18,Andrew,11/14/18
@@ -1093,6 +1094,7 @@
 ●,NF_Phaestis,1,1,Female,1,Mother of AristotleWife of Nicomachus,Monte Johnson,10/13/18,jacobo,10/30/18
 ●,NF_Phemonoe,1,1,Female,1,,Sydney,10/13/18,Sydney,10/13/18
 ●,NF_Phila,1,2,Female,1,,Andrew,5/3/19,Andrew,5/3/19
+●,NF_Philesia,1,7,Female,1,,Jamie Marvin,8/10/18,jacobo,7/1/19
 ●,NF_Phryne,1,1,Female,1,,Andrew,5/2/19,Andrew,5/2/19
 ●,NF_Potone,1,2,Female,1,,valli,10/10/18,jacobo,10/30/18
 ●,NF_Theodete,1,2,Female,1,,Andrew,5/3/19,Andrew,5/3/19
@@ -1225,6 +1227,7 @@
 ●,NN_Medias,1,0,NO,1,,Sydney,4/8/19,jacobo,5/7/19
 ●,NN_Melanchrus,1,0,NO,1,,Sydney,11/5/18,jacobo,5/7/19
 ●,NN_Melantes,6,0,NO,1,,Sydney,4/7/19,jacobo,5/7/19
+●,NN_Menelaus,3,3,Male,1,,Panagiota Vlahakis,7/26/18,jacobo,7/1/19
 ●,NN_Menodora,1,0,NO,1,,Sydney,4/8/19,jacobo,5/7/19
 ●,NN_Metrodorus,1,0,NO,1,,Sydney,4/7/19,jacobo,5/7/19
 ●,NN_Metrodorus IV,1,0,NO,1,,Sydney,4/15/19,jacobo,5/7/19
