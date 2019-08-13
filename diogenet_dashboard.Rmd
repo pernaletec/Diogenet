@@ -26,15 +26,7 @@ library(heatmaply)
 
 source("source_data.R")
 
-```
 
-Global Network
-===================================== 
-
-Inputs {.sidebar}
--------------------------------------
-
-```{r}
 # Re-scale sliders
 
 # a and b are the desired initial values in the original scale 
@@ -44,6 +36,16 @@ rescaled_value = function(a,b,x) {
   y = ((b-a)/(6-4))*(x-4)+a
   return(y)
 }
+
+```
+
+Graph {data-navmenu="Global Network"}
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
 
 br()
 h4("Network Ties")
@@ -356,6 +358,79 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
 
 # Use the visnetworkOutput function for visnetwork objects
 visNetworkOutput(outputId="global_network")
+
+```
+
+Graph + Centrality {data-navmenu="Global Network" data-orientation="columns"}
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+br()
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network 
+checkboxGroupInput("edges_select_global_m",
+                   label = NULL,
+                   choices = list("Is teacher of" = 1, 
+                                  "Is friend of" = 2, 
+                                  "Is family of" = 3, 
+                                  "Studied the work of" = 4, 
+                                  "Sent letters to" = 5, 
+                                  #"Is associated with" = 6, 
+                                  "Is benefactor of" = 7),
+                   selected = 1,
+                   inline = FALSE)
+br()
+
+h4("Graph Layout")
+selectInput(inputId = "layout_global_m", 
+            label = NULL, 
+            choices = list(
+                          "Fruchterman-Reingold" = "layout_with_fr",
+                          "Kamada-Kawai" = "layout_with_kk",
+                          "On sphere" = "layout_on_sphere",
+                          "In Circle" = "layout_in_circle",
+                          "On Grid" = "layout_on_grid"
+                          ), 
+            selected = "layout_nicely"
+            )
+br()
+
+# Plot Height
+h4("Appearence")
+# Nodes/Label sizes
+sliderInput(inputId = "label_size_global_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_global_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+
+div(message, style = "color:red")
+
+```
+
+Column {.tabset .tabset-fade}
+-------------------------------------
+
+```{r, echo = FALSE}
+
+```
+
+### Graph
+
+```{r, echo = FALSE}
+
+```
+
+### Heatmap
+
+```{r, echo = FALSE}
+
+```
+
+### Metrics
+
+```{r, echo = FALSE}
 
 ```
 
