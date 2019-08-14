@@ -447,6 +447,83 @@ g = reactive({
 
 })
 
+values_global = reactive({
+    
+    validate(
+      need(try(!is.null(input$edges_select_global_m)), "Please select at least one tie")
+    )
+  
+    g = g()
+    val =  data.frame(degree = igraph::degree(g),
+                       betweenness = as.numeric(format(igraph::betweenness(g, normalized =TRUE), digits = 3, nsmall = 3)),
+                       closeness = as.numeric(format(igraph::closeness(g), digits = 3, nsmall = 3)),
+                       eigenvector = as.numeric(format(igraph::eigen_centrality(g)$vector, digits = 3, nsmall = 3)))
+    val = val[order(val$degree, decreasing = TRUE),]
+    return(val)
+})
+
+centr_global = reactive({
+  
+  validate(
+    need(try(!is.null(input$edges_select_global_m)), "Please select at least one tie")
+  )
+  
+  g = g()
+  centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(g)$centralization[1], 
+                                                 digits = 3, nsmall = 3)),
+                   betweenness = as.numeric(format(igraph::centralization.betweenness(g)$centralization[1], 
+                                                   digits = 3, nsmall = 3)),
+                   closeness = as.numeric(format(igraph::centralization.closeness(g)$centralization[1], 
+                                                 digits = 3, nsmall = 3)),
+                   eigenvector = as.numeric(format(igraph::centralization.evcent(g)$centralization[1], 
+                                                   digits = 3, nsmall = 3))
+                   )
+  row.names(centr_) = c("Graph")
+  return(centr_)
+
+})
+
+output$table_values_global = DT::renderDataTable({datatable(values_global(), selection = 'none', caption = 'Centrality scores', 
+                                   options = list(
+                                                 initComplete = JS(
+                                                  "function(settings, json){",
+                                                  "$(this.api().table().body()).css({'font-size': '14px'});",
+                                                  "$(this.api().table().header()).css({'font-size': '12px'});",
+                                                  "}"),
+                                                  pageLength = 10,
+                                                  lengthChange = FALSE,
+                                                  processing = FALSE,
+                                                  scrollX = TRUE
+                                                  #,
+                                                  #scrollY = TRUE,
+                                                  #scrollCollapse = TRUE,
+                                                  #autoWidth = TRUE
+                                                  ,
+                                                  columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
+                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                  ))})
+
+output$table_centr_global = DT::renderDataTable({datatable(centr_global(), selection = 'none', caption = 'Centralization scores',
+                                  options = list(lengthChange = FALSE,
+                                                 processing = FALSE,
+                                                 ordering = FALSE,
+                                                 #autoWidth = TRUE,
+                                                 scrollX = TRUE,
+                                                 searching = FALSE,
+                                                 paging = FALSE,
+                                                 info = FALSE
+                                                 ,
+                                                 columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
+                                                                   list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                 ,
+                                                 initComplete = JS(
+                                                    "function(settings, json){",
+                                                    "$(this.api().table().body()).css({'font-size': '14px'});",
+                                                    "$(this.api().table().header()).css({'font-size': '12px'});",
+                                                    "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});",
+                                                    "}")
+                                                 ))})
+
 ```
 
 ### Graph
@@ -1181,11 +1258,34 @@ visNetworkOutput(outputId="global_network_monitor")
 
 ```{r, echo = FALSE}
 
+output$global_heatmap = renderPlotly({
+  
+  withProgress(message = 'Creating heatmap', style = 'notification', value = 0.1, {
+    Sys.sleep(0.25)
+
+    incProgress(1, detail = paste("Running Heatmapply"))
+  
+    validate(
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
+    )
+    
+    values = values_global()
+    heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"), fontsize_row = 4)
+
+  })
+})
+
+plotlyOutput(outputId="global_heatmap")
+
 ```
 
 ### Metrics
 
 ```{r, echo = FALSE}
+
+fillCol(DT::DTOutput(outputId = 'table_centr_global'),
+        br(),
+        DT::DTOutput(outputId = 'table_values_global'), flex = c(NA,NA,NA))
 
 ```
 
@@ -2278,6 +2378,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
     return(ntw)
   }
 })
+
 visNetworkOutput(outputId="local_network_monitor")   
 
 ```
@@ -2311,6 +2412,7 @@ plotlyOutput(outputId="local_heatmap")
 ### Metrics
 
 ```{r}
+
 fillCol(DT::DTOutput(outputId = 'table_centr'),
         br(),
         DT::DTOutput(outputId = 'table_values'), flex = c(NA,NA,NA))
