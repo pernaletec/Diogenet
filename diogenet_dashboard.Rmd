@@ -464,7 +464,7 @@ output$global_network_monitor = renderVisNetwork({
   # Graph
   g_ = g()
   
-  if (input$variable_type == 'degree') {
+  if (input$variable_type_global_m == 'degree') {
     
     #Set label size
     if (is.null(input$label_size_global_m[1])) min_label = rescaled_value(1.0,2.0,4)
@@ -474,7 +474,11 @@ output$global_network_monitor = renderVisNetwork({
     else max_label = rescaled_value(1.0,2.0,input$label_size_global_m[2])
     
     # Scaling labels
-    labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
+    labsize <- rescale(igraph::degree(g_), 
+                       min(igraph::degree(g_)), 
+                       max(igraph::degree(g_)), 
+                       min_label, max_label)
+    
     V(g_)$label.cex <- labsize
     
     # Funtion to convert igraph format to visNetwork format
@@ -488,22 +492,34 @@ output$global_network_monitor = renderVisNetwork({
     else max_node = rescaled_value(20.0,30.0,input$node_size_global_m[2])
     
     # Scaling nodes
-    nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+    nodesize <- rescale(igraph::degree(g_), 
+                        min(igraph::degree(g_)), 
+                        max(igraph::degree(g_)), 
+                        min_node, max_node)
+    
     data$nodes$size = nodesize
     
+    min_deg = min(igraph::degree(g_))
+    max_deg = max(igraph::degree(g_))
+    n_col =  50
+    node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+    
+    # x in this function is degree
+    col_index = function(x) {((n_col -1)/(max_deg - min_deg))*(x-min_deg)+1}
+  
+    returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+     
+    
     # Setting parameters straight in the data frame for visNetwork
-    data$nodes$color.background = case_when(
-      data$nodes$Group == "Male" ~ '#FF6347',
-      data$nodes$Group == "Female" ~ '#ffa500',
-      data$nodes$Group == "Place" ~ '#31e001',
-      data$nodes$Group == "God" ~ '#05e2ff'
-    )
+    data$nodes$color.background = sapply(igraph::degree(g_), FUN = returnColor)
+    
+    data$nodes$degree = igraph::degree(g_)
     
     # Setting group in visnetwork format
     data$nodes$group = data$nodes$Group
-    
-    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
-    
+
+    data$nodes$color.border = sapply(igraph::degree(g_), FUN = returnColor)
+
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
       data$nodes$Group == "Female" ~ '#4d00ff',
@@ -512,25 +528,9 @@ output$global_network_monitor = renderVisNetwork({
     )
     
     # Setting parameters straight in the data frame for visNetwork
-    data$edges$color.color = case_when(
-      data$edges$Relation == "is teacher of" ~ '#0000FF',
-      data$edges$Relation == "is friend of" ~ '#228B22',
-      data$edges$Relation == "is family of" ~ '#FF0000', 
-      data$edges$Relation == "studied the work of" ~ '#ff01d9',
-      data$edges$Relation == "sent letters to" ~ '#ffbf00',
-      #data$edges$Relation == "is associated with" ~ '#14ff03',
-      data$edges$Relation == "is benefactor of" ~ '#fff23c'
-    )
+    data$edges$color.color = rep("gray",length(data$edges$Relation))
     
-    data$edges$color.highlight = case_when(
-      data$edges$Relation == "is teacher of" ~ '#00ffff',
-      data$edges$Relation == "is friend of" ~ '#568b22',
-      data$edges$Relation == "is family of" ~ '#ff4000',
-      data$edges$Relation == "studied the work of" ~ '#d9ff01',
-      data$edges$Relation == "sent letters to" ~ '#8400ff',
-      #data$edges$Relation == "is associated with" ~ '#ff0314',
-      data$edges$Relation == "is benefactor of" ~ '#e53cff'
-    )
+    data$edges$color.highlight = rep("gray",length(data$edges$Relation))
     
     # nodes data.frame for legend
     lnodes <- data.frame(label = c("Male", "Female"),
@@ -553,7 +553,7 @@ output$global_network_monitor = renderVisNetwork({
                               '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
                               data$nodes$color.background, 
                               ';">',
-                              data$nodes$Group,
+                              data$nodes$degree,
                               '</p></center>'
                               )
     
@@ -641,26 +641,532 @@ output$global_network_monitor = renderVisNetwork({
     })
     
   }
-  if (input$variable_type == 'betweenness') {
+  if (input$variable_type_global_m == 'betweenness') {
     
+    #Set label size
+    if (is.null(input$label_size_global_m[1])) min_label = rescaled_value(1.0,2.0,4)
+    else min_label = rescaled_value(1.0,2.0,input$label_size_global_m[1])
     
+    if (is.null(input$label_size_global_m[2])) max_label = rescaled_value(1.0,2.0,6)
+    else max_label = rescaled_value(1.0,2.0,input$label_size_global_m[2])
     
+    # Scaling labels
+    labsize <- rescale(igraph::betweenness(g_), 
+                       min(igraph::betweenness(g_)), 
+                       max(igraph::betweenness(g_)), 
+                       min_label, max_label)
     
+    V(g_)$label.cex <- labsize
     
+    # Funtion to convert igraph format to visNetwork format
+    data <- toVisNetworkData(g_)
+     
+    # Set node size
+    if (is.null(input$node_size_global_m[1])) min_node = rescaled_value(20.0,30.0,4)
+    else min_node = rescaled_value(20.0,30.0,input$node_size_global_m[1])
+    
+    if (is.null(input$node_size_global_m[2])) max_node = rescaled_value(20.0,30.0,6)
+    else max_node = rescaled_value(20.0,30.0,input$node_size_global_m[2])
+    
+    # Scaling nodes
+    nodesize <- rescale(igraph::betweenness(g_), 
+                        min(igraph::betweenness(g_)), 
+                        max(igraph::betweenness(g_)), 
+                        min_node, max_node)
+    
+    data$nodes$size = nodesize
+    
+    min_bet = min(igraph::betweenness(g_))
+    max_bet = max(igraph::betweenness(g_))
+    n_col =  50
+    node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+    
+    # x in this function is betweenness
+    col_index = function(x) {((n_col -1)/(max_bet - min_bet))*(x-min_bet)+1}
+  
+    returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+     
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = sapply(igraph::betweenness(g_), FUN = returnColor)
+    
+    data$nodes$betweenness = igraph::betweenness(g_)
+    
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = sapply(betweenness(g_), FUN = returnColor)
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = rep("gray",length(data$edges$Relation))
+    
+    data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+    
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows =arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$betweenness,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+  
+    
+    # Progress indicator
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+      
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      if (input$layout_global_m == "layout_with_fr") {
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        # Visnetwork graph creation
+        ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+          visNodes(shape = "dot") %>%
+          visEdges(arrows =list(to = list(enabled = directed))) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+          visIgraphLayout(layout = "layout_with_fr", niter= 10000) %>%
+          visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+      } 
+      else {
+        if (input$layout_global_m == "layout_with_kk") {
+          # Setting seed is important so the graph is always with the same configuration when starts
+          set.seed(123)
+          # Visnetwork graph creation
+          ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+            visNodes(shape = "dot") %>%
+            visEdges(arrows =list(to = list(enabled = directed))) %>%
+            #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+            visIgraphLayout(layout = "layout_with_kk", maxiter = 1000) %>%
+            visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+        } else {
+          # Setting seed is important so the graph is always with the same configuration when starts
+          set.seed(123)
+          # Visnetwork graph creation
+          ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+            visNodes(shape = "dot") %>%
+            visEdges(arrows =list(to = list(enabled = directed))) %>%
+            #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+            visIgraphLayout(layout = as.character(input$layout_global_m)) %>%
+            visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+        }
+      }
+    })   
   }
-  if (input$variable_type == 'closeness') {
+  if (input$variable_type_global_m == 'closeness') {
+    
+    #Set label size
+    if (is.null(input$label_size_global_m[1])) min_label = rescaled_value(1.0,2.0,4)
+    else min_label = rescaled_value(1.0,2.0,input$label_size_global_m[1])
+    
+    if (is.null(input$label_size_global_m[2])) max_label = rescaled_value(1.0,2.0,6)
+    else max_label = rescaled_value(1.0,2.0,input$label_size_global_m[2])
+    
+    # Scaling labels
+    labsize <- rescale(igraph::closeness(g_), 
+                       min(igraph::closeness(g_)), 
+                       max(igraph::closeness(g_)), 
+                       min_label, max_label)
+    
+    V(g_)$label.cex <- labsize
+    
+    # Funtion to convert igraph format to visNetwork format
+    data <- toVisNetworkData(g_)
+     
+    # Set node size
+    if (is.null(input$node_size_global_m[1])) min_node = rescaled_value(20.0,30.0,4)
+    else min_node = rescaled_value(20.0,30.0,input$node_size_global_m[1])
+    
+    if (is.null(input$node_size_global_m[2])) max_node = rescaled_value(20.0,30.0,6)
+    else max_node = rescaled_value(20.0,30.0,input$node_size_global_m[2])
+    
+    # Scaling nodes
+    nodesize <- rescale(igraph::closeness(g_), 
+                        min(igraph::closeness(g_)), 
+                        max(igraph::closeness(g_)), 
+                        min_node, max_node)
+    
+    data$nodes$size = nodesize
+    
+    min_close = min(igraph::closeness(g_))
+    max_close = max(igraph::closeness(g_))
+    n_col =  50
+    node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+    
+    # x in this function is closeness
+    col_index = function(x) {((n_col -1)/(max_close - min_close))*(x-min_close)+1}
+  
+    returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+     
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = sapply(igraph::closeness(g_), FUN = returnColor)
+    
+    data$nodes$closeness = format(igraph::closeness(g_), digits = 3, nsmall = 3)
+    
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = sapply(closeness(g_), FUN = returnColor)
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = rep("gray",length(data$edges$Relation))
+    
+    data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+    
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows =arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$closeness,
+                              '</p></center>'
+                              )
     
     
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+  
     
-    
-    
+    # Progress indicator
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+      
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      if (input$layout_global_m == "layout_with_fr") {
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        # Visnetwork graph creation
+        ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+          visNodes(shape = "dot") %>%
+          visEdges(arrows =list(to = list(enabled = directed))) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+          visIgraphLayout(layout = "layout_with_fr", niter= 10000) %>%
+          visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+      } 
+      else {
+        if (input$layout_global_m == "layout_with_kk") {
+          # Setting seed is important so the graph is always with the same configuration when starts
+          set.seed(123)
+          # Visnetwork graph creation
+          ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+            visNodes(shape = "dot") %>%
+            visEdges(arrows =list(to = list(enabled = directed))) %>%
+            #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+            visIgraphLayout(layout = "layout_with_kk", maxiter = 1000) %>%
+            visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+        } else {
+          # Setting seed is important so the graph is always with the same configuration when starts
+          set.seed(123)
+          # Visnetwork graph creation
+          ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+            visNodes(shape = "dot") %>%
+            visEdges(arrows =list(to = list(enabled = directed))) %>%
+            #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+            visIgraphLayout(layout = as.character(input$layout_global_m)) %>%
+            visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+        }
+      }
+    })      
   }
-  if (input$variable_type == 'eigenvector') {
+  if (input$variable_type_global_m == 'eigenvector') {
     
+    #Set label size
+    if (is.null(input$label_size_global_m[1])) min_label = rescaled_value(1.0,2.0,4)
+    else min_label = rescaled_value(1.0,2.0,input$label_size_global_m[1])
     
+    if (is.null(input$label_size_global_m[2])) max_label = rescaled_value(1.0,2.0,6)
+    else max_label = rescaled_value(1.0,2.0,input$label_size_global_m[2])
     
+    # Scaling labels
+    labsize <- rescale(igraph::eigen_centrality(g_)$vector, 
+                       min(igraph::eigen_centrality(g_)$vector), 
+                       max(igraph::eigen_centrality(g_)$vector), 
+                       min_label, max_label)
     
+    V(g_)$label.cex <- labsize
     
+    # Funtion to convert igraph format to visNetwork format
+    data <- toVisNetworkData(g_)
+     
+    # Set node size
+    if (is.null(input$node_size_global_m[1])) min_node = rescaled_value(20.0,30.0,4)
+    else min_node = rescaled_value(20.0,30.0,input$node_size_global_m[1])
+    
+    if (is.null(input$node_size_global_m[2])) max_node = rescaled_value(20.0,30.0,6)
+    else max_node = rescaled_value(20.0,30.0,input$node_size_global_m[2])
+    
+    # Scaling nodes
+    nodesize <- rescale(igraph::eigen_centrality(g_)$vector, 
+                        min(igraph::eigen_centrality(g_)$vector), 
+                        max(igraph::eigen_centrality(g_)$vector), 
+                        min_node, max_node)
+    
+    data$nodes$size = nodesize
+    
+    min_eigen = min(igraph::eigen_centrality(g_)$vector)
+    max_eigen = max(igraph::eigen_centrality(g_)$vector)
+    n_col =  50
+    node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+    
+    # x in this function is eigen_centrality
+    col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
+    
+    col_index_evc_data = col_index_evc(igraph::eigen_centrality(g_)$vector)
+  
+    returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)}
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
+    
+    data$nodes$eigen = format(igraph::eigen_centrality(g_)$vector, digits = 3, nsmall = 3)
+    
+    data$nodes$color.border = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
+    
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+    
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = rep("gray",length(data$edges$Relation))
+    
+    data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+    
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"), 
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+    
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) 
+    
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), 
+                         arrows =arrow, 
+                         font.align = "bottom")
+    
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>', 
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background, 
+                              ';">',
+                              data$nodes$eigen,
+                              '</p></center>'
+                              )
+    
+    if (directed) {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to, 
+                                '</p></center>'
+                                )  
+      
+    } else {
+      
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>', 
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color, 
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>', 
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from, 
+                                '</p></center>'
+                                )
+      
+    }
+  
+    
+    # Progress indicator
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+      
+      incProgress(1, detail = paste("Running visnetwork"))
+      
+      if (input$layout_global_m == "layout_with_fr") {
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        # Visnetwork graph creation
+        ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+          visNodes(shape = "dot") %>%
+          visEdges(arrows =list(to = list(enabled = directed))) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+          visIgraphLayout(layout = "layout_with_fr", niter= 10000) %>%
+          visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+      } 
+      else {
+        if (input$layout_global_m == "layout_with_kk") {
+          # Setting seed is important so the graph is always with the same configuration when starts
+          set.seed(123)
+          # Visnetwork graph creation
+          ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+            visNodes(shape = "dot") %>%
+            visEdges(arrows =list(to = list(enabled = directed))) %>%
+            #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+            visIgraphLayout(layout = "layout_with_kk", maxiter = 1000) %>%
+            visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+        } else {
+          # Setting seed is important so the graph is always with the same configuration when starts
+          set.seed(123)
+          # Visnetwork graph creation
+          ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+            visNodes(shape = "dot") %>%
+            visEdges(arrows =list(to = list(enabled = directed))) %>%
+            #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+            visIgraphLayout(layout = as.character(input$layout_global_m)) %>%
+            visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+        }
+      }
+    })      
   }
   
   return(ntw)
@@ -759,7 +1265,7 @@ output$local_network = renderVisNetwork({
                         mode = c("all"),
                         mindist = 0)
     
-    # The following line could be uses to export to pajek. Should be linked to a "download" button. 
+    # The following line could be used to export to pajek. Should be linked to a "download" button. 
     #write_graph(d[[1]], "pajek.txt", format = "pajek")
     
     #Set label size
@@ -786,7 +1292,6 @@ output$local_network = renderVisNetwork({
     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
     data$nodes$size = nodesize
 
-    # Setting parameters straight in the data frame for visNetwork
     # Setting parameters straight in the data frame for visNetwork
     data$nodes$color.background = case_when(
       data$nodes$Group == "Male" ~ '#FF6347',
@@ -1215,6 +1720,7 @@ output$local_network_monitor = renderVisNetwork({
                          min(igraph::degree(d[[1]])), 
                          max(igraph::degree(d[[1]])), 
                          min_label, max_label)
+      
       V(d[[1]])$label.cex <- labsize
   
       #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
