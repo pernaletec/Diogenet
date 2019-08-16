@@ -397,6 +397,16 @@ selectInput(inputId = "layout_global_m",
                           ), 
             selected = "layout_nicely"
             )
+
+br()
+
+h4("Centrality Index")
+selectInput("variable_type_global_m", NULL,
+                c("Degree" = "degree",
+                  "Betweenness" = "betweenness",
+                  "Closeness" = "closeness",
+                  "Eigenvector" = "eigenvector"))
+
 br()
 
 # Plot Height
@@ -405,13 +415,7 @@ h4("Appearence")
 sliderInput(inputId = "label_size_global_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_global_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 
-br()
-h4("Centrality Index")
-selectInput("variable_type_global_m", NULL,
-                c("Degree" = "degree",
-                  "Betweenness" = "betweenness",
-                  "Closeness" = "closeness",
-                  "Eigenvector" = "eigenvector"))
+
 
 
 div(message, style = "color:red")
@@ -1119,11 +1123,13 @@ output$global_network_monitor = renderVisNetwork({
     returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)}
     
     # Setting parameters straight in the data frame for visNetwork
-    data$nodes$color.background = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
+    data$nodes$color.background = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
+    
+    print(col_index_evc_data)
     
     data$nodes$eigen = format(igraph::eigen_centrality(g_)$vector, digits = 3, nsmall = 3)
     
-    data$nodes$color.border = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
+    data$nodes$color.border = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
     
     data$nodes$color.highlight = case_when(
       data$nodes$Group == "Male" ~ '#47e3ff',
@@ -1600,11 +1606,6 @@ uiOutput(outputId = "node_sel_m")
 #br()
 # Order
 sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1)
-# Node and Label Size
-br()
-h4("Appearance")
-sliderInput(inputId = "label_size_local_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
-sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 br()
 h4("Centrality Index")
 selectInput("variable_type", NULL,
@@ -1612,7 +1613,12 @@ selectInput("variable_type", NULL,
                   "Betweenness" = "betweenness",
                   "Closeness" = "closeness",
                   "Eigenvector" = "eigenvector"))
- 
+# Node and Label Size
+br()
+h4("Appearance")
+sliderInput(inputId = "label_size_local_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
@@ -2278,11 +2284,11 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
       returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)}
       
       # Setting parameters straight in the data frame for visNetwork
-      data$nodes$color.background = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
+      data$nodes$color.background = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
       
       data$nodes$eigen = format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
       
-      data$nodes$color.border = sapply(ceiling(col_index_evc_data), FUN = returnColor_evc)
+      data$nodes$color.border = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
   
       data$nodes$color.highlight = case_when(
         data$nodes$Group == "Male" ~ '#47e3ff',
