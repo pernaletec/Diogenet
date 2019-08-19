@@ -23,6 +23,9 @@ library(tidyverse)
 library(visNetwork)
 library(viridis)
 library(heatmaply)
+library(dplyr)
+library(treemap)
+library(highcharter)
 
 source("source_data.R")
 
@@ -2425,7 +2428,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr'),
 
 ```
 
-Communities 
+Graph {data-navmenu="Communities"} 
 ===================================== 
 
 Inputs {.sidebar}
@@ -2489,7 +2492,7 @@ div(message, style = "color:red")
 Row
 -------------------------------------
 
-### Communities
+### Graph
 
 ```{r}
 
@@ -2825,5 +2828,197 @@ output$nodeUI_igp <- renderUI({
 })
   
 uiOutput(outputId="graph_cmnt")
+
+```
+
+Treemap View {data-navmenu="Communities"} 
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+br()
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network
+checkboxGroupInput("edges_select_comm_tm",
+                   label = NULL,
+                   choices = list("Is teacher of" = 1,
+                                  "Is friend of" = 2,
+                                  "Is family of" = 3,
+                                  "Studied the work of" = 4,
+                                  "Sent letters to" = 5,
+                                  #"Is associated with" = 6,
+                                  "Is benefactor of" = 7),
+                   selected = 1,
+                   inline = FALSE)
+br()
+# Plot Height
+h4("Community Detection")
+# Algorithm for community detection
+selectInput("cmnt_dtc_alg_tm", "Algorithm", choices=c(
+                                                    "Cluster Edge Betweenness",
+                                                    "Cluster Fast Greedy",
+                                                    "Cluster Infomap",
+                                                    "Cluster Label Prop",
+                                                    "Cluster Leading Eigen",
+                                                    "Cluster Louvain",
+                                                    #"Cluster Optimal", # Crashes the system! #
+                                                    #"Cluster Spinglass",
+                                                    "Cluster Walktrap"))
+
+br()
+
+div(message, style = "color:red")
+
+```
+
+Row
+-------------------------------------
+
+### Treemap View
+
+```{r}
+
+# Community detection
+
+clustering = function(alg, graph){
+  if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph, bridges = TRUE)
+  if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph)
+  if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph)
+  if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph)
+  if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph)
+  if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph)
+  #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system #
+  #if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
+  if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph)
+  return(cluster)
+} 
+
+handledClustering = function(alg, graph){
+  tryCatch(clustering(alg,graph), 
+           #warning = function(w){;},
+           error = function(e){message = e;NULL})
+}
+
+output$cmnt_hch_tm <- renderHighchart({
+  
+  # First validate if there are edges (Ties) selected
+  validate(
+    need(try(!is.null(input$edges_select_comm_tm)), "Please select at least one tie")
+  )
+
+  # Use function is_directed
+  #directed = is_directed(input$edges_select_comm)
+  directed = FALSE
+
+  try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+  # ids in nodes are es required to export to Pajek format. Just in case!
+  V(g)$id = V(g)$name
+
+  # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+  E(g)$id = seq(1:length(E(g)))
+
+  # Subsetting according to edges selected
+  g_ = subset_graph(input$edges_select_comm_tm, g)
+
+  cluster = handledClustering(input$cmnt_dtc_alg_tm, g_)
+
+  # Controling the colours of each group
+  node_colours = rainbow(summary(cluster$membership)[6])
+  print(node_colours)
+  setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
+
+  validate(
+    need(try(!is.null(cluster)),
+         paste("The algorithm ",
+               input$cmnt_dtc_alg,
+               " could not identify communities given the current Phylosophers and Relations"," . ",  message)
+         )
+  )
+
+  # Assign membership ids to vertex
+  V(g_)$community  <- cluster$membership
+  
+  data <- toVisNetworkData(g_)
+  
+  data$nodes$degree = igraph::degree(g_)
+
+  #### Highcharter part!!!
+
+  nodes_tb = as_tibble(data$nodes)
+  
+  # Example for hctreemap not working!! 
+  # Let it here just in case is required to use it in the future
+  # It might be needed to migrate to hctreemap2
+  
+  # hc = hctreemap2(data = nodes_tb,
+  #                 group_vars = c("community", "label"), 
+  #                 size_var = "degree", 
+  #                 color_var = "community",
+  #                 layoutAlgorithm = "squarified",
+  #                 levelIsConstant = FALSE,
+  #                 levels = list(
+  #                   list(level = 1, dataLabels = list(enabled = FALSE)),
+  #                   list(level = 2, dataLabels = list(enabled = TRUE))
+  #                   )
+  #                 ) %>%
+  #   #hc_colorAxis(node_colours) %>%
+  #   hc_tooltip(pointFormat = "<b>{point.name}</b>:<br>
+  #                           Degree: {point.value:,.0f}<br>
+  #                           Community: {point.valuecolor:,.0f}")
+  
+  #   hc = data_frame(
+  #   index1 = sample(LETTERS[1:5], 500, replace = T),
+  #   index2 = sample(LETTERS[6:10], 500, replace = T),
+  #   index3 = sample(LETTERS[11:15], 500, replace = T),
+  #   value = rpois(500, 5),
+  #   color_value = rpois(500, 5)
+  # ) %>%
+  #   highcharter::hctreemap2(
+  #     group_vars = c("index1", "index2", "index3"),
+  #     size_var = "value",
+  #     color_var = "color_value",
+  #     layoutAlgorithm = "squarified",
+  #     levelIsConstant = FALSE,
+  #     levels = list(
+  #       list(level = 1, dataLabels = list(enabled = TRUE)),
+  #       list(level = 2, dataLabels = list(enabled = FALSE)),
+  #       list(level = 3, dataLabels = list(enabled = FALSE))
+  #     )
+  #   ) %>%
+  #   hc_colorAxis(minColor = brewer.pal(7, "Greens")[1],
+  #                maxColor = brewer.pal(7, "Greens")[7]) %>%
+  #   hc_tooltip(pointFormat = "<b>{point.name}</b>:<br>
+  #              Value: {point.value:,.0f}<br>
+  #              Color Value: {point.colorValue:,.0f}")
+  
+  # edges_tb = as_tibble(data$edges)
+  # 
+  withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+    Sys.sleep(0.25)
+    incProgress(0.3, detail = paste("Running Treemap"))
+
+    tm = treemap(nodes_tb, index = c("community", "label"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
+
+    incProgress(0.3, detail = paste("Running Highcharter"))
+
+    # hc = hctreemap(tm, allowDrillToNode = TRUE, layoutAlgorithm = "squarified") %>%
+    #   hc_tooltip(pointFormat = "<b>{point.name}</b>:<br>
+    #                           Degree: {point.value:,.0f}<br>
+    #                           Community: {point.valuecolor:,.0f}")
+    
+    hc = hctreemap(tm, allowDrillToNode = TRUE, layoutAlgorithm = "squarified") %>%
+      hc_tooltip(pointFormat = "<b>{point.name}</b>:<br>
+                              Degree: {point.value:,.0f}<br>")
+
+  })
+  
+  return(hc)
+})
+
+highcharter::highchartOutput(outputId="cmnt_hch_tm")
 
 ```
