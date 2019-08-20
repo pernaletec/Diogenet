@@ -2542,7 +2542,7 @@ network_cmnt =  reactive({
   cluster = handledClustering(input$cmnt_dtc_alg, g_)
   
   # Controling the colours of each group
-  node_colours = rainbow(summary(cluster$membership)[6])
+  node_colours = viridis(summary(cluster$membership)[6])
   setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
 
   validate(
@@ -2927,8 +2927,8 @@ output$cmnt_hch_tm <- renderHighchart({
   cluster = handledClustering(input$cmnt_dtc_alg_tm, g_)
 
   # Controling the colours of each group
-  node_colours = rainbow(summary(cluster$membership)[6])
-  print(node_colours)
+  node_colours = viridis(summary(cluster$membership)[6])
+  #print(node_colours)
   setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
 
   validate(
