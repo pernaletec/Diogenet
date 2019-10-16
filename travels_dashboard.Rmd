@@ -147,10 +147,10 @@ output$travels_network = renderLeaflet({
   # saveWidget(m, file = "map.html", selfcontained = TRUE)
 })
 
-# rescale the radius of the marker to the 5-20 scale
-rescale_radius = function(x, min, max){
-  if (min != max) y = ((20-5)/(max-min))*(x-min)+5
-  else y = 5
+# rescale the radius of the marker to the min_scale-max_scale scale (5-20)
+rescale_radius = function(x, min, max, min_scale, max_scale){
+  if (min != max) y = ((max_scale-min_scale)/(max-min))*(x-min)+min_scale
+  else y = min_scale
   return(y)
 }
 
@@ -194,7 +194,6 @@ observe({
   
     if (input$centrality_type == "degree") {
       centrality = all_places_full_data$degree
-
     }
     if (input$centrality_type == "betweenness") {
       centrality = all_places_full_data$betweenness      
@@ -224,6 +223,13 @@ observe({
       
     }
     
+    # Set node size
+    if (is.null(input$node_size_map[1])) min_node = rescaled_value(5,20,4)
+    else min_node = rescaled_value(5,20,input$node_size_map[1])
+
+    if (is.null(input$node_size_map[2])) max_node = rescaled_value(5,20,6)
+    else max_node = rescaled_value(5,20,input$node_size_map[2])
+
     # print("centrality")
     # print(centrality)
     # print("length(centrality) > 2")
@@ -231,7 +237,6 @@ observe({
     # print(pal)
     # print(min)
     # print(max)
-    
     
     text_title = input$centrality_type
   
@@ -275,7 +280,12 @@ observe({
                                     "<br/><i>Long: </i>",
                                     all_places_full_data$lon,
                                     "<br/></small></center></p>"),
-                       radius=sapply(X = centrality, FUN = rescale_radius, min = min, max = max),
+                       radius=sapply(X = centrality, 
+                                     FUN = rescale_radius, 
+                                     min = min, 
+                                     max = max, 
+                                     min_scale = min_node, 
+                                     max_scale = max_node),
                        color = ~pal(centrality),
                        stroke =TRUE,
                        fillOpacity = 0.75)%>%
@@ -387,9 +397,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr'),
 
 ```{r, echo=FALSE}
 
-
 output$graph_map <- visNetwork::renderVisNetwork({
-  
   
   d = graph_reactive()
   
@@ -397,7 +405,7 @@ output$graph_map <- visNetwork::renderVisNetwork({
   
   directed = TRUE
   
-    #Set label size
+  #Set label size
   if (is.null(input$label_size_map[1])) min_label = rescaled_value(0.3,1.0,4)
   else min_label = rescaled_value(0.3,1.0,input$label_size_map[1])
 
@@ -410,8 +418,6 @@ output$graph_map <- visNetwork::renderVisNetwork({
 
   if (is.null(input$node_size_map[2])) max_node = rescaled_value(10.0,30.0,6)
   else max_node = rescaled_value(10.0,30.0,input$node_size_map[2])
-  
-  
   
   if (input$centrality_type == 'degree'){
     
