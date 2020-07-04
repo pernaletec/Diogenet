@@ -1,9 +1,4 @@
----
-output:
-  pdf_document: default
-  html_document: default
----
-# Diogenet
+# **Diogenet**
 
 Intellectual Networks in Ancient Greece
 
