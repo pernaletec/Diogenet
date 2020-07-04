@@ -39,8 +39,8 @@ The script `formatToIgraph.R` converts old nodes and edges into new nodes and ed
 
 |Script|Description|
 |------|--------|
-|`travels_dahsboard.Rmd` |Main script for **Diogenet's Map**. It is based on R chunks embedded in a markdown file|
-|`diogenet_dahsboard.Rmd`|Main script Horus, Intellectual Networks in Ancient Greece.  based on R chunks embedded in a markdow file|
+|`travels_dahsboard.Rmd` |Main script for **Diogenet's Map**. It is based on R chunks embedded in a Markdown file|
+|`diogenet_dahsboard.Rmd`|Main script for **Horus, Intellectual Networks in Ancient Greece**.  It is based on R chunks embedded in a Markdown file|
 |`travels_data.R`|Creates the data frame required to plot the information in the map|
 |`travels_map.R`|Isolated version of the map, not embedded in `travels_dashboard.Rmd`|
 |`nets_ancient.Rmd`|Seed version of Horus! Just a reference|
