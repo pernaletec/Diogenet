@@ -36,12 +36,14 @@ The script `formatToIgraph.R` converts old nodes and edges into new nodes and ed
 
 ## Scripts
 
-|Data set|Description|
+|Script|Description|
 |------|--------|
 |`travels_dahsboard.Rmd` |Main script for **Diogenet's Map**. It is based on R chunks embedded in a markdown file|
 |`diogenet_dahsboard.Rmd`|Main script Horus, Intellectual Networks in Ancient Greece.  based on R chunks embedded in a markdow file|
+|`travels_data.R`|Creates the data frame required to plot the information in the map|
+|`travels_map.R`|Isolated version of the map, not embedded in `travels_dashboard.Rmd`|
 |`nets_ancient.Rmd`|Seed version of Horus! Just a reference|
-|`source_data.R`|Test if every edge is composed by valid nodes|
+|`source_data.R`|Test if every edge is composed by valid nodes. Auxiliary script|
 |`formatToIgraph.R`|Converts raw nodes and edges files into new and clean files|
 |`vnwGraphsToHTML.R`|Creates visnetwork graphs and then export them to HTML|
 
