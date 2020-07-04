@@ -31,6 +31,7 @@ The description of the datasets and applications, includind **RMarkdown** web de
 |`full_travels_edges_to.csv`|All information destinations (Created in `travels_map.R`)|
 |`locations.csv`|Raw information about locations|
 |`locations_data.csv`|Ordered information about locations|
+|`travelers_not_in_is_from.txt`|Travelers with no origin place identified. Not considered in the map|
 
 The script `formatToIgraph.R` converts old nodes and edges into new nodes and edges.
 
