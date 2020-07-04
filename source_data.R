@@ -1,3 +1,5 @@
+# This script test if every edge is composed by valid nodes 
+
 library(stringi)
 # Import node list: contains nodes$Name, nodes$Group
 nodes <- read.csv('new_Nodes.csv', 

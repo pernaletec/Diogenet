@@ -21,8 +21,6 @@ library(igraph)
 library(visNetwork)
 ```
 
-
-
 Inputs {.sidebar}
 -------------------------------------
 
@@ -111,6 +109,9 @@ graph_reactive = reactive({
   
   travel_edges = travel_edges_reactive()
   all_places = all_places_reactive()
+  
+  write.csv(travel_edges, "travel_edges_graph.csv")
+  write.csv(all_places, "all_places_graph.csv")
   
   centralities_data = TRUE
   # First validate if there are at least two nodes

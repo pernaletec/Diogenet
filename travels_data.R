@@ -1,3 +1,11 @@
+# This script creates the data frame required
+# to plot the information in the map
+# It checks that every location has its
+# proper coordinates
+# Many locations do not have an 
+# identified geo-reference.
+
+
 library(tidyverse)
 library(devtools)
 library(geosphere)
@@ -74,74 +82,11 @@ knw_all_names_trav = names_traveler[intsect_condition]
 # Destinations with joint condition
 knw_all_travl_trgt = traveler_target[intsect_condition]
 
-################################################################################
-## In the following lines a table will be built for nodes in "travelled to"   ##
-## but not in "is from". A column will be added to show weather or not these  ##
-## places have an identified location                                         ##
-################################################################################
-
-# nodes in "travelled to" but not in "is from"
-id_travelers_in_is_from = which(names_traveler %in% names_origin)
-travelers_not_in_is_from = unique(names_traveler[-id_travelers_in_is_from])
-write.table(x = travelers_not_in_is_from, file = "travelers_not_in_is_from.txt", fileEncoding = "UTF-8")
-
-travelers_names = unique(names_traveler)
-
-full_travel_edges = list(name = travelers_names,
-                         from = rep("", length(travelers_names)),
-                         to = rep("", length(travelers_names)))
-
-traveler_source = function (x) {
-  id = which(names_origin %in% x) 
-  return(origin_places[id])
-}
-
-traveler_destiny = function (x) {
-  id = which(names_traveler %in% x) 
-  return(traveler_target[id])
-}
-
-full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
-full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
-
-travels_to_edit = data.frame(name = c(0), from = c(0), to = c(0))
-
-i = 1
-falta = TRUE
-cum_index = 0
-
-while (falta  == TRUE) {
-  
-  from = full_travel_edges$from[[i]]
-  to = full_travel_edges$to[[i]]
-
-  l_from = length(from)
-  l_to = length(to)
-
-  max_val = max(c(l_from, l_to))
-
-  for (k in 1:max_val) {
-    if(!is.null(full_travel_edges$name[[i]])) travels_to_edit[cum_index+k,1] = full_travel_edges$name[[i]]
-    if(!is.null(from[k]) && !is.na(from[k])) travels_to_edit[cum_index+k,2] = from[k]
-    if(!is.null(to[k]) && !is.na(to[k])) travels_to_edit[cum_index+k,3] = to[k]
-  }
-  cum_index = cum_index + k
-  i = i+1
-  if (i > length(full_travel_edges$name)) falta = FALSE
-}
-
-write.csv(x = travels_to_edit, file = paste0("travels_to_edit.csv"), fileEncoding = "UTF-8")
-
-# Table with all sources and detinations for each node (...only travelers)
-write.csv(x = as.matrix(full_travel_edges$from), file = paste0("full_travel_edges_from.csv"), fileEncoding = "UTF-8")
-write.csv(x = as.matrix(full_travel_edges$to), file = paste0("full_travel_edges_to.csv"), fileEncoding = "UTF-8")
-
-################################################################################
-
-
 ## 3. turn it into something like this:
 ##   source   target  name
-##   Athens   Egypt   Pythagoras
+##   Athens   Egypt   Pythagoras}
+
+# travel_edges is the main object used in `travels_dashboard.R`
 
 travel_edges = data.frame(source = rep("", length(knw_all_names_trav)), 
                           target = knw_all_travl_trgt, 
@@ -154,7 +99,7 @@ travel_edges = data.frame(source = rep("", length(knw_all_names_trav)),
 
 ## After getting all the places for which there IS at least one location identified 
 ## there was a "manual" search using the shiny app developed
-#all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 
 # Some Phylosophers are identified with more that one "is from" Relation
 # Keep that in mind!
@@ -172,3 +117,80 @@ for (k in 1:length(travel_edges$source)) {
 all_places = sort(unique(c(travel_edges$source, travel_edges$target)), decreasing = FALSE)
 # These are the nodes in the graph
 all_places = data.frame(places = all_places)
+
+################################################################################
+##                                                                            ##
+##                          AUXILIARY SCRIPTS                                 ##
+##                                                                            ##
+################################################################################
+
+## In the following lines a table will be built for nodes in "travelled to"   ##
+## but not in "is from". A column will be added to show weather or not these  ##
+## places have an identified location                                         ##
+
+# nodes in "travelled to" but not in "is from"
+id_travelers_in_is_from = which(names_traveler %in% names_origin)
+travelers_not_in_is_from = unique(names_traveler[-id_travelers_in_is_from])
+write.table(x = travelers_not_in_is_from, file = "travelers_not_in_is_from.txt", fileEncoding = "UTF-8")
+#
+
+# With this script a deep study is made about the travels to check any issue with 
+# the full list of travels
+
+# List of travelers name's
+travelers_names = unique(names_traveler)
+
+# List with all travels per phylosopher
+full_travel_edges = list(name = travelers_names,
+                         from = rep("", length(travelers_names)),
+                         to = rep("", length(travelers_names)))
+
+# Returns all origin places for travelers with identified location
+traveler_source = function (x) {
+  id = which(names_origin %in% x) # which phylosopher with location match with x 
+  return(origin_places[id]) # Returns the location(s) of the phylosopher
+}
+
+# Returns all destiny places for traveler 
+traveler_destiny = function (x) {
+  id = which(names_traveler %in% x) # which phylosopher(traveler) match with x 
+  return(traveler_target[id]) # Returns travel's target
+}
+
+# Creates a full table of travels
+full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
+full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
+
+travels_to_edit = data.frame(name = c(0), from = c(0), to = c(0))
+
+i = 1
+falta = TRUE
+cum_index = 0
+
+while (falta  == TRUE) {
+  
+  from = full_travel_edges$from[[i]]
+  to = full_travel_edges$to[[i]]
+  
+  l_from = length(from)
+  l_to = length(to)
+  
+  max_val = max(c(l_from, l_to))
+  
+  for (k in 1:max_val) {
+    if(!is.null(full_travel_edges$name[[i]])) travels_to_edit[cum_index+k,1] = full_travel_edges$name[[i]]
+    if(!is.null(from[k]) && !is.na(from[k])) travels_to_edit[cum_index+k,2] = from[k]
+    if(!is.null(to[k]) && !is.na(to[k])) travels_to_edit[cum_index+k,3] = to[k]
+  }
+  cum_index = cum_index + k
+  i = i+1
+  if (i > length(full_travel_edges$name)) falta = FALSE
+}
+
+write.csv(x = travels_to_edit, file = paste0("travels_to_edit.csv"), fileEncoding = "UTF-8")
+
+# Table with all sources and destinations for each node (...only travelers)
+write.csv(x = as.matrix(full_travel_edges$from), file = paste0("full_travel_edges_from.csv"), fileEncoding = "UTF-8")
+write.csv(x = as.matrix(full_travel_edges$to), file = paste0("full_travel_edges_to.csv"), fileEncoding = "UTF-8")
+
+#
