@@ -14,7 +14,7 @@ We think that moving away from the idea that philosophical and scientific fields
 
 ## What is in this repository?
 
-The description of the datasets and applications, includind **RMarkdown** web deployments, is given below. Note that separate scripts used in the development process, and NOT necessarilly called at execution time, are also included. 
+The description of the datasets and applications, includind **RMarkdown** web deployments, is given below. Note that separate scripts used in the development process are also included. Not all scripts are called called at execution time. 
 
 ## Datasets
 
