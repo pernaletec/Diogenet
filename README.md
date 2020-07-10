@@ -2,6 +2,8 @@
 
 Intellectual Networks in Ancient Greece
 
+[https://diogenet.ucsd.edu/](https://diogenet.ucsd.edu/)
+
 ## About
 
 Diogenet is a dataset and a series of web applications for investigating the impact of social networks on the emergence and development of ancient Greek philosophy. 
@@ -41,7 +43,7 @@ The script `formatToIgraph.R` converts old nodes and edges into new nodes and ed
 |------|--------|
 |`travels_dahsboard.Rmd` |Main script for **Diogenet's Map**. It is based on R chunks embedded in a Markdown file|
 |`diogenet_dahsboard.Rmd`|Main script for **Horus, Intellectual Networks in Ancient Greece**.  It is based on R chunks embedded in a Markdown file|
-|`travels_data.R`|Creates the data frame required to plot the information in the map|
+|`travels_data.R`|Creates the data frame required to plot the information in the map. Key script!|
 |`travels_map.R`|Isolated version of the map, not embedded in `travels_dashboard.Rmd`|
 |`nets_ancient.Rmd`|Seed version of Horus! Just a reference|
 |`source_data.R`|Test if every edge is composed by valid nodes. Auxiliary script|
@@ -58,3 +60,34 @@ In addition there are separate shiny scripts for each type of graph general netw
 |`egograph_vnw` |Local view graph using `visnetwork`|
 |`network_igp` |Full graph using `igraph`|
 |`network_vnw` |Full graph using `visnetwork`|
+
+
+## Dependencies
+
+### `travels_dashboard.Rmd`
+
+`flexdashboard 0.5.1.1`
+`tidyverse 1.2.1`
+`devtools 2.2.1`
+`leaflet 2.0.2`
+`shiny 1.4.0`
+`DT 0.9`
+`geosphere 1.5-10`
+`viridis 0.5.1`
+`igraph 1.2.4.1`
+`visNetwork 2.0.8`
+
+### `diogenet_dashboard.Rmd`
+
+`flexdashboard 0.5.1.1`
+`shiny 1.4.0`
+`DT 0.9`
+`rmarkdown 1.16`
+`knitr 1.25`
+`rsconnect 0.8.15`
+`igraph 1.2.4.1`
+`stringi 1.4.3`
+`tidyverse 1.2.1`
+`visNetwork 2.0.8`
+`viridis 0.5.1`
+`heatmaply 0.16.0`
