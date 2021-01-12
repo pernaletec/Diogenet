@@ -74,6 +74,9 @@ Row {.tabset}
 
 ```{r, echo = FALSE, message = FALSE}
 
+# Reactive function that filter edges depending on the Phylosopher selected
+# If 'All' is selected all edges are considered for the graph what means all 
+# travelers 
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
   if ((input$philosopher != "All") && !is.null(input$philosopher)) {
@@ -82,6 +85,7 @@ travel_edges_reactive = reactive({
   } else  return(travel_edges)
 })
 
+# Depending on the travelers selected places are ordered stored in a vector
 all_places_reactive = reactive({
   travel_edges = travel_edges_reactive()
   all_places = sort(unique(c(travel_edges$source,
@@ -91,21 +95,21 @@ all_places_reactive = reactive({
   return(data.frame(places = all_places))
 })
 
+# A comparisson is made between all the places for which a location is available
+# with the places selected to be included in the graph
 all_places_full_data_reactive = reactive({
-  
   all_places = all_places_reactive()
   drawn_places = all_places_full_data$name %in% all_places
   return(all_places_full_data[drawn_places,])
-  
 })
 
+###############################################################################################
+###################################                     #######################################  
+##################################    GRAPH CREATION     ######################################
+###################################                     #######################################
+###############################################################################################
+
 graph_reactive = reactive({
-  
-  ###############################################################################################
-  ###################################                     #######################################  
-  ##################################    GRAPH CREATION     ######################################
-  ###################################                     #######################################
-  ###############################################################################################
   
   travel_edges = travel_edges_reactive()
   all_places = all_places_reactive()
