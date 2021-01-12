@@ -5,7 +5,6 @@
 # Many locations do not have an 
 # identified geo-reference.
 
-
 library(tidyverse)
 library(devtools)
 library(geosphere)
@@ -24,10 +23,10 @@ nodes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF
 black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Filter the nodes that are places
 places <- nodes$Name[nodes$Groups=="Place"]
-# Reads the locations data
+# Reads the locations data. Loactions data is created previously manually. 
 all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
-# Filter the places for whom location is available
-# Note that pipe the pipe operator %in% is used here 
+# Filter the places for whom a location is available
+# Note that the pipe operator %in%, available because of tidyverse, is used here 
 places_available = places[places %in% all_places_full_data$name]
 
 ##############################################################################
