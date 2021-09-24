@@ -4,13 +4,13 @@ subtitle: "Intellectual Networks in Ancient Greece"
 output: 
   flexdashboard::flex_dashboard:
         orientation: rows
-        favicon: iah_classicalstudies_logo_fv_pq.png
+        favicon: logo.png 
         navbar:
           - { icon: "fa-home", href: " http://diogenet.ucsd.edu", align: right }
 runtime: shiny
 ---
 
-```{r global, include=FALSE}
+```{r setup, include=FALSE}
 library(flexdashboard)
 library(shiny)
 library(DT)
@@ -23,11 +23,10 @@ library(tidyverse)
 library(visNetwork)
 library(viridis)
 library(heatmaply)
-
-source("source_data.R")
-
 ```
-
+```{r global}
+source("source_data.R")
+```
 Global Network
 ===================================== 
 
@@ -55,7 +54,6 @@ checkboxGroupInput("edges_select_global",
                                   "Is family of" = 3, 
                                   "Studied the work of" = 4, 
                                   "Sent letters to" = 5, 
-                                  #"Is associated with" = 6, 
                                   "Is benefactor of" = 7),
                    selected = 1,
                    inline = FALSE)
@@ -65,31 +63,15 @@ h4("Graph Layout")
 selectInput(inputId = "layout_global", 
             label = NULL, 
             choices = list(
-                          #"layout_as_bipartite" = "layout_as_bipartite",
-                          #"layout_as_star" = "layout_as_star",
-                          #"layout_as_tree" = "layout_as_tree",
-                          #"layout_components" = "layout_components",
-                          #"Nicely" = "layout_nicely",
                           "Fruchterman-Reingold" = "layout_with_fr",
                           "Kamada-Kawai" = "layout_with_kk",
                           "On sphere" = "layout_on_sphere",
                           "In Circle" = "layout_in_circle",
                           "On Grid" = "layout_on_grid"
-                          #"layout_randomly" = "layout_randomly",
-                          #"layout_with_dh" = "layout_with_dh",
-                          #"layout_with_drl" = "layout_with_drl",
-                          #"layout_with_gem" = "layout_with_gem",
-                          #"layout_with_lgl" = "layout_with_lgl",
-                          #"layout_with_graphopt" = "layout_with_graphopt",
-                          #"layout_with_mds" = "layout_with_mds",
-                          #"layout_with_sugiyama" = "layout_with_sugiyama",
-                          #"layout_with_graphopt" = "layout_with_graphopt",
-                          #,
-                          #"layout_with_mds" = "layout_with_mds",
-                          #"layout_with_sugiyama" = "layout_with_sugiyama"), selected = "layout_nicely", multiple = FALSE
                           ), 
-            selected = "layout_nicely"
-            )
+            selected = "layout_with_fr",
+            multiple = FALSE
+)
 br()
 
 # Plot Height
