@@ -27,51 +27,8 @@ library(rsconnect)
 ```
 ```{r global}
 source("travels_data.R")
+travel_edges_LOPL <- read.csv("travel_edges_LOPL.csv")
 ```
-Add Data
-=====================================  
-
-Inputs {.sidebar}
------------------------------------------------------------------------
-
-```{r}
-h4("Upload data set")
-fileInput("NodesInput", 
-          "Choose CSV Nodes File", 
-          accept = ".csv")
-
-fileInput("EdgesInput", 
-          "Choose CSV Edges File", 
-          accept = ".csv")
-```
-Row
------------------------------------------------------------------------
-
-
-### Node Data
-
-```{r} 
-nodeDataSet <- eventReactive(input$NodesInput,{nodeDataSet <- read.csv(input$NodesInput$datapath)})
-renderTable({
-  nodeDataSet <- nodeDataSet()
-  nodeDataSet
-})
-```
-
-Row 
------------------------------------------------------------------------
-
-
-### Edge Data
-
-```{r}
-EdgeDataSet <- eventReactive(input$EdgesInput,{EdgeDataSet <- read.csv(input$EdgesInput$datapath)})
-renderTable({
-  EdgeDataSet <- EdgeDataSet()
-  EdgeDataSet
-})
-```
-
 Travels
 ======================================
 
@@ -93,23 +50,29 @@ rescaled_value = function(a,b,x) {
 # Function to rescale node degree
 rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 
-h4("Traveler:")
-# Node selection
-selectInput(inputId = "philosopher", 
-            label = NULL, 
-            choices = c("All", sort(travel_edges$name, decreasing = FALSE)), 
-            selected = "All")
-br()
-h4("Centrality Index:")
-selectInput("centrality_type", NULL,
-                c("Degree" = "degree",
-                  "Betweenness" = "betweenness",
-                  "Closeness" = "closeness",
-                  "Eigenvector" = "eigenvector"))
+# Menu de seleccion del dataset
+selectInput(inputId= "dataset_selection", 
+            label = "select a dataset", 
+            choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL", "Custom" = "custom"),
+            selected = "Diogenes Laertius")
+
+
+# Menu reactivo que se muestra cuando es seleccionado
+uiOutput(outputId = 'travelerInput')
+selectInput("centrality_type",
+            label = "Select a Centrality type",
+            c("Degree" = "degree",
+              "Betweenness" = "betweenness",
+              "Closeness" = "closeness",
+              "Eigenvector" = "eigenvector"))
+
 br()
 h4("Appearance")
 sliderInput(inputId = "label_size_map", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+
+#boton de subir archivo que se muestra cuando es elegida la opcion custom
+uiOutput(outputId = "customInput")
 
 #div(message, style = "color:red")
 
@@ -121,6 +84,35 @@ Row {.tabset}
 ### Map
 
 ```{r, echo = FALSE, message = FALSE}
+
+# Manejador que se encarga de la logica para mostrar los selectinput reactivos (falta agregar el manejador para custom)
+output$travelerInput <- renderUI({
+  # This input exists if the `dataset_selection`
+  # one is equal to `diogenes` only
+  if (input$dataset_selection == 'diogenes') {
+    selectInput(inputId = "philosopher", 
+                label = "Select a Traveler", 
+                choices = c("All", sort(travel_edges$name, decreasing = FALSE)), 
+                selected = "All")
+  } else if (input$dataset_selection == 'custom') {
+    selectInput(inputId = "philosopher_custom", 
+                label = "Select a Traveler", 
+                choices = c("All", sort(travel_edges_custom$name, decreasing = FALSE)),  # hay que crear este dataset basado en lo que se suba!!!!
+                selected = "All")
+  } else {
+    return(NULL)
+  }
+})
+
+# Manejador de eventos para subir archivo al elegir "custom"
+output$customInput <- renderUI({
+  if (input$dataset_selection == "custom"){
+    fileInput(inputId = "custom_dataset", 
+              label = "Add custom dataset", 
+              multiple = FALSE, 
+              accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
+  }
+})
 
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
