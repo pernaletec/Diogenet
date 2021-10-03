@@ -27,7 +27,7 @@ library(rsconnect)
 ```
 ```{r global}
 source("travels_data.R")
-travel_edges_LOPL <- read.csv("travel_edges_LOPL.csv")
+travel_edges_LOPL <- read.csv("travel_edges_LOPL.csv",header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 ```
 Travels
 ======================================
@@ -114,6 +114,8 @@ output$customInput <- renderUI({
   }
 })
 
+# se definen los edges en funcion del la seleccion del filosofo
+# diogenes
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
   if ((input$philosopher != "All") && !is.null(input$philosopher)) {
@@ -121,7 +123,13 @@ travel_edges_reactive = reactive({
     return(travel_edges[travel_edges_selected,])
   } else  return(travel_edges)
 })
+# Life of Phytagoras
+travel_edges_LOPL_reactive <- reactive({
+    return(travel_edges_LOPL)
+})
 
+#se eligen todo los lugares que esten en las locaciones para el mapa
+#diogenes
 all_places_reactive = reactive({
   travel_edges = travel_edges_reactive()
   all_places = sort(unique(c(travel_edges$source,
@@ -130,15 +138,31 @@ all_places_reactive = reactive({
   # These are the nodes in the graph
   return(data.frame(places = all_places))
 })
+# Life of Pythagoras
+all_places_LOPL_reactive <- reactive({
+  travel_edges_LOPL <- travel_edges_LOPL_reactive()
+  all_places_LOPL <- sort(unique(c(travel_edges_LOPL$source,
+                                   travel_edges_LOPL$target)),
+                          decreasing = FALSE)
+  return(data.frame(places_LOPL = all_places_LOPL))
+})
 
+#se eligen todo los lugares que esten en las locaciones para el mapa
+#diogenes
 all_places_full_data_reactive = reactive({
-  
   all_places = all_places_reactive()
   drawn_places = all_places_full_data$name %in% all_places
   return(all_places_full_data[drawn_places,])
-  
+})
+# Life of Pythagoras
+all_places_full_data__LOPL_reactive <- reactive({
+  all_places_LOPL <- all_places_LOPL_reactive()
+  drawn_places_LOPL <- all_places_full_data$name %in% all_places_LOPL
+  return(all_places_full_data[drawn_places_LOPL,])
 })
 
+#creacion del grafo
+#diogenes
 graph_reactive = reactive({
   
   ###############################################################################################
@@ -148,22 +172,37 @@ graph_reactive = reactive({
   ###############################################################################################
   
   travel_edges = travel_edges_reactive()
-  all_places = all_places_reactive()
+    all_places = all_places_reactive()
+    
+    centralities_data = TRUE
+    # First validate if there are at least two nodes
+    if (length(all_places$places)<2) centralities_data  = FALSE
+    
+    #print(centralities_data)
+    
+    try(graph <- igraph::graph_from_data_frame(d = travel_edges[,1:2], 
+                                               directed=FALSE, 
+                                               vertices = all_places$places), 
+        silent = TRUE)
+    
+    if(centralities_data) return(graph)
+    else return("Too few (<2) nodes to calculate centralities")
   
-  centralities_data = TRUE
-  # First validate if there are at least two nodes
-  if (length(all_places$places)<2) centralities_data  = FALSE
+})
+# Life of phytagoras
+graph_reactive_LOPL <- reactive({
+  travel_edges_LOPL <- travel_edges_LOPL_reactive()
+  all_places_LOPL <- all_places_LOPL_reactive()
+  centralities_data_LOPL <- TRUE
+# First validate if there are at least two nodes
+  if (length(all_places_LOPL$places)<2) centralities_data_LOPL <- FALSE
   
-  #print(centralities_data)
-  
-  try(graph <- igraph::graph_from_data_frame(d = travel_edges[,1:2], 
-                                             directed=FALSE, 
-                                             vertices = all_places$places), 
+  try(graph_LOPL <- igraph::graph_from_data_frame(d = travel_edges_LOPL[,2:3],
+                                                  directed = FALSE,
+                                                  vertices = all_places_LOPL$places),
       silent = TRUE)
-  
-  if(centralities_data) return(graph)
+  if (centralities_data_LOPL) return(graph_LOPL)
   else return("Too few (<2) nodes to calculate centralities")
-  
 })
 
 # network stores an object rendered by renderVisnetwork 
