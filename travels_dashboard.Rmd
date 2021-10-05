@@ -72,7 +72,11 @@ sliderInput(inputId = "label_size_map", label = "Label Size", min = 0.0, max = 1
 sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 
 #boton de subir archivo que se muestra cuando es elegida la opcion custom
-uiOutput(outputId = "customInput")
+fileInput(inputId = "custom_dataset", 
+              label = "Add custom dataset", 
+              multiple = FALSE, 
+              accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
+
 
 #div(message, style = "color:red")
 
@@ -85,36 +89,36 @@ Row {.tabset}
 
 ```{r, echo = FALSE, message = FALSE}
 
-# Manejador que se encarga de la logica para mostrar los selectinput reactivos (falta agregar el manejador para custom)
+# Manejador que se encarga de la logica para mostrar los selectinput reactivos
 output$travelerInput <- renderUI({
   # This input exists if the `dataset_selection`
-  # one is equal to `diogenes` only
   if (input$dataset_selection == 'diogenes') {
     selectInput(inputId = "philosopher", 
                 label = "Select a Traveler", 
                 choices = c("All", sort(travel_edges$name, decreasing = FALSE)), 
                 selected = "All")
   } else if (input$dataset_selection == 'custom') {
+    travel_edges_custom <- travel_edges_custom()
     selectInput(inputId = "philosopher_custom", 
                 label = "Select a Traveler", 
-                choices = c("All", sort(travel_edges_custom$name, decreasing = FALSE)),  # hay que crear este dataset basado en lo que se suba!!!!
+                choices = c("All", sort(travel_edges_custom$name, decreasing = FALSE)), 
                 selected = "All")
-  } else {
+  } 
+  else {
     return(NULL)
   }
 })
 
-# Manejador de eventos para subir archivo al elegir "custom"
-output$customInput <- renderUI({
-  if (input$dataset_selection == "custom"){
-    fileInput(inputId = "custom_dataset", 
-              label = "Add custom dataset", 
-              multiple = FALSE, 
-              accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
-  }
-})
+# se define el Dataframe a partir el custom input
+travel_edges_custom <- reactive({
+    inFile <- input$custom_dataset
+    if (is.null(inFile))
+      return(NULL)
+    df <- read.csv(inFile$datapath, header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+    return(df)
+  })
 
-# se definen los edges en funcion del la seleccion del filosofo
+# se definen los edges en funcion del la seleccion del filosofo, en el caso de phytagoras no hace falta incluir ya que es uno solo
 # diogenes
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
@@ -126,6 +130,15 @@ travel_edges_reactive = reactive({
 # Life of Phytagoras
 travel_edges_LOPL_reactive <- reactive({
     return(travel_edges_LOPL)
+})
+# Custom dataset
+travel_edges_custon_reactive = reactive({
+  travel_edges_custom <- travel_edges_custom()
+  # Filter by Phylosopher selected...if any
+  if ((input$philosopher_custom != "All") && !is.null(input$philosopher_custom)) {
+    travel_edges_selected <- travel_edges_custom$name %in% input$philosopher_custom
+    return(travel_edges_custom[travel_edges_selected,])
+  } else return(travel_edges_custom)
 })
 
 #se eligen todo los lugares que esten en las locaciones para el mapa
@@ -146,6 +159,16 @@ all_places_LOPL_reactive <- reactive({
                           decreasing = FALSE)
   return(data.frame(places_LOPL = all_places_LOPL))
 })
+# Custom
+all_places_custom_reactive = reactive({
+  travel_edges_custom = travel_edges_custon_reactive()
+  all_places_custom = sort(unique(c(travel_edges_custom$source,
+                             travel_edges_custom$target)), 
+                    decreasing = FALSE)
+  # These are the nodes in the graph
+  return(data.frame(places = all_places_custom))
+})
+observe(print(all_places_custom_reactive()))
 
 #se eligen todo los lugares que esten en las locaciones para el mapa
 #diogenes
