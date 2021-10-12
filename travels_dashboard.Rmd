@@ -53,8 +53,9 @@ rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 # Menu de seleccion del dataset
 selectInput(inputId= "dataset_selection", 
             label = "select a dataset", 
-            choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL", "Custom" = "custom"),
+            choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL"),
             selected = "diogenes")
+
 
 
 # Menu reactivo que se muestra cuando es seleccionado
@@ -88,6 +89,21 @@ Row {.tabset}
 ### Map
 
 ```{r, echo = FALSE, message = FALSE}
+
+# Changing values of selectInput conditionally
+ observe({
+    x <- input$custom_dataset
+
+    # Can use character(0) to remove all choices
+    if (!is.null(x)){
+      updateSelectInput(session, "dataset_selection",
+      label = "select a dataset",
+      choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL", "Custom" = "custom"),
+      selected = "diogenes"
+      )
+    }
+    
+  })
 
 # Manejador que se encarga de la logica para mostrar los selectinput reactivos
 output$travelerInput <- renderUI({
@@ -290,6 +306,7 @@ returnColor = function(char_col) {substr(char_col,1,nchar(char_col)-2)}
 #observes
 # Diogenes
 observe({
+  
   req(input$dataset_selection)
   if (input$dataset_selection == 'LOPL') {
     travel_edges <- travel_edges_LOPL_reactive()
