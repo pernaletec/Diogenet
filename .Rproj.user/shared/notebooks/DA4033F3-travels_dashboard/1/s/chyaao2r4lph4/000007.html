@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<style>body{background-color:white;}</style>
+<link href="shared/selectize/css/selectize.bootstrap3.css" rel="stylesheet" />
+<script src="shared/selectize/js/selectize.min.js"></script>
+<script src="shared/selectize/accessibility/js/selectize-plugin-a11y.min.js"></script>
+
+</head>
+<body>
+<div class="form-group shiny-input-container">
+  <label class="control-label" id="centrality_type-label" for="centrality_type">Select a Centrality type</label>
+  <div>
+    <select id="centrality_type"><option value="degree" selected>Degree</option>
+<option value="betweenness">Betweenness</option>
+<option value="closeness">Closeness</option>
+<option value="eigenvector">Eigenvector</option></select>
+    <script type="application/json" data-for="centrality_type" data-nonempty="">{"plugins":["selectize-plugin-a11y"]}</script>
+  </div>
+</div>
+</body>
+</html>

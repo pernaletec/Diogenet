@@ -1,0 +1,6 @@
+"0","selectInput(""centrality_type"","
+"0","            label = ""Select a Centrality type"","
+"0","            c(""Degree"" = ""degree"","
+"0","              ""Betweenness"" = ""betweenness"","
+"0","              ""Closeness"" = ""closeness"","
+"0","              ""Eigenvector"" = ""eigenvector""))"
