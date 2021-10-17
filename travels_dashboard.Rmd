@@ -94,7 +94,7 @@ Row {.tabset}
  observe({
     x <- input$custom_dataset
 
-    # Can use character(0) to remove all choices
+    # Can use character(0) to remove all 
     if (!is.null(x)){
       updateSelectInput(session, "dataset_selection",
       label = "select a dataset",
@@ -235,17 +235,22 @@ graph_reactive = reactive({
 })
 # Life of phytagoras
 graph_reactive_LOPL <- reactive({
-  travel_edges_LOPL <- travel_edges_LOPL_reactive()
-  all_places_LOPL <- all_places_LOPL_reactive()
-  centralities_data_LOPL <- TRUE
-# First validate if there are at least two nodes
-  if (length(all_places_LOPL$places)<2) centralities_data_LOPL <- FALSE
   
-  try(graph_LOPL <- igraph::graph_from_data_frame(d = travel_edges_LOPL[,2:3],
-                                                  directed = FALSE,
-                                                  vertices = all_places_LOPL$places),
-      silent = TRUE)
-  if (centralities_data_LOPL) return(graph_LOPL)
+  travel_edges <- travel_edges_LOPL_reactive()
+  all_places <- all_places_LOPL_reactive()
+    
+  centralities_data = TRUE
+  # First validate if there are at least two nodes
+  if (length(all_places$places)<2) centralities_data  = FALSE
+    
+  #print(centralities_data)
+  # revisar lo del travel
+  try(graph <- igraph::graph_from_data_frame(d = travel_edges[,2:3], 
+                                             directed=FALSE, 
+                                             vertices = all_places$places), 
+        silent = TRUE)
+    
+  if(centralities_data) return(graph)
   else return("Too few (<2) nodes to calculate centralities")
 })
 # Custom
