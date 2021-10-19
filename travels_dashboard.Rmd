@@ -255,7 +255,7 @@ sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.
 
 #boton de subir archivo que se muestra cuando es elegida la opcion custom
 fileInput(inputId = "custom_dataset", 
-              label = "Add custom dataset", 
+              label = "Upload a custom dataset", 
               multiple = FALSE, 
               accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
 
@@ -270,8 +270,16 @@ Row {.tabset}
 ### Map
 
 ```{r, echo = FALSE, message = FALSE}
+# Travel edges for Custom dataset
+travel_edges_custom <- reactive({
+    inFile <- input$custom_dataset
+    if (is.null(inFile))
+      return(NULL)
+    df <- read.csv(inFile$datapath, header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+    return(df)
+  })
 
-# Changing values of selectInput conditionally
+# the "custom" option is shown in the selectInput "select a dataset" if a .csv file is uploaded
  observe({
     x <- input$custom_dataset
 
@@ -286,7 +294,7 @@ Row {.tabset}
     
   })
 
-# Manejador que se encarga de la logica para mostrar los selectinput reactivos
+# the list of names in SelectInput "Select a Traveler" is updated based on the selected dataset
 output$travelerInput <- renderUI({
   # This input exists if the `dataset_selection`
   if (input$dataset_selection == 'diogenes') {
@@ -294,7 +302,12 @@ output$travelerInput <- renderUI({
                 label = "Select a Traveler", 
                 choices = c("All", sort(travel_edges$name, decreasing = FALSE)), 
                 selected = "All")
-  } else if (input$dataset_selection == 'custom') {
+  } else if (input$dataset_selection == 'LOPL') {
+    selectInput(inputId = "philosopher_LOPL", 
+                label = "Select a Traveler", 
+                choices = c("All", sort(travel_edges_LOPL$name, decreasing = FALSE)), 
+                selected = "All")
+  }  else if (input$dataset_selection == 'custom') {
     travel_edges_custom <- travel_edges_custom()
     selectInput(inputId = "philosopher_custom", 
                 label = "Select a Traveler", 
@@ -306,17 +319,8 @@ output$travelerInput <- renderUI({
   }
 })
 
-# se define el Dataframe a partir el custom input
-travel_edges_custom <- reactive({
-    inFile <- input$custom_dataset
-    if (is.null(inFile))
-      return(NULL)
-    df <- read.csv(inFile$datapath, header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-    return(df)
-  })
 
-# se definen los edges en funcion del la seleccion del filosofo, en el caso de phytagoras no hace falta incluir ya que es uno solo
-# diogenes
+# Reactive travel edges expression for Diogenes dataset
 travel_edges_reactive = reactive({
   # Filter by Phylosopher selected...if any
   if ((input$philosopher != "All") && !is.null(input$philosopher)) {
@@ -324,11 +328,15 @@ travel_edges_reactive = reactive({
     return(travel_edges[travel_edges_selected,])
   } else  return(travel_edges)
 })
-# Life of Phytagoras
+# Reactive travel edges expression for  Life of pythagroas Lamblichus dataset
 travel_edges_LOPL_reactive <- reactive({
-    return(travel_edges_LOPL)
+    # Filter by Phylosopher selected...if any
+    if ((input$philosopher_LOPL != "All") && !is.null(input$philosopher_LOPL)) {
+      travel_edges_selected <- travel_edges_LOPL$name %in% input$philosopher_LOPL
+      return(travel_edges_LOPL[travel_edges_selected,])
+    } else return(travel_edges_LOPL)
 })
-# Custom dataset
+# Reactive travel edges expression for  Custom dataset
 travel_edges_custom_reactive <- reactive({
   travel_edges_custom <- travel_edges_custom()
   # Filter by Phylosopher selected...if any
@@ -338,8 +346,7 @@ travel_edges_custom_reactive <- reactive({
   } else return(travel_edges_custom)
 })
 
-#se eligen todo los lugares que esten en las locaciones para el mapa
-#diogenes
+# Reactive places expression for Diogenes dataset
 all_places_reactive = reactive({
   travel_edges = travel_edges_reactive()
   all_places = sort(unique(c(travel_edges$source,
@@ -348,7 +355,7 @@ all_places_reactive = reactive({
   # These are the nodes in the graph
   return(data.frame(places = all_places))
 })
-# Life of Pythagoras
+# Reactive places expression for Life of pythagroas Lamblichus dataset
 all_places_LOPL_reactive <- reactive({
   travel_edges_LOPL <- travel_edges_LOPL_reactive()
   all_places_LOPL <- sort(unique(c(travel_edges_LOPL$source,
@@ -356,7 +363,7 @@ all_places_LOPL_reactive <- reactive({
                           decreasing = FALSE)
   return(data.frame(places_LOPL = all_places_LOPL))
 })
-# Custom
+# Reactive places expression for Custom dataset
 all_places_custom_reactive <- reactive({
   travel_edges_custom = travel_edges_custom_reactive()
   all_places_custom = sort(unique(c(travel_edges_custom$source,
@@ -366,28 +373,28 @@ all_places_custom_reactive <- reactive({
   return(data.frame(places = all_places_custom))
 })
 
-#se eligen todo los lugares que esten en las locaciones para el mapa
-#diogenes
+
+# Reactive all places full data expression for Diogenes dataset
 all_places_full_data_reactive = reactive({
   all_places = all_places_reactive()
   drawn_places = all_places_full_data$name %in% all_places
   return(all_places_full_data[drawn_places,])
 })
-# Life of Pythagoras
+# Reactive all places full data expression for Life of Pythagoras Lamblichus dataset
 all_places_full_data__LOPL_reactive <- reactive({
   all_places_LOPL <- all_places_LOPL_reactive()
   drawn_places_LOPL <- all_places_full_data$name %in% all_places_LOPL
   return(all_places_full_data[drawn_places_LOPL,])
 })
-# Custom
+# Reactive all places full data expression for Custom dataset
 all_places_full_data_custom_reactive <- reactive({
   all_places = all_places_custom_reactive()
   drawn_places = all_places_full_data$name %in% all_places
   return(all_places_full_data[drawn_places,])
 })
 
-#creacion del grafo
-#diogenes
+#Graph creaction
+# Reactive graph expression for Diogenes dataset
 graph_reactive = reactive({
   
   ###############################################################################################
@@ -414,7 +421,7 @@ graph_reactive = reactive({
     else return("Too few (<2) nodes to calculate centralities")
   
 })
-# Life of phytagoras
+# Reactive graph expression for Life of Pythagoras Lamblichus dataset
 graph_reactive_LOPL <- reactive({
   
   travel_edges <- travel_edges_LOPL_reactive()
@@ -434,7 +441,7 @@ graph_reactive_LOPL <- reactive({
   if(centralities_data) return(graph)
   else return("Too few (<2) nodes to calculate centralities")
 })
-# Custom
+# Reactive graph expression for Custom dataset
 graph_reactive_custom <- reactive({
   
   travel_edges <- travel_edges_custom_reactive()
@@ -457,8 +464,7 @@ graph_reactive_custom <- reactive({
 })
 
 
-# network stores an object rendered by renderVisnetwork 
-# diogenes
+# network stores an object rendered by renderVisnetwork
 output$travels_network = renderLeaflet({
   
   tcu_map = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}"
@@ -489,8 +495,7 @@ col_index = function(x, n_col, min, max) {((n_col -1)/(max - min))*(x-min)+1}
 
 returnColor = function(char_col) {substr(char_col,1,nchar(char_col)-2)}
 
-#observes
-# Diogenes
+# observe
 observe({
   
   req(input$dataset_selection)
