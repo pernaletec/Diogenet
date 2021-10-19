@@ -34,7 +34,7 @@ all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep 
 ##################### Here is the call of the edges and nodes of the different datasets #####################################################
 
 ######################################################################
-####################  Diogenes #######################################
+####################  Diogenes Dataset ###############################
 ######################################################################
 # Reads the nodes file
 nodes_diogenes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
@@ -42,7 +42,7 @@ nodes_diogenes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encodi
 edges_diogenes = read.csv(file="new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 
 ######################################################################
-###############  Life of Pythagoras Lamblichus #######################
+###############  Life of Pythagoras Lamblichus Dataset ###############
 ######################################################################
 #read nodes file
 nodes_LOPL <- read.csv(file="new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
@@ -206,7 +206,8 @@ travelsData <- function(nodes, black_list, all_places_full_data, edges){
 # Travel edges for Diogenes dataset
 travel_edges <- travelsData(nodes_diogenes, black_list, all_places_full_data, edges_diogenes)
 
-travel_edges_LOPL <- read.csv("travel_edges_LOPL.csv",header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+# Travel edges for Life Of Pythagoras Lamblichus (LOPL) dataset
+travel_edges_LOPL <- travelsData(nodes_LOPL, black_list, all_places_full_data, edges_LOPL)
 
 ```
 Travels
@@ -425,7 +426,7 @@ graph_reactive_LOPL <- reactive({
     
   #print(centralities_data)
   # revisar lo del travel
-  try(graph <- igraph::graph_from_data_frame(d = travel_edges[,2:3], 
+  try(graph <- igraph::graph_from_data_frame(d = travel_edges[,1:2], 
                                              directed=FALSE, 
                                              vertices = all_places$places), 
         silent = TRUE)
