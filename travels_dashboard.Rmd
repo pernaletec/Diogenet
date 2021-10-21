@@ -26,34 +26,13 @@ library(knitr)
 library(rsconnect)
 ```
 ```{r global, include=FALSE}
-# Reads the black list for datasets
-black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-# Reads the locations data for datasets
-all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
-
-##################### Here is the call of the edges and nodes of the different datasets #####################################################
-
-######################################################################
-####################  Diogenes Dataset ###############################
-######################################################################
-# Reads the nodes file
-nodes_diogenes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-# Reads the edges file
-edges_diogenes = read.csv(file="new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-
-######################################################################
-###############  Life of Pythagoras Lamblichus Dataset ###############
-######################################################################
-#read nodes file
-nodes_LOPL <- read.csv(file="new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-# read edges file
-edges_LOPL <- read.csv("new_Edges_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-
+#Functions
+travelsData <- function(nodes, black_list, all_places_full_data, edges){
 ##################### This function with arguments (nodes, travels_blacklist, locations_data, edges) #######################################
 ###################### 1. create a new table from Nodes and Edges dataset. #################################################################
 ###################### 2. identify nodes that are in both relations "is from" and "travelled to" ###########################################
 ###################### 3. Create a dataframe with the follow form:  source target name lat_source lat_targer lon_source lon_target #########
-travelsData <- function(nodes, black_list, all_places_full_data, edges){
+  
   # Filter the nodes that are places
   places <- nodes$Name[nodes$Groups=="Place"]
   # Filter the places for whom location is available
@@ -202,10 +181,61 @@ travelsData <- function(nodes, black_list, all_places_full_data, edges){
   all_places = data.frame(places = all_places)
   return(travel_edges)
 }
+CentralityValues <- function (graph){
+# This function take a graph object argument and return a dataframe with centrality scores (degree, betweenness, closeness, eigenvector)
+  
+  if (is.igraph(graph)) {  
+    
+    val =  data.frame(degree = igraph::degree(graph),
+    betweenness = as.numeric(format(igraph::betweenness(graph, normalized =TRUE),digits = 3, nsmall = 3)),
+                     closeness = as.numeric(format(igraph::closeness(graph),digits = 3, nsmall = 3)),
+                     eigenvector = as.numeric(format(igraph::eigen_centrality(graph)$vector,digits = 3, nsmall = 3)))
+  return(val)
+  } else {
+    val <- graph
+  }
+}
+CentralizationValues <- function(graph){
+  # This function take a graph object argument and return a dataframe with centralization scores (degree, betweenness, closeness, eigenvector)
+    centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(graph)$centralization[1], 
+                                                   digits = 3, nsmall = 3)),
+                     betweenness = as.numeric(format(igraph::centralization.betweenness(graph)$centralization[1], 
+                                                     digits = 3, nsmall = 3)),
+                     closeness = as.numeric(format(igraph::centralization.closeness(graph)$centralization[1], 
+                                                   digits = 3, nsmall = 3)),
+                     eigenvector = as.numeric(format(igraph::centralization.evcent(graph)$centralization[1], 
+                                                     digits = 3, nsmall = 3))
+                     )
+    row.names(centr_) = c("Graph")
+    return(centr_)
+}
 
+
+# Reads the black list for datasets
+black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+# Reads the locations data for datasets
+all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+
+##################### Here is the call of the edges and nodes of the different datasets #####################################################
+######################################################################
+####################  Diogenes Dataset ###############################
+######################################################################
+# Reads the nodes file
+nodes_diogenes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+# Reads the edges file
+edges_diogenes = read.csv(file="new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+######################################################################
+###############  Life of Pythagoras Lamblichus Dataset ###############
+######################################################################
+#read nodes file
+nodes_LOPL <- read.csv(file="new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+# read edges file
+edges_LOPL <- read.csv("new_Edges_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+
+
+##################### Here is the travels edges of the different datasets #####################################################
 # Travel edges for Diogenes dataset
 travel_edges <- travelsData(nodes_diogenes, black_list, all_places_full_data, edges_diogenes)
-
 # Travel edges for Life Of Pythagoras Lamblichus (LOPL) dataset
 travel_edges_LOPL <- travelsData(nodes_LOPL, black_list, all_places_full_data, edges_LOPL)
 
@@ -657,69 +687,17 @@ leafletOutput(outputId="travels_network")
 ### Metrics
 
 ```{r, echo=FALSE}
-#Values
-#diogenes
-values = reactive({
-  
-  graph = graph_reactive()
-  
-  if (is.igraph(graph)) {  
-    
-    val =  data.frame(degree = igraph::degree(graph),
-    betweenness = as.numeric(format(igraph::betweenness(graph, normalized =TRUE),digits = 3, nsmall = 3)),
-                     closeness = as.numeric(format(igraph::closeness(graph),digits = 3, nsmall = 3)),
-                     eigenvector = as.numeric(format(igraph::eigen_centrality(graph)$vector,digits = 3, nsmall = 3)))
-  #val = val[order(val$degree, decreasing = TRUE),]
-  return(val)
-  } else {
-  
-    val = graph
-}
-    
 
-})
-#Life of phytagoras
-values_LOPL <- reactive({
-  
-  graph = graph_reactive_LOPL()
-  
-  if (is.igraph(graph)) {  
-    
-    val =  data.frame(degree = igraph::degree(graph),
-    betweenness = as.numeric(format(igraph::betweenness(graph, normalized =TRUE),digits = 3, nsmall = 3)),
-                     closeness = as.numeric(format(igraph::closeness(graph),digits = 3, nsmall = 3)),
-                     eigenvector = as.numeric(format(igraph::eigen_centrality(graph)$vector,digits = 3, nsmall = 3)))
-  #val = val[order(val$degree, decreasing = TRUE),]
-  return(val)
-  } else {
-  
-    val = graph
-}
-    
 
-})
-# Custom
-values_custom <- reactive({
-  
-  graph = graph_reactive_custom()
-  
-  if (is.igraph(graph)) {  
-    
-    val =  data.frame(degree = igraph::degree(graph),
-    betweenness = as.numeric(format(igraph::betweenness(graph, normalized =TRUE),digits = 3, nsmall = 3)),
-                     closeness = as.numeric(format(igraph::closeness(graph),digits = 3, nsmall = 3)),
-                     eigenvector = as.numeric(format(igraph::eigen_centrality(graph)$vector,digits = 3, nsmall = 3)))
-  #val = val[order(val$degree, decreasing = TRUE),]
-  return(val)
-  } else {
-  
-    val = graph
-}
-    
+############### centrality score calculations ########################
+# Reactive centrality values expression for Diogenes dataset
+values <- reactive({ CentralityValues(graph_reactive()) })
+# Reactive centrality values expression for Life of phytagoras dataset 
+values_LOPL <- reactive({ CentralityValues(graph_reactive_LOPL()) })
+# Reactive centrality values expression for custom dataset
+values_custom <- reactive({ CentralityValues(graph_reactive_custom()) })
 
-})
-
-# calculo de centralidad
+############### centralization score calculations ########################
 #diogenes
 centr = reactive({
   
