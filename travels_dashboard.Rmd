@@ -234,6 +234,32 @@ CentralityDataTable <- function (graph) {
   )
   
 }
+CentralizationDataTable <- function (graph) {
+  # This function take a graph object as argument and return a DataTable with centralization scores (degree, betweenness, closeness, eigenvector)
+  return(
+   DT::renderDataTable({datatable(graph, selection = 'none', caption = 'Centralization scores',
+                                  options = list(lengthChange = FALSE,
+                                                 processing = FALSE,
+                                                 ordering = FALSE,
+                                                 #autoWidth = TRUE,
+                                                 scrollX = TRUE,
+                                                 searching = FALSE,
+                                                 paging = FALSE,
+                                                 info = FALSE
+                                                 ,
+                                                 columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
+                                                                   list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                 ,
+                                                 initComplete = JS(
+                                                    "function(settings, json){",
+                                                    "$(this.api().table().body()).css({'font-size': '14px'});",
+                                                    "$(this.api().table().header()).css({'font-size': '12px'});",
+                                                    "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});",
+                                                    "}")
+                                                 ))})
+  )
+  
+}
 
 
 # Reads the black list for datasets
@@ -736,51 +762,33 @@ output$table_values <- CentralityDataTable(values())
 # Life of phytagoras Lamblichus Dataset
 output$table_values_LOPL <- CentralityDataTable(values_LOPL())
 # Custom Dataset
-output$table_values_custom <- CentralityDataTable(values_custom())
+output$table_values_custom <- DT::renderDataTable({datatable(values_custom()[order(values_custom()$degree, decreasing = TRUE),], 
+                                   selection = 'none', caption = 'Centrality scores', 
+                                   options = list(
+                                                 initComplete = JS(
+                                                  "function(settings, json){",
+                                                  "$(this.api().table().body()).css({'font-size': '14px'});",
+                                                  "$(this.api().table().header()).css({'font-size': '12px'});",
+                                                  "}"),
+                                                  pageLength = 10,
+                                                  lengthChange = FALSE,
+                                                  processing = FALSE,
+                                                  scrollX = TRUE
+                                                  #,
+                                                  #scrollY = TRUE,
+                                                  #scrollCollapse = TRUE,
+                                                  #autoWidth = TRUE
+                                                  ,
+                                                  columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
+                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                  ))})
+
 ############### centralization Data Table ########################
-# Diogenes
-output$table_centr = DT::renderDataTable({datatable(centr(), selection = 'none', caption = 'Centralization scores',
-                                  options = list(lengthChange = FALSE,
-                                                 processing = FALSE,
-                                                 ordering = FALSE,
-                                                 #autoWidth = TRUE,
-                                                 scrollX = TRUE,
-                                                 searching = FALSE,
-                                                 paging = FALSE,
-                                                 info = FALSE
-                                                 ,
-                                                 columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
-                                                                   list(className = 'dt-center', targets = c(1, 2, 3, 4)))
-                                                 ,
-                                                 initComplete = JS(
-                                                    "function(settings, json){",
-                                                    "$(this.api().table().body()).css({'font-size': '14px'});",
-                                                    "$(this.api().table().header()).css({'font-size': '12px'});",
-                                                    "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});",
-                                                    "}")
-                                                 ))})
-# Life of phytagoras
-output$table_centr_LOPL <- DT::renderDataTable({datatable(centr_LOPL(), selection = 'none', caption = 'Centralization scores',
-                                  options = list(lengthChange = FALSE,
-                                                 processing = FALSE,
-                                                 ordering = FALSE,
-                                                 #autoWidth = TRUE,
-                                                 scrollX = TRUE,
-                                                 searching = FALSE,
-                                                 paging = FALSE,
-                                                 info = FALSE
-                                                 ,
-                                                 columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
-                                                                   list(className = 'dt-center', targets = c(1, 2, 3, 4)))
-                                                 ,
-                                                 initComplete = JS(
-                                                    "function(settings, json){",
-                                                    "$(this.api().table().body()).css({'font-size': '14px'});",
-                                                    "$(this.api().table().header()).css({'font-size': '12px'});",
-                                                    "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});",
-                                                    "}")
-                                                 ))})
-# Custom
+# Diogenes dataset
+output$table_centr <- CentralizationDataTable(centr())
+# Life of phytagoras dataset
+output$table_centr_LOPL <- CentralizationDataTable(centr_LOPL())
+# Custom dataset
 output$table_centr_custom <- DT::renderDataTable({datatable(centr_custom(), selection = 'none', caption = 'Centralization scores',
                                   options = list(lengthChange = FALSE,
                                                  processing = FALSE,
