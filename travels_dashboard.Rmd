@@ -698,57 +698,12 @@ values_LOPL <- reactive({ CentralityValues(graph_reactive_LOPL()) })
 values_custom <- reactive({ CentralityValues(graph_reactive_custom()) })
 
 ############### centralization score calculations ########################
-#diogenes
-centr = reactive({
-  
-  graph = graph_reactive()
-  
-  centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(graph)$centralization[1], 
-                                                 digits = 3, nsmall = 3)),
-                   betweenness = as.numeric(format(igraph::centralization.betweenness(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3)),
-                   closeness = as.numeric(format(igraph::centralization.closeness(graph)$centralization[1], 
-                                                 digits = 3, nsmall = 3)),
-                   eigenvector = as.numeric(format(igraph::centralization.evcent(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3))
-                   )
-  row.names(centr_) = c("Graph")
-  return(centr_)
-})
-#Life of phytagoras
-centr_LOPL <- reactive({
-  
-  graph = graph_reactive_LOPL()
-  
-  centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(graph)$centralization[1], 
-                                                 digits = 3, nsmall = 3)),
-                   betweenness = as.numeric(format(igraph::centralization.betweenness(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3)),
-                   closeness = as.numeric(format(igraph::centralization.closeness(graph)$centralization[1], 
-                                                 digits = 3, nsmall = 3)),
-                   eigenvector = as.numeric(format(igraph::centralization.evcent(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3))
-                   )
-  row.names(centr_) = c("Graph")
-  return(centr_)
-})
-# Custom
-centr_custom <- reactive({
-  
-  graph = graph_reactive_custom()
-  
-  centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(graph)$centralization[1], 
-                                                 digits = 3, nsmall = 3)),
-                   betweenness = as.numeric(format(igraph::centralization.betweenness(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3)),
-                   closeness = as.numeric(format(igraph::centralization.closeness(graph)$centralization[1], 
-                                                 digits = 3, nsmall = 3)),
-                   eigenvector = as.numeric(format(igraph::centralization.evcent(graph)$centralization[1], 
-                                                   digits = 3, nsmall = 3))
-                   )
-  row.names(centr_) = c("Graph")
-  return(centr_)
-})
+# Reactive centralization values expression for Diogenes dataset
+centr <- reactive({ CentralizationValues(graph_reactive()) })
+# Reactive centralization values expression for Life of phytagoras dataset 
+centr_LOPL <- reactive({ CentralizationValues(graph_reactive_LOPL()) })
+# Reactive centralization values expression for Custom dataset 
+centr_custom <- reactive({ CentralizationValues(graph_reactive_custom()) })
 
 # Data table values
 # Diogenes
