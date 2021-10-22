@@ -1,6 +1,0 @@
-"0","travel_edges_reactive()
-"
-"2","Error: Operation not allowed without an active reactive context.
-* You tried to do something that can only be done from inside a reactive consumer.
-[90mRun `rlang::last_error()` to see where the error occurred.[39m
-"
