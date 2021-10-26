@@ -136,9 +136,9 @@ graph_reactive = reactive({
 # network stores an object rendered by renderVisnetwork 
 output$travels_network = renderLeaflet({
   
-  tcu_map = "https://api.tiles.mapbox.com/v3/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ"
+  tcu_map = "https://server.arcgisonline.com/ArcGIS/rest/services/World_Physical_Map/MapServer/tile/{z}/{y}/{x}"
   
-  map_attr = "Map data &copy<a href='http://openstreetmap.org'>OpenStreetMap</a> contributors <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a> Imagery © <a href='http://mapbox.com'>Mapbox</a>"
+  map_attr = "Map data &copy<a href='https://developers.arcgis.com/esri-leaflet/maps/display-a-map/'>ArcGIS</a> contributors <a href='http://creativecommons.org/licenses/by-sa/2.0/'>CC-BY-SA</a> Imagery © <a href='https://developers.arcgis.com/'>ArcGIS</a>"
   
   # This line is not requiered
   #m <- leaflet(avail_data_tb) %>% 
