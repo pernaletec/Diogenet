@@ -1,3 +1,8 @@
+# This script is in charge of creating the map of travelers. 
+# A considerable reduction of the plotting is made due to 
+# the unavailability of many locations. 
+
+# This script is intended to run separate as a test step. It is not used by travels_dashboard.R
 
 library(ggplot2)
 library(tidyverse)
@@ -111,7 +116,7 @@ traveler_destiny = function (x) {
 full_travel_edges$from = sapply(full_travel_edges$name, traveler_source)
 full_travel_edges$to = sapply(full_travel_edges$name, traveler_destiny)
 
-# Table with all sources and detinations for each node (...only travelers)
+# Table with all sources and destinations for each node (...only travelers)
 write.csv(x = as.matrix(full_travel_edges$from), file = paste0("full_travel_edges_from.csv"), fileEncoding = "UTF-8")
 write.csv(x = as.matrix(full_travel_edges$to), file = paste0("full_travel_edges_to.csv"), fileEncoding = "UTF-8")
 

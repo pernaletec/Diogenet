@@ -1,3 +1,6 @@
+# This script takes nodes and edges data raw from (Pajek??) and
+# clean it. 
+
 # Reading data saved as .csv
 
 edgesFile = "Edges.csv"
