@@ -312,16 +312,15 @@ rescaled_value = function(a,b,x) {
 # Function to rescale node degree
 rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 
-# Menu de seleccion del dataset
+# Dataset selection menu
 selectInput(inputId= "dataset_selection", 
             label = "select a dataset", 
             choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL"),
             selected = "diogenes")
 
-
-
-# Menu reactivo que se muestra cuando es seleccionado
+# Reactive menu "Select a Traveler" is shown based on the selected dataset
 uiOutput(outputId = 'travelerInput')
+
 selectInput("centrality_type",
             label = "Select a Centrality type",
             c("Degree" = "degree",
@@ -334,7 +333,18 @@ h4("Appearance")
 sliderInput(inputId = "label_size_map", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 
-#boton de subir archivo que se muestra cuando es elegida la opcion custom
+h5("Custom Travel Edges Dataset")
+helpText("The custom .cvs dataset must have the following names and column order:")
+helpText("\" \" ")
+helpText("\"source\"")
+helpText("\"target\"")
+helpText("\"name\"")
+helpText("\"lat_source\"")
+helpText("\"lon_source\"")
+helpText("\"lat_target\"")
+helpText("\"lon_target\"")
+
+# file Input button for custom dataset
 fileInput(inputId = "custom_dataset", 
               label = "Upload a custom dataset", 
               multiple = FALSE, 
@@ -342,7 +352,6 @@ fileInput(inputId = "custom_dataset",
 
 
 #div(message, style = "color:red")
-
 ```
 
 Row {.tabset}
@@ -353,16 +362,31 @@ Row {.tabset}
 ```{r, echo = FALSE, message = FALSE}
 # Travel edges for Custom dataset
 travel_edges_custom <- reactive({
+    
     inFile <- input$custom_dataset
+    
     if (is.null(inFile))
       return(NULL)
-    df <- read.csv(inFile$datapath, header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
-    return(df)
+    # fileInput parameters validation
+    file_contents <- read.csv(inFile$datapath, header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+    required_columns <- c("source","target","name","lat_source","lon_source","lat_target","lon_target")
+    column_names <- colnames(file_contents)
+    max_columns <- 8
+    # fileInput data content validation 
+    if (all(required_columns %in% column_names)){
+      df <- file_contents
+      return(df)
+    } else if (ncol(file_contents) <= max_columns){
+      return(NULL)
+    } else {
+      return(NULL)
+    }
+    
   })
 
 # the "custom" option is shown in the selectInput "select a dataset" if a .csv file is uploaded
  observe({
-    x <- input$custom_dataset
+    x <- travel_edges_custom()
 
     # Can use character(0) to remove all 
     if (!is.null(x)){
@@ -833,7 +857,8 @@ output$dynamic_table <- renderUI({
 
 ```{r, echo=FALSE}
 # visnetwork graph
-#Diogenes
+############### visnetwork graph ########################
+# Diogenes dataset
 output$graph_map <- visNetwork::renderVisNetwork({
   
   d = graph_reactive()
@@ -1459,7 +1484,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
   return(ntw)
     
   })
-#Life of Phytagoras
+# Life of phytagoras Lamblichus Dataset
 output$graph_map_LOPL <- visNetwork::renderVisNetwork({
   
   d = graph_reactive_LOPL()
@@ -2066,7 +2091,7 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
   return(ntw)
     
   })
-# Custom
+# Custom Dataset
 output$graph_map_custom <- visNetwork::renderVisNetwork({
   
   d = graph_reactive_custom()
