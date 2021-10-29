@@ -26,10 +26,6 @@ library(rmarkdown)
 library(knitr)
 library(rsconnect)
 ```
-=======
-
-Inputs {.sidebar}
--------------------------------------
 
 ```{r global, include=FALSE}
 #Functions
@@ -422,7 +418,7 @@ output$travelerInput <- renderUI({
 })
 
 # Reactive travel edges expression for Diogenes dataset
-=======
+# =======
 # Reactive function that filter edges depending on the Phylosopher selected
 # If 'All' is selected all edges are considered for the graph what means all 
 # travelers 
@@ -453,7 +449,7 @@ travel_edges_custom_reactive <- reactive({
 })
 
 # Reactive places expression for Diogenes dataset
-=======
+# =======
 # Depending on the travelers selected places are ordered stored in a vector
 
 all_places_reactive = reactive({
@@ -483,7 +479,7 @@ all_places_custom_reactive <- reactive({
 })
 
 # Reactive all places full data expression for Diogenes dataset
-=======
+# =======
 # A comparisson is made between all the places for which a location is available
 # with the places selected to be included in the graph
 
