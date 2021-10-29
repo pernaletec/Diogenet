@@ -1,6 +1,12 @@
-*.Rproj.user
 .Rhistory
+Diogenet.Rproj
+*.Rproj.user/**
 .RData
 .Ruserdata
 *.txt
-.Rproj.user/**
+full_travel_edges_from.csv
+full_travel_edges_to.csv
+travelers_not_in_is_from.txt
+travels_to_edit.csv
+all_places_graph.csv
+travel_edges_graph.csv
