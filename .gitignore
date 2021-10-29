@@ -1,19 +1,12 @@
-<<<<<<< HEAD
 .Rhistory
-.Rproj.user
 Diogenet.Rproj
-=======
 *.Rproj.user/**
->>>>>>> 8174dafdd2ac59b987d4b391e178da87609f6e7d
-.Rhistory
 .RData
 .Ruserdata
 *.txt
-<<<<<<< HEAD
-.Rproj.user/**
-=======
 full_travel_edges_from.csv
 full_travel_edges_to.csv
 travelers_not_in_is_from.txt
 travels_to_edit.csv
->>>>>>> 8174dafdd2ac59b987d4b391e178da87609f6e7d
+all_places_graph.csv
+travel_edges_graph.csv
