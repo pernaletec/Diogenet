@@ -1,3 +1,6 @@
+# This is a script that creates visnetwork graphs and then export them to HTML
+# so they can be easily embedded in a webpage.  
+
 library(rmarkdown)
 library(knitr)
 library(rsconnect)

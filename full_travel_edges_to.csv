@@ -1,74 +1,90 @@
 "","V1"
-"Theomedon",c("Piraeus", "Athenae")
-"Xenophon",c("Hellas", "Asia", "Corinth", "Elis", "Skillous", "Lepreum", "Delium", "Pontus")
-"Antigonus III",Athenae
-"Xenocrates",c("Academy of Plato (Athens)", "Sicily")
-"Menedemus",c("Elis", "Megara (Attica)", "Amphiareion", "Oropus")
-"Thales",c("Ancient Egypt (region)", "Creta", "Athenae")
-"Epicharmus",c("Megara (Attica)", "Syracuse", "Megara Hyblaea", "Sicily")
-"Democritus",c("Persia", "Ancient Egypt (region)", "India", "Red Sea", "Aethiopia")
-"Aristippus",c("Megara (Attica)", "Corinth", "Athenae", "Asia")
-"Solon",c("Creta", "Cilicia", "Athenae", "Cyprus", "Ancient Egypt (region)")
-"Nileos",Miletus
-"Xenophanes",c("Zancle", "Elea", "Katane")
-"Carcinus",Syracuse
-"Pyrrho",c("India", "Alpheios river")
-"Pythagoras",c("Nestos (river)", "Ancient Egypt (region)", "Italy", "Creta", "Crotone", "Hades (Place)", "Metapontum", "Ida", "Delos", "Lesbos")
-"Bion",c("Athenae", "Rhodos (island)")
-"Theodorus",c("Corinth", "Athenae")
-"Aristotle",c("Borboros", "Chalcis", "Macedonia", "Athenae", "Lyceum (Athens)", "Academy of Plato (Athens)", "Mitylene")
-"Diodorus V",c("Corinth", "Lepreum", "Skillous")
-"Protagoras",c("Sicily", "Athenae")
-"Socrates",c("Samos", "Phthia", "Amphipolis", "Delphi", "Potidaea", "Isthmus", "Delium")
-"Crates XII",Hellas
-"Eudoxus",c("Piraeus", "Cyzicus", "Propontis", "Ancient Egypt (region)", "Memphis (Egypt)", "Athenae")
-"Arcesilaus",c("Athenae", "Demetrias (Magnesia)", "Sardis")
-"Cleanthes",Athenae
-"Hesiod",Hades (Place)
-"Asclepiades",c("Elis", "Eretria")
-"Pherecydes",c("Olympian Zeus sanctuary (Eleia)", "Messene", "Delos", "Samos", "Delphi")
 "A Magician",Athenae
-"Aeschines",c("Syracuse", "Sicily", "Megara (Attica)")
-"Plato",c("Academy of Plato (Athens)", "Sicily")
-"Empedocles",c("Peloponnesus", "Olympian Zeus sanctuary (Eleia)", "Aetna M.", "Thurii", "Messene", "Hades (Place)", "Syracuse")
-"Clitomachus",Athenae
-"Anaxagoras",c("Halicarnassus", "Athenae", "Lampsacus", "Ionia region (Asia Minor)", "Olympian Zeus sanctuary (Eleia)")
-"Stilpo",c("Aegina", "Athenae")
-"Anaxarchus",Cyprus
-"Demetrius XXVIII",Cyrene
-"Epaminondas",Mantinea
-"Chrysippus",Ancient Egypt (region)
-"Demosthenes",Calauria
-"Anytus",Heraclea
-"Hermotimus",Didyma/Branchidai/Ioustinianopolis
-"Gryllus II",c("Mantinea", "Corinth", "Lepreum")
-"Archytas",Lucania
-"Crantor",Athenae
-"Demetrius",c("Athenae", "Alexandria at Egypt")
+"Aeschines",c("Sicily", "Syracuse", "Megara (Attica)")
 "Agesilaus",Hellas
-"Zeno II",c("Piraeus", "Athenae")
-"Lycophron",Corcyra
-"Speusippus",Macedonia
-"Alexinus",Olympian Zeus sanctuary (Eleia)
-"Pylades II",c("Chios (island)", "Athenae")
 "Agrigentines",Taras/Tarentum/Neptunia
-"Homer",Hades (Place)
-"Hegesilaus",Mantinea
-"Epimenides",c("Ida", "Athenae")
-"Diodorus",Alexandria at Egypt
-"Archelaus",Samos
-"Anacharsis",c("Athenae", "Sardis")
-"Autolycus",Sardis
-"Lysis II",Thebes
-"Sphaerus",Alexandria at Egypt
-"Hierocles",c("Piraeus", "Amphiareion", "Munichia")
-"Chilon",Pisa
-"Hippocrates II",Olympian Zeus sanctuary (Eleia)
 "Alcibiades",Potidaea
-"Metrocles",Corinth
+"Alexander",Babylon
+"Alexinus",Olympian Zeus sanctuary (Eleia)
+"Anacharsis",c("Sardis", "Athenae")
+"Anaxagoras",c("Halicarnassus", "Lampsacus", "Athenae", "Ionia region (Asia Minor)", "Olympian Zeus sanctuary (Eleia)")
+"Anaxarchus",Cyprus
 "Antigonus",Lysimachia
+"Antigonus III",Athenae
+"Anytus",Heraclea
+"Arcesilaus",c("Athenae", "Sardis", "Demetrias (Magnesia)")
+"Archelaus",Samos
+"Archippus",Milo
+"Archytas",Lucania
+"Aristippus",c("Megara (Attica)", "Asia", "Corinth", "Athenae")
+"Aristotle",c(" Lyceum (Athens)", "Academy of Plato (Athens)", "Athenae", "Chalcis", "Borboros", "Mitylene", "Macedonia")
+"Asclepiades",c("Eretria", "Elis")
+"Autolycus",Sardis
+"Bion",c("Athenae", "Rhodos (island)")
+"Carcinus",Syracuse
 "Cephisodorus",Mantinea
-"Proxenus",Sardis
-"Philesia",Elis
+"Chilon",Pisa
+"Chrysippus",Ancient Egypt (region)
+"Cleanthes",Athenae
+"Clitomachus",Athenae
+"Crantor",Athenae
+"Crates II",Boeotia
+"Crates XII",Hellas
+"Demetrius",c("Athenae", "Alexandria at Egypt")
+"Demetrius XXVIII",Cyrene
+"Democritus",c("Persia", "Aethiopia", "Red Sea", "Ancient Egypt (region)", "India")
+"Demosthenes",Calauria
+"Diodorus",Alexandria at Egypt
+"Diodorus V",c("Lepreum", "Corinth", "Skillous")
+"Diogenes II",c("Delphi", "Corinth", "Olympian Zeus sanctuary (Eleia)", "Creta", "Megara (Attica)", "Lacedaemon", "Athenae", "Myndus")
+"Dion",Sicily
+"Empedocles",c("Olympian Zeus sanctuary (Eleia)", "Messene", "Syracuse", "Hades (Place)", "Aetna M.", "Thurii", "Peloponnesus", "Hades")
+"Epaminondas",Mantinea
+"Epicharmus",c("Megara Hyblaea", "Syracuse", "Sicily", "Megara (Attica)")
+"Epicurus",c("Colophon", "Lampsacus", "Athenae", "Mitylene", "Ionia region (Asia Minor)")
+"Epimenides",c("Athenae", "Ida")
+"Eudoxus",c("Piraeus", "Memphis (Egypt)", "Athenae", "Cyzicus", "Propontis", "Ancient Egypt (region)")
+"Eudoxus III",c("Athenae", "Lenaea", "Dionysia")
+"Euripides",Ancient Egypt (region)
+"Eurytus",Italy
+"Gryllus II",c("Mantinea", "Corinth", "Lepreum")
+"Hegesilaus",Mantinea
 "Heraclides",Athenae
-"Eudoxus III",Athenae
+"Hermotimus",Didyma/Branchidai/Ioustinianopolis
+"Hesiod",c("Hades (Place)", "Hades")
+"Hierocles",c("Amphiareion", "Munichia", "Piraeus")
+"Hippocrates II",Olympian Zeus sanctuary (Eleia)
+"Homer",c("Hades (Place)", "Hades")
+"Lycophron",Corcyra
+"Lysis II",c("Milo", "Thebes")
+"Menedemus",c("Amphiareion", "Oropus", "Megara (Attica)", "Elis")
+"Menippus",Thebes
+"Metrocles",Corinth
+"Nileos",Miletus
+"Pherecydes",c("Messene", "Samos", "Delphi", "Olympian Zeus sanctuary (Eleia)", "Delos")
+"Philolaus",c("Italy", "Sicily")
+"Plato",c("Sicily", "Academy of Plato (Athens)", "Colonus", "Olympia", "Corinth", "Tanagra", "Cyrene", "Megara (Attica)", "Aetna M.", "Ancient Egypt (region)", "Delium", "Italy")
+"Pollis",Aegina
+"Protagoras",c("Sicily", "Athenae")
+"Proxenus",Sardis
+"Pylades II",c("Athenae", "Chios (island)")
+"Pyrrho",c("Alpheios river", "India")
+"Pythagoras",c("Creta", "Ancient Egypt (region)", "Metapontum", "Ida", "Italy", "Lesbos", "Delos", "Nestos (river)", "Hades (Place)", "Crotone", "Croto")
+"Socrates",c("Phthia", "Potidaea", "Isthmus", "Delium", "Samos", "Delphi", "Amphipolis")
+"Solon",c("Cilicia", "Ancient Egypt (region)", "Athenae", "Cyprus", "Creta")
+"Speusippus",Macedonia
+"Sphaerus",Alexandria at Egypt
+"Stilpo",c("Athenae", "Aegina")
+"Thales",c("Creta", "Ancient Egypt (region)", "Athenae")
+"Theodorus",c("Athenae", "Corinth")
+"Theodotas",Sicily
+"Theomedon",c("Athenae", "Piraeus")
+"Timon",c("Chalcedon", "Thebes", "Elis", "Propontis", "Hellespont", "Megara (Attica)", "Athenae")
+"Xenocrates",c("Academy of Plato (Athens)", "Sicily")
+"Xenophanes",c("Elea", "Zancle", "Katane", "Sicily")
+"Xenophon",c("Corinth", "Skillous", "Elis", "Pontus", "Hellas", "Asia", "Lepreum", "Delium")
+"Zeno",Lipara
+"Zeno II",c("Piraeus", "Athenae")
+"Axiothea",Athenae
+"Lastheneia",Athenae
+"Philesia",Elis

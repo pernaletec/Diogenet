@@ -1,4 +1,9 @@
-.Rproj.user
+*.Rproj.user/**
 .Rhistory
 .RData
 .Ruserdata
+*.txt
+full_travel_edges_from.csv
+full_travel_edges_to.csv
+travelers_not_in_is_from.txt
+travels_to_edit.csv
