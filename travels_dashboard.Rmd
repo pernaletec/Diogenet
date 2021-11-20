@@ -335,13 +335,13 @@ h4("Appearance")
 sliderInput(inputId = "label_size_map", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 
-h5("Custom Travel Edges Dataset")
-
-# file Input button for custom dataset
-fileInput(inputId = "custom_dataset", 
-              label = "Upload a custom dataset", 
-              multiple = FALSE, 
-              accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
+# h5("Custom Travel Edges Dataset")
+# 
+# # file Input button for custom dataset
+# fileInput(inputId = "custom_dataset", 
+#               label = "Upload a custom dataset", 
+#               multiple = FALSE, 
+#               accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
 
 
 #div(message, style = "color:red")
