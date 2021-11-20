@@ -11,3 +11,4 @@ travels_to_edit.csv
 all_places_graph.csv
 travel_edges_graph.csv
 .Rproj.user
+*.csv
