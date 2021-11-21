@@ -422,27 +422,26 @@ output$travelerInput <- renderUI({
 
 # Create the actual downloadButton for travel edges graph data
 output$download_edges_graph <- renderUI( {
-  if (input$dataset_selection == 'diogenes') {
-    downloadButton("downBtnEdgesGraphDiogenes", "Download .csv", style = "width:100%;")
-  } else if (input$dataset_selection == 'LOPI') {
-    downloadButton("downBtnEdgesGraphLOPI", "Download .csv", style = "width:100%;")
-  }
-  
+  downloadButton("downBtnEdgesGraph", "Download .csv", style = "width:100%;")
 })
 
 # Add download handling
-diogenes <- read.csv("travel_edges_graph_diogenes.csv")
-LOPI <- read.csv(file = "travel_edges_graph_LOPI.csv")
-output$downBtnEdgesGraphDiogenes <- downloadHandler(
-  filename = function() {"travel_edges_graph_diogenes.csv"},
-  content = function(file) {write.csv(diogenes, file, row.names = TRUE)}
-)
-output$downBtnEdgesGraphLOPI <- downloadHandler(
-  filename = function() {"travel_edges_graph_LOPI.csv"},
-  content = function(file) {write.csv(LOPI, file, row.names = TRUE)}
-)
-          
-
+observe ({
+  req(input$dataset_selection)
+  if (input$dataset_selection == 'diogenes') {
+      datadownlad <- read.csv("travel_edges_graph_diogenes.csv")
+      output$downBtnEdgesGraph <- downloadHandler(
+        filename = function() {"Travel Edges Graph.csv"},
+        content = function(file) {write.csv(datadownlad, file, row.names = TRUE)}
+      )
+  } else if (input$dataset_selection == 'LOPI') {
+      datadownlad <- read.csv("travel_edges_graph_LOPI.csv")
+      output$downBtnEdgesGraph <- downloadHandler(
+        filename = function() {"Travel Edges Graph.csv"},
+        content = function(file) {write.csv(datadownlad, file, row.names = TRUE)}
+      )
+  }
+})
 
 # Reactive travel edges expression for Diogenes dataset
 # =======
