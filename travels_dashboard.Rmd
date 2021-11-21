@@ -343,6 +343,9 @@ sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.
 #               multiple = FALSE, 
 #               accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
 
+br()
+h5("Download travel edges graph data")
+uiOutput("download_edges_graph")
 
 #div(message, style = "color:red")
 ```
@@ -416,6 +419,30 @@ output$travelerInput <- renderUI({
     return(NULL)
   }
 })
+
+# Create the actual downloadButton for travel edges graph data
+output$download_edges_graph <- renderUI( {
+  if (input$dataset_selection == 'diogenes') {
+    downloadButton("downBtnEdgesGraphDiogenes", "Download .csv", style = "width:100%;")
+  } else if (input$dataset_selection == 'LOPI') {
+    downloadButton("downBtnEdgesGraphLOPI", "Download .csv", style = "width:100%;")
+  }
+  
+})
+
+# Add download handling
+diogenes <- read.csv("travel_edges_graph_diogenes.csv")
+LOPI <- read.csv(file = "travel_edges_graph_LOPI.csv")
+output$downBtnEdgesGraphDiogenes <- downloadHandler(
+  filename = function() {"travel_edges_graph_diogenes.csv"},
+  content = function(file) {write.csv(diogenes, file, row.names = TRUE)}
+)
+output$downBtnEdgesGraphLOPI <- downloadHandler(
+  filename = function() {"travel_edges_graph_LOPI.csv"},
+  content = function(file) {write.csv(LOPI, file, row.names = TRUE)}
+)
+          
+
 
 # Reactive travel edges expression for Diogenes dataset
 # =======
@@ -516,8 +543,8 @@ graph_reactive = reactive({
     travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
     
-    write.csv(travel_edges, "travel_edges_graph_diogenet.csv")
-    write.csv(all_places, "all_places_graph_diogenet.csv")
+    write.csv(travel_edges, "travel_edges_graph_diogenes.csv")
+    write.csv(all_places, "all_places_graph_diogenes.csv")
     
     centralities_data = TRUE
     # First validate if there are at least two nodes
