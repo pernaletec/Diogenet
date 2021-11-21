@@ -513,8 +513,11 @@ all_places_full_data_custom_reactive <- reactive({
 
 graph_reactive = reactive({
   
-  travel_edges = travel_edges_reactive()
+    travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
+    
+    write.csv(travel_edges, "travel_edges_graph_diogenet.csv")
+    write.csv(all_places, "all_places_graph_diogenet.csv")
     
     centralities_data = TRUE
     # First validate if there are at least two nodes
@@ -537,8 +540,8 @@ graph_reactive_LOPI <- reactive({
   travel_edges <- travel_edges_LOPI_reactive()
   all_places <- all_places_LOPI_reactive()
     
-  write.csv(travel_edges, "travel_edges_graph.csv")
-  write.csv(all_places, "all_places_graph.csv")
+  write.csv(travel_edges, "travel_edges_graph_LOPI.csv")
+  write.csv(all_places, "all_places_graph_LOPI.csv")
   
   centralities_data = TRUE
   # First validate if there are at least two nodes
