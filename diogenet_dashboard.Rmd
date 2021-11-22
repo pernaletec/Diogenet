@@ -1,16 +1,16 @@
 ---
 title: "Horus"
 subtitle: "Intellectual Networks in Ancient Greece"
+runtime: shiny
 output: 
   flexdashboard::flex_dashboard:
         orientation: rows
         favicon: iah_classicalstudies_logo_fv_pq.png
         navbar:
           - { icon: "fa-home", href: " http://diogenet.ucsd.edu", align: right }
-runtime: shiny
----
 
-```{r global, include=FALSE}
+---
+```{r setup, include=FALSE}
 library(flexdashboard)
 library(shiny)
 library(DT)
@@ -26,7 +26,9 @@ library(heatmaply)
 library(dplyr)
 library(treemap)
 library(highcharter)
+```
 
+```{r global, include=FALSE}
 source("source_data.R")
 
 
