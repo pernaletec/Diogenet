@@ -426,22 +426,16 @@ output$download_edges_graph <- renderUI( {
 })
 
 # Add download handling
-observe ({
-  req(input$dataset_selection)
-  if (input$dataset_selection == 'diogenes') {
-      datadownlad <- read.csv("travel_edges_graph_diogenes.csv")
-      output$downBtnEdgesGraph <- downloadHandler(
-        filename = function() {"Travel Edges Graph.csv"},
-        content = function(file) {write.csv(datadownlad, file, row.names = TRUE)}
-      )
-  } else if (input$dataset_selection == 'LOPI') {
-      datadownlad <- read.csv("travel_edges_graph_LOPI.csv")
-      output$downBtnEdgesGraph <- downloadHandler(
-        filename = function() {"Travel Edges Graph.csv"},
-        content = function(file) {write.csv(datadownlad, file, row.names = TRUE)}
-      )
-  }
+datadownlad_reactive <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath = 
+"travel_edges_graph.csv", readFunc = read.csv)
+observe({
+  datadownlad <- datadownlad_reactive()
+  output$downBtnEdgesGraph <- downloadHandler(
+    filename = function() {"Travel Edges Graph.csv"},
+    content = function(file) {write.csv(datadownlad, file, row.names = TRUE)}
+  )
 })
+
 
 # Reactive travel edges expression for Diogenes dataset
 # =======
@@ -538,12 +532,8 @@ all_places_full_data_custom_reactive <- reactive({
 ###############################################################################################
 
 graph_reactive = reactive({
-  
     travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
-    
-    write.csv(travel_edges, "travel_edges_graph_diogenes.csv")
-    write.csv(all_places, "all_places_graph_diogenes.csv")
     
     centralities_data = TRUE
     # First validate if there are at least two nodes
@@ -562,12 +552,8 @@ graph_reactive = reactive({
 })
 # Reactive graph expression for Life of Pythagoras Iamblichus dataset
 graph_reactive_LOPI <- reactive({
-  
   travel_edges <- travel_edges_LOPI_reactive()
   all_places <- all_places_LOPI_reactive()
-    
-  write.csv(travel_edges, "travel_edges_graph_LOPI.csv")
-  write.csv(all_places, "all_places_graph_LOPI.csv")
   
   centralities_data = TRUE
   # First validate if there are at least two nodes
@@ -646,11 +632,15 @@ observe({
     all_places <- all_places_LOPI_reactive()
     graph <- graph_reactive_LOPI()
     values = values_LOPI()
+    write.csv(travel_edges, "travel_edges_graph.csv")
+    write.csv(all_places, "all_places_graph.csv")
   }  else if (input$dataset_selection == 'diogenes') {
     travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
     graph = graph_reactive()
     values = values()
+    write.csv(travel_edges, "travel_edges_graph.csv")
+    write.csv(all_places, "all_places_graph.csv")
   } else if (input$dataset_selection == 'custom') {
     travel_edges = travel_edges_custom_reactive()
     all_places = all_places_custom_reactive()
