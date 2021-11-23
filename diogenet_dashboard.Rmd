@@ -31,6 +31,72 @@ library(highcharter)
 ```{r global, include=FALSE}
 source("source_data.R")
 
+dataTest <- function(input) {
+  dataset <- read.csv('datasetList.csv',
+                  header = TRUE, 
+                  sep=",",
+                  col.names = c("name","path","type"),
+                  encoding = "UTF-8")
+  
+  nodepath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
+  print(nodepath)
+}
+
+sourceData <- function(nodes, edges, selection){
+dataset <- read.csv('datasetList.csv',
+                  header = TRUE, 
+                  sep=",",
+                  col.names = c("name","path","type"),
+                  encoding = "UTF-8")  
+  
+##################### This function with arguments (nodes, edges) #######################
+##################### Verify consistency of nodes - edges ###############################
+  
+# Remove leading and trailing whitespace
+nodes$Name <- stri_trim(nodes$Name)
+nodes$Group <- stri_trim(nodes$Group)
+edges$Source <- stri_trim(edges$Source)
+edges$Target <- stri_trim(edges$Target)
+edges$Relation <- stri_trim(edges$Relation)
+
+# Verifica consistencia vertices - ejes
+edges_ = c(edges$Source,edges$Target)
+length(edges_)
+missing = edges_ %in% nodes$Name
+missing_indx = which(missing == FALSE)
+edges_[missing_indx]
+table(edges_ %in% nodes$Name)
+
+# Discard edges whith unknown nodes 
+if (length(missing_indx) >0) {
+  missing_edges = edges[unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
+  edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
+  message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ") 
+  for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
+  } else message = ""
+
+}
+
+
+
+
+
+```
+
+Graph {data-navmenu="Global Network"}
+===================================== 
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+observe({
+  req(input$dataset_selection)
+  selection <- input$dataset_selection
+  dataTest(selection)
+})
+
 
 # Re-scale sliders
 
@@ -45,15 +111,12 @@ rescaled_value = function(a,b,x) {
 # Function to rescale node degree
 rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 
-```
+# Dataset selection menu
+selectInput(inputId= "dataset_selection", 
+            label = "Select a dataset", 
+            choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
+            selected = "diogenes")
 
-Graph {data-navmenu="Global Network"}
-===================================== 
-
-Inputs {.sidebar}
--------------------------------------
-
-```{r}
 
 br()
 h4("Network Ties")
