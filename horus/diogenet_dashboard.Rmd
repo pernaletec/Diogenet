@@ -32,18 +32,18 @@ library(highcharter)
 source("source_data.R")
 
 dataTest <- function(input) {
-  dataset <- read.csv('datasetList.csv',
-                  header = TRUE, 
+  dataset <- read.csv('./../data/datasetList.csv',
+                  header = TRUE,
                   sep=",",
                   col.names = c("name","path","type"),
                   encoding = "UTF-8")
-  
+
   nodepath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
   print(nodepath)
 }
 
 sourceData <- function(nodes, edges, selection){
-dataset <- read.csv('datasetList.csv',
+dataset <- read.csv('./../data/datasetList.csv',
                   header = TRUE, 
                   sep=",",
                   col.names = c("name","path","type"),

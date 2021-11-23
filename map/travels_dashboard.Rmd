@@ -163,7 +163,7 @@ travelsData <- function(nodes, black_list, all_places_full_data, edges){
   
   ## After getting all the places for which there IS at least one location identified 
   ## there was a "manual" search using the shiny app developed
-  #all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+  #all_places_full_data = read.csv(file = "./../data/locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
   
   # Some Phylosophers are identified with more that one "is from" Relation
   # Keep that in mind!
@@ -265,25 +265,25 @@ CentralizationDataTable <- function (graph) {
 
 
 # Reads the black list for datasets
-black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+black_list = read.csv(file="./../data/travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Reads the locations data for datasets
-all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+all_places_full_data = read.csv(file = "./../data/locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 
 ##################### Here is the call of the edges and nodes of the different datasets #####################################################
 ######################################################################
 ####################  Diogenes Dataset ###############################
 ######################################################################
 # Reads the nodes file
-nodes_diogenes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+nodes_diogenes = read.csv(file="./../data/new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Reads the edges file
-edges_diogenes = read.csv(file="new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+edges_diogenes = read.csv(file="./../data/new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 ######################################################################
 ###############  Life of Pythagoras Iamblichus Dataset ###############
 ######################################################################
 #read nodes file
-nodes_LOPI <- read.csv(file="new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+nodes_LOPI <- read.csv(file="./../data/new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # read edges file
-edges_LOPI <- read.csv("new_Edges_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+edges_LOPI <- read.csv("./../data/new_Edges_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 
 
 ##################### Here is the travels edges of the different datasets #####################################################
@@ -427,7 +427,7 @@ output$download_edges_graph <- renderUI( {
 
 # Add download handling
 datadownlad_reactive <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath = 
-"travel_edges_graph.csv", readFunc = read.csv)
+"./../data/travel_edges_graph.csv", readFunc = read.csv)
 observe({
   datadownlad <- datadownlad_reactive()
   output$downBtnEdgesGraph <- downloadHandler(
@@ -632,15 +632,15 @@ observe({
     all_places <- all_places_LOPI_reactive()
     graph <- graph_reactive_LOPI()
     values = values_LOPI()
-    write.csv(travel_edges, "travel_edges_graph.csv")
-    write.csv(all_places, "all_places_graph.csv")
+    write.csv(travel_edges, "./../data/travel_edges_graph.csv")
+    write.csv(all_places, "./../data/all_places_graph.csv")
   }  else if (input$dataset_selection == 'diogenes') {
     travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
     graph = graph_reactive()
     values = values()
-    write.csv(travel_edges, "travel_edges_graph.csv")
-    write.csv(all_places, "all_places_graph.csv")
+    write.csv(travel_edges, "./../data/travel_edges_graph.csv")
+    write.csv(all_places, "./../data/all_places_graph.csv")
   } else if (input$dataset_selection == 'custom') {
     travel_edges = travel_edges_custom_reactive()
     all_places = all_places_custom_reactive()
