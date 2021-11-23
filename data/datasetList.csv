@@ -1,0 +1,5 @@
+"name","path","type"
+"diogenes","new_Edges.csv","edges"
+"diogenes","new_Nodes.csv","nodes"
+"iamblichus","new_Edges_Life_of_Pythagoras_Iamblichus.csv","edges"
+"iamblichus","new_Nodes_Life_of_Pythagoras_Iamblichus.csv","nodes"
