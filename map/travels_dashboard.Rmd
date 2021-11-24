@@ -163,7 +163,7 @@ travelsData <- function(nodes, black_list, all_places_full_data, edges){
   
   ## After getting all the places for which there IS at least one location identified 
   ## there was a "manual" search using the shiny app developed
-  #all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+  #all_places_full_data = read.csv(file = "./../data/locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
   
   # Some Phylosophers are identified with more that one "is from" Relation
   # Keep that in mind!
@@ -265,32 +265,32 @@ CentralizationDataTable <- function (graph) {
 
 
 # Reads the black list for datasets
-black_list = read.csv(file="travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+black_list = read.csv(file="./../data/travels_blacklist.csv", header = FALSE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Reads the locations data for datasets
-all_places_full_data = read.csv(file = "locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
+all_places_full_data = read.csv(file = "./../data/locations_data.csv", header = TRUE, sep = ",", dec = ".", stringsAsFactors = FALSE)
 
 ##################### Here is the call of the edges and nodes of the different datasets #####################################################
 ######################################################################
 ####################  Diogenes Dataset ###############################
 ######################################################################
 # Reads the nodes file
-nodes_diogenes = read.csv(file="new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+nodes_diogenes = read.csv(file="./../data/new_Nodes.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # Reads the edges file
-edges_diogenes = read.csv(file="new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+edges_diogenes = read.csv(file="./../data/new_Edges.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 ######################################################################
-###############  Life of Pythagoras Lamblichus Dataset ###############
+###############  Life of Pythagoras Iamblichus Dataset ###############
 ######################################################################
 #read nodes file
-nodes_LOPL <- read.csv(file="new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+nodes_LOPI <- read.csv(file="./../data/new_Nodes_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 # read edges file
-edges_LOPL <- read.csv("new_Edges_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
+edges_LOPI <- read.csv("./../data/new_Edges_Life_of_Pythagoras_Iamblichus.csv", header = TRUE, sep = ",", encoding = "UTF-8", stringsAsFactors = FALSE)
 
 
 ##################### Here is the travels edges of the different datasets #####################################################
 # Travel edges for Diogenes dataset
 travel_edges <- travelsData(nodes_diogenes, black_list, all_places_full_data, edges_diogenes)
-# Travel edges for Life Of Pythagoras Lamblichus (LOPL) dataset
-travel_edges_LOPL <- travelsData(nodes_LOPL, black_list, all_places_full_data, edges_LOPL)
+# Travel edges for Life Of Pythagoras Iamblichus (LOPI) dataset
+travel_edges_LOPI <- travelsData(nodes_LOPI, black_list, all_places_full_data, edges_LOPI)
 
 ```
 Travels
@@ -317,7 +317,7 @@ rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 # Dataset selection menu
 selectInput(inputId= "dataset_selection", 
             label = "Select a dataset", 
-            choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL"),
+            choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "LOPI"),
             selected = "diogenes")
 
 # Reactive menu "Select a Traveler" is shown based on the selected dataset
@@ -335,14 +335,17 @@ h4("Appearance")
 sliderInput(inputId = "label_size_map", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_map", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 
-h5("Custom Travel Edges Dataset")
+# h5("Custom Travel Edges Dataset")
+# 
+# # file Input button for custom dataset
+# fileInput(inputId = "custom_dataset", 
+#               label = "Upload a custom dataset", 
+#               multiple = FALSE, 
+#               accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
 
-# file Input button for custom dataset
-fileInput(inputId = "custom_dataset", 
-              label = "Upload a custom dataset", 
-              multiple = FALSE, 
-              accept = c("text/csv", "text/comma-separated-values,text/plain",".csv"))
-
+br()
+h5("Download travel edges graph data")
+uiOutput("download_edges_graph")
 
 #div(message, style = "color:red")
 ```
@@ -385,7 +388,7 @@ travel_edges_custom <- reactive({
     if (!is.null(x)){
       updateSelectInput(session, "dataset_selection",
       label = "select a dataset",
-      choices = c("Diogenes Laertius" = "diogenes", "Lamblichus" = "LOPL", "Custom" = "custom"),
+      choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "LOPI", "Custom" = "custom"),
       selected = "diogenes"
       )
     }
@@ -400,10 +403,10 @@ output$travelerInput <- renderUI({
                 label = "Select a Traveler", 
                 choices = c("All", sort(travel_edges$name, decreasing = FALSE)), 
                 selected = "All")
-  } else if (input$dataset_selection == 'LOPL') {
-    selectInput(inputId = "philosopher_LOPL", 
+  } else if (input$dataset_selection == 'LOPI') {
+    selectInput(inputId = "philosopher_LOPI", 
                 label = "Select a Traveler", 
-                choices = c("All", sort(travel_edges_LOPL$name, decreasing = FALSE)), 
+                choices = c("All", sort(travel_edges_LOPI$name, decreasing = FALSE)), 
                 selected = "All")
   }  else if (input$dataset_selection == 'custom') {
     travel_edges_custom <- travel_edges_custom()
@@ -416,6 +419,23 @@ output$travelerInput <- renderUI({
     return(NULL)
   }
 })
+
+# Create the actual downloadButton for travel edges graph data
+output$download_edges_graph <- renderUI( {
+  downloadButton("downBtnEdgesGraph", "Download .csv", style = "width:100%;")
+})
+
+# Add download handling
+datadownlad_reactive <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath = 
+"./../data/travel_edges_graph.csv", readFunc = read.csv)
+observe({
+  datadownlad <- datadownlad_reactive()
+  output$downBtnEdgesGraph <- downloadHandler(
+    filename = function() {"Travel Edges Graph.csv"},
+    content = function(file) {write.csv(datadownlad, file, row.names = TRUE)}
+  )
+})
+
 
 # Reactive travel edges expression for Diogenes dataset
 # =======
@@ -430,13 +450,13 @@ travel_edges_reactive = reactive({
     return(travel_edges[travel_edges_selected,])
   } else  return(travel_edges)
 })
-# Reactive travel edges expression for  Life of pythagroas Lamblichus dataset
-travel_edges_LOPL_reactive <- reactive({
+# Reactive travel edges expression for  Life of pythagroas Iamblichus dataset
+travel_edges_LOPI_reactive <- reactive({
     # Filter by Phylosopher selected...if any
-    if ((input$philosopher_LOPL != "All") && !is.null(input$philosopher_LOPL)) {
-      travel_edges_selected <- travel_edges_LOPL$name %in% input$philosopher_LOPL
-      return(travel_edges_LOPL[travel_edges_selected,])
-    } else return(travel_edges_LOPL)
+    if ((input$philosopher_LOPI != "All") && !is.null(input$philosopher_LOPI)) {
+      travel_edges_selected <- travel_edges_LOPI$name %in% input$philosopher_LOPI
+      return(travel_edges_LOPI[travel_edges_selected,])
+    } else return(travel_edges_LOPI)
 })
 # Reactive travel edges expression for  Custom dataset
 travel_edges_custom_reactive <- reactive({
@@ -460,13 +480,13 @@ all_places_reactive = reactive({
   # These are the nodes in the graph
   return(data.frame(places = all_places))
 })
-# Reactive places expression for Life of pythagroas Lamblichus dataset
-all_places_LOPL_reactive <- reactive({
-  travel_edges_LOPL <- travel_edges_LOPL_reactive()
-  all_places_LOPL <- sort(unique(c(travel_edges_LOPL$source,
-                                   travel_edges_LOPL$target)),
+# Reactive places expression for Life of pythagroas Iamblichus dataset
+all_places_LOPI_reactive <- reactive({
+  travel_edges_LOPI <- travel_edges_LOPI_reactive()
+  all_places_LOPI <- sort(unique(c(travel_edges_LOPI$source,
+                                   travel_edges_LOPI$target)),
                           decreasing = FALSE)
-  return(data.frame(places_LOPL = all_places_LOPL))
+  return(data.frame(places_LOPI = all_places_LOPI))
 })
 # Reactive places expression for Custom dataset
 all_places_custom_reactive <- reactive({
@@ -489,11 +509,11 @@ all_places_full_data_reactive = reactive({
   return(all_places_full_data[drawn_places,])
 
 })
-# Reactive all places full data expression for Life of Pythagoras Lamblichus dataset
-all_places_full_data__LOPL_reactive <- reactive({
-  all_places_LOPL <- all_places_LOPL_reactive()
-  drawn_places_LOPL <- all_places_full_data$name %in% all_places_LOPL
-  return(all_places_full_data[drawn_places_LOPL,])
+# Reactive all places full data expression for Life of Pythagoras Iamblichus dataset
+all_places_full_data__LOPI_reactive <- reactive({
+  all_places_LOPI <- all_places_LOPI_reactive()
+  drawn_places_LOPI <- all_places_full_data$name %in% all_places_LOPI
+  return(all_places_full_data[drawn_places_LOPI,])
 })
 # Reactive all places full data expression for Custom dataset
 all_places_full_data_custom_reactive <- reactive({
@@ -512,8 +532,7 @@ all_places_full_data_custom_reactive <- reactive({
 ###############################################################################################
 
 graph_reactive = reactive({
-  
-  travel_edges = travel_edges_reactive()
+    travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
     
     centralities_data = TRUE
@@ -531,14 +550,10 @@ graph_reactive = reactive({
     else return("Too few (<2) nodes to calculate centralities")
   
 })
-# Reactive graph expression for Life of Pythagoras Lamblichus dataset
-graph_reactive_LOPL <- reactive({
-  
-  travel_edges <- travel_edges_LOPL_reactive()
-  all_places <- all_places_LOPL_reactive()
-    
-  write.csv(travel_edges, "travel_edges_graph.csv")
-  write.csv(all_places, "all_places_graph.csv")
+# Reactive graph expression for Life of Pythagoras Iamblichus dataset
+graph_reactive_LOPI <- reactive({
+  travel_edges <- travel_edges_LOPI_reactive()
+  all_places <- all_places_LOPI_reactive()
   
   centralities_data = TRUE
   # First validate if there are at least two nodes
@@ -612,16 +627,20 @@ returnColor = function(char_col) {substr(char_col,1,nchar(char_col)-2)}
 observe({
   
   req(input$dataset_selection)
-  if (input$dataset_selection == 'LOPL') {
-    travel_edges <- travel_edges_LOPL_reactive()
-    all_places <- all_places_LOPL_reactive()
-    graph <- graph_reactive_LOPL()
-    values = values_LOPL()
+  if (input$dataset_selection == 'LOPI') {
+    travel_edges <- travel_edges_LOPI_reactive()
+    all_places <- all_places_LOPI_reactive()
+    graph <- graph_reactive_LOPI()
+    values = values_LOPI()
+    write.csv(travel_edges, "./../data/travel_edges_graph.csv")
+    write.csv(all_places, "./../data/all_places_graph.csv")
   }  else if (input$dataset_selection == 'diogenes') {
     travel_edges = travel_edges_reactive()
     all_places = all_places_reactive()
     graph = graph_reactive()
     values = values()
+    write.csv(travel_edges, "./../data/travel_edges_graph.csv")
+    write.csv(all_places, "./../data/all_places_graph.csv")
   } else if (input$dataset_selection == 'custom') {
     travel_edges = travel_edges_custom_reactive()
     all_places = all_places_custom_reactive()
@@ -776,7 +795,7 @@ leafletOutput(outputId="travels_network")
 # Reactive centrality values expression for Diogenes dataset
 values <- reactive({ CentralityValues(graph_reactive()) })
 # Reactive centrality values expression for Life of phytagoras dataset 
-values_LOPL <- reactive({ CentralityValues(graph_reactive_LOPL()) })
+values_LOPI <- reactive({ CentralityValues(graph_reactive_LOPI()) })
 # Reactive centrality values expression for custom dataset
 values_custom <- reactive({ CentralityValues(graph_reactive_custom()) })
 
@@ -784,15 +803,15 @@ values_custom <- reactive({ CentralityValues(graph_reactive_custom()) })
 # Reactive centralization values expression for Diogenes dataset
 centr <- reactive({ CentralizationValues(graph_reactive()) })
 # Reactive centralization values expression for Life of phytagoras dataset 
-centr_LOPL <- reactive({ CentralizationValues(graph_reactive_LOPL()) })
+centr_LOPI <- reactive({ CentralizationValues(graph_reactive_LOPI()) })
 # Reactive centralization values expression for Custom dataset 
 centr_custom <- reactive({ CentralizationValues(graph_reactive_custom()) })
 
 ############### centrality Data Table ########################
 # Diogenes dataset
 output$table_values <- CentralityDataTable(values())
-# Life of phytagoras Lamblichus Dataset
-output$table_values_LOPL <- CentralityDataTable(values_LOPL())
+# Life of phytagoras Iamblichus Dataset
+output$table_values_LOPI <- CentralityDataTable(values_LOPI())
 # Custom Dataset
 output$table_values_custom <- DT::renderDataTable({datatable(values_custom()[order(values_custom()$degree, decreasing = TRUE),], 
                                    selection = 'none', caption = 'Centrality scores', 
@@ -819,7 +838,7 @@ output$table_values_custom <- DT::renderDataTable({datatable(values_custom()[ord
 # Diogenes dataset
 output$table_centr <- CentralizationDataTable(centr())
 # Life of phytagoras dataset
-output$table_centr_LOPL <- CentralizationDataTable(centr_LOPL())
+output$table_centr_LOPI <- CentralizationDataTable(centr_LOPI())
 # Custom dataset
 output$table_centr_custom <- DT::renderDataTable({datatable(centr_custom(), selection = 'none', caption = 'Centralization scores',
                                   options = list(lengthChange = FALSE,
@@ -845,10 +864,10 @@ output$table_centr_custom <- DT::renderDataTable({datatable(centr_custom(), sele
 uiOutput("dynamic_table")
 
 output$dynamic_table <- renderUI({ 
-  if (input$dataset_selection == 'LOPL') {
-      fillCol(DT::DTOutput(outputId = 'table_centr_LOPL'),
+  if (input$dataset_selection == 'LOPI') {
+      fillCol(DT::DTOutput(outputId = 'table_centr_LOPI'),
         br(),
-        DT::DTOutput(outputId = 'table_values_LOPL'), flex = c(NA,NA,NA))
+        DT::DTOutput(outputId = 'table_values_LOPI'), flex = c(NA,NA,NA))
   }  else if (input$dataset_selection == 'diogenes') {
       fillCol(DT::DTOutput(outputId = 'table_centr'),
             br(),
@@ -1492,10 +1511,10 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
   return(ntw)
     
   })
-# Life of phytagoras Lamblichus Dataset
-output$graph_map_LOPL <- visNetwork::renderVisNetwork({
+# Life of phytagoras Iamblichus Dataset
+output$graph_map_LOPI <- visNetwork::renderVisNetwork({
   
-  d = graph_reactive_LOPL()
+  d = graph_reactive_LOPI()
   
   directed = TRUE
   
@@ -2711,8 +2730,8 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
 uiOutput("dynamic_graph")
 
 output$dynamic_graph <- renderUI({ 
-  if (input$dataset_selection == 'LOPL') {
-   visNetworkOutput(outputId="graph_map_LOPL")
+  if (input$dataset_selection == 'LOPI') {
+   visNetworkOutput(outputId="graph_map_LOPI")
   }  else if (input$dataset_selection == 'diogenes') {
     visNetworkOutput(outputId="graph_map")
   } else if (input$dataset_selection == 'custom') {

@@ -2,14 +2,14 @@
 
 library(stringi)
 # Import node list: contains nodes$Name, nodes$Group
-nodes <- read.csv('new_Nodes.csv', 
+nodes <- read.csv('./../data/new_Nodes.csv', 
                   sep=",", 
                   header = TRUE, 
                   col.names = c("Name","Group"),
                   encoding = "UTF-8")
 
 # Import edge list: contains edges$Source, edges$Target, edges$Weight, edges$Relation
-edges <- read.csv('new_Edges.csv',
+edges <- read.csv('./../data/new_Edges.csv',
                   header = TRUE, 
                   sep=",",
                   col.names = c("Source","Target","Relation"),
