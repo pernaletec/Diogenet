@@ -31,55 +31,56 @@ library(highcharter)
 ```{r global, include=FALSE}
 source("source_data.R")
 
-dataTest <- function(input) {
+sourceData <- function(input){
   dataset <- read.csv('./../data/datasetList.csv',
                   header = TRUE,
                   sep=",",
                   col.names = c("name","path","type"),
                   encoding = "UTF-8")
 
-  nodepath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
-  print(nodepath)
-}
-
-sourceData <- function(nodes, edges, selection){
-dataset <- read.csv('./../data/datasetList.csv',
+  nodePath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
+  nodes <- read.csv(paste0("./../data/", nodePath), 
+                  sep=",", 
+                  header = TRUE, 
+                  col.names = c("Name","Group"),
+                  encoding = "UTF-8")
+  
+  edgesPath <- dataset$path[input == dataset$name & dataset$type == "edges"]
+  edges <- read.csv(paste0("./../data/", edgesPath),
                   header = TRUE, 
                   sep=",",
-                  col.names = c("name","path","type"),
-                  encoding = "UTF-8")  
+                  col.names = c("Source","Target","Relation"),
+                  encoding = "UTF-8") 
   
-##################### This function with arguments (nodes, edges) #######################
-##################### Verify consistency of nodes - edges ###############################
+  ##################### This function with arguments (nodes, edges) #######################
+  ##################### Verify consistency of nodes - edges ###############################
+    
+  # Remove leading and trailing whitespace
+  nodes$Name <- stri_trim(nodes$Name)
+  nodes$Group <- stri_trim(nodes$Group)
+  edges$Source <- stri_trim(edges$Source)
+  edges$Target <- stri_trim(edges$Target)
+  edges$Relation <- stri_trim(edges$Relation)
   
-# Remove leading and trailing whitespace
-nodes$Name <- stri_trim(nodes$Name)
-nodes$Group <- stri_trim(nodes$Group)
-edges$Source <- stri_trim(edges$Source)
-edges$Target <- stri_trim(edges$Target)
-edges$Relation <- stri_trim(edges$Relation)
-
-# Verifica consistencia vertices - ejes
-edges_ = c(edges$Source,edges$Target)
-length(edges_)
-missing = edges_ %in% nodes$Name
-missing_indx = which(missing == FALSE)
-edges_[missing_indx]
-table(edges_ %in% nodes$Name)
-
-# Discard edges whith unknown nodes 
-if (length(missing_indx) >0) {
-  missing_edges = edges[unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
-  edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
-  message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ") 
-  for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
-  } else message = ""
-
+  # Verifica consistencia vertices - ejes
+  edges_ = c(edges$Source,edges$Target)
+  length(edges_)
+  missing = edges_ %in% nodes$Name
+  missing_indx = which(missing == FALSE)
+  edges_[missing_indx]
+  table(edges_ %in% nodes$Name)
+  
+  # Discard edges whith unknown nodes 
+  if (length(missing_indx) >0) {
+    missing_edges = edges[unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
+    edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
+    message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ") 
+    for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
+    } else message = ""
+  
+  horus_data <- list("nodes" = nodes, "edges" = edges)
+  return(horus_data)
 }
-
-
-
-
 
 ```
 
@@ -94,9 +95,8 @@ Inputs {.sidebar}
 observe({
   req(input$dataset_selection)
   selection <- input$dataset_selection
-  dataTest(selection)
+  data <- sourceData(selection)
 })
-
 
 # Re-scale sliders
 
