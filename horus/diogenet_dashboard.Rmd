@@ -29,108 +29,7 @@ library(highcharter)
 ```
 
 ```{r global, include=FALSE}
-#source("source_data.R")
-
-# sourceDataNodes <- function(input){
-#   dataset <- read.csv('./../data/datasetList.csv',
-#                   header = TRUE,
-#                   sep=",",
-#                   col.names = c("name","path","type"),
-#                   encoding = "UTF-8")
-# 
-#   nodePath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
-#   nodesData <- read.csv(paste0("./../data/", nodePath), 
-#                   sep=",", 
-#                   header = TRUE, 
-#                   col.names = c("Name","Groups"),
-#                   encoding = "UTF-8")
-#   
-#   edgesPath <- dataset$path[input == dataset$name & dataset$type == "edges"]
-#   edgesData <- read.csv(paste0("./../data/", edgesPath),
-#                   header = TRUE, 
-#                   sep=",",
-#                   col.names = c("Source","Target","Relation"),
-#                   encoding = "UTF-8") 
-#   
-#   ##################### This function with arguments (nodes, edges) #######################
-#   ##################### Verify consistency of nodes - edges ###############################
-#     
-#   # Remove leading and trailing whitespace
-#   nodes$Name <- stri_trim(nodes$Name)
-#   nodes$Group <- stri_trim(nodes$Group)
-#   edges$Source <- stri_trim(edges$Source)
-#   edges$Target <- stri_trim(edges$Target)
-#   edges$Relation <- stri_trim(edges$Relation)
-#   
-#   # Verifica consistencia vertices - ejes
-#   edges_ = c(edges$Source,edges$Target)
-#   length(edges_)
-#   missing = edges_ %in% nodes$Name
-#   missing_indx = which(missing == FALSE)
-#   edges_[missing_indx]
-#   table(edges_ %in% nodes$Name)
-#   
-#   # Discard edges whith unknown nodes 
-#   if (length(missing_indx) >0) {
-#     missing_edges = edges[unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
-#     edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
-#     message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ") 
-#     for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
-#     } else message = ""
-#   
-#   #horus_data <- list("nodes" = nodesData, "edges" = edgesData)
-#   return(nodesData)
-# }
-# 
-# sourceDataEdges <- function(input){
-#   dataset <- read.csv('./../data/datasetList.csv',
-#                   header = TRUE,
-#                   sep=",",
-#                   col.names = c("name","path","type"),
-#                   encoding = "UTF-8")
-# 
-#   nodePath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
-#   nodesData <- read.csv(paste0("./../data/", nodePath), 
-#                   sep=",", 
-#                   header = TRUE, 
-#                   col.names = c("Name","Groups"),
-#                   encoding = "UTF-8")
-#   
-#   edgesPath <- dataset$path[input == dataset$name & dataset$type == "edges"]
-#   edgesData <- read.csv(paste0("./../data/", edgesPath),
-#                   header = TRUE, 
-#                   sep=",",
-#                   col.names = c("Source","Target","Relation"),
-#                   encoding = "UTF-8") 
-#   
-#   ##################### This function with arguments (nodes, edges) #######################
-#   ##################### Verify consistency of nodes - edges ###############################
-#     
-#   # Remove leading and trailing whitespace
-#   nodes$Name <- stri_trim(nodes$Name)
-#   nodes$Group <- stri_trim(nodes$Group)
-#   edges$Source <- stri_trim(edges$Source)
-#   edges$Target <- stri_trim(edges$Target)
-#   edges$Relation <- stri_trim(edges$Relation)
-#   
-#   # Verifica consistencia vertices - ejes
-#   edges_ = c(edges$Source,edges$Target)
-#   length(edges_)
-#   missing = edges_ %in% nodes$Name
-#   missing_indx = which(missing == FALSE)
-#   edges_[missing_indx]
-#   table(edges_ %in% nodes$Name)
-#   
-#   # Discard edges whith unknown nodes 
-#   if (length(missing_indx) >0) {
-#     missing_edges = edges[unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
-#     edges = edges[-unique(c(which(edges$Source %in% edges_[missing_indx]), which(edges$Target %in% edges_[missing_indx]))),]
-#     message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ") 
-#     for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
-#     } else message = ""
-#   
-#   return(edgesData)
-# }
+source("source_data.R")
 
 ```
 
@@ -142,23 +41,16 @@ Inputs {.sidebar}
 
 ```{r}
 
-nodes <- reactive({
+nodes_reactive <- reactive({
   req(input$dataset_selection)
-  dataset <- read.csv('./../data/datasetList.csv',
-                  header = TRUE,
-                  sep=",",
-                  col.names = c("name","path","type"),
-                  encoding = "UTF-8")
-
-  nodePath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
-  nodesData <- read.csv(paste0("./../data/", nodePath), 
+  
+  nodesData <- read.csv(paste0("./../data/new_Nodes_", input$dataset_selection, ".csv"), 
                   sep=",", 
                   header = TRUE, 
                   col.names = c("Name","Groups"),
                   encoding = "UTF-8")
   
-  edgesPath <- dataset$path[input == dataset$name & dataset$type == "edges"]
-  edgesData <- read.csv(paste0("./../data/", edgesPath),
+  edgesData <- read.csv(paste0("./../data/new_Edges_", input$dataset_selection, ".csv"),
                   header = TRUE, 
                   sep=",",
                   col.names = c("Source","Target","Relation"),
@@ -190,27 +82,19 @@ nodes <- reactive({
     for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
     } else message = ""
   
-  #horus_data <- list("nodes" = nodesData, "edges" = edgesData)
-  return(nodesData)
+  return(nodes)
 })
 
-edges <- reactive({
+edges_reactive <- reactive({
   req(input$dataset_selection)
-  dataset <- read.csv('./../data/datasetList.csv',
-                  header = TRUE,
-                  sep=",",
-                  col.names = c("name","path","type"),
-                  encoding = "UTF-8")
-
-  nodePath <- dataset$path[input == dataset$name & dataset$type == "nodes"]
-  nodesData <- read.csv(paste0("./../data/", nodePath), 
+  
+  nodesData <- read.csv(paste0("./../data/new_Nodes_", input$dataset_selection, ".csv"), 
                   sep=",", 
                   header = TRUE, 
                   col.names = c("Name","Groups"),
                   encoding = "UTF-8")
   
-  edgesPath <- dataset$path[input == dataset$name & dataset$type == "edges"]
-  edgesData <- read.csv(paste0("./../data/", edgesPath),
+  edgesData <- read.csv(paste0("./../data/new_Edges_", input$dataset_selection, ".csv"),
                   header = TRUE, 
                   sep=",",
                   col.names = c("Source","Target","Relation"),
@@ -242,19 +126,13 @@ edges <- reactive({
     for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
     } else message = ""
   
-  #horus_data <- list("nodes" = nodesData, "edges" = edgesData)
-  return(edgesData)
+  return(edges)
 })
 
-# observe({
-#   req(input$dataset_selection)
-#   selection <- input$dataset_selection
-#   data <- sourceData(selection)
-#   # print(head(data$nodes))
-#   # print(class(data$nodes))
-#   nodes <- data$nodes()
-#   edges <- data$edges()
-# })
+observe({
+  print(head(nodes_reactive()))
+  print(head(edges_reactive()))
+})
 
 # Re-scale sliders
 
@@ -341,16 +219,6 @@ Row
 ### Global Network
 
 ```{r, echo=FALSE}
-
-# observe({
-#   req(input$dataset_selection)
-#   selection <- input$dataset_selection
-#   data <- sourceData(selection)
-#   print(nodes)
-#   nodes <- data$nodes
-#   print(class(data$nodes))
-#   edges <- data$edges
-# })
 
 subset_graph  = function(edges_selected, g){
   
