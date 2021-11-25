@@ -77,7 +77,7 @@ sourceData <- function(input){
      message = paste("WARNING: Check data. ", length(missing_indx)," edges removed", ": ")
      for (k in 1:length(missing_edges$Source)) message = paste(message,",", missing_edges[k,1],"-",missing_edges[k,3],"-", missing_edges[k,2])
      } else message = ""
-   
+
    horus_data <- list("nodes" = nodes, "edges" = edges)
    return(horus_data)
 }
@@ -91,25 +91,6 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
-nodes_reactive <- reactive ({
-  req(input$dataset_selection)
-  entrada <- input$dataset_selection
-  data <- sourceData(entrada)
-  return (data$nodes)
-})
-
-edges_reactive <- reactive({
-  req(input$dataset_selection)
-  entrada <- input$dataset_selection
-  data <- sourceData(entrada)
-  return (data$edges)
-})
-
-observe({
-  print(head(nodes_reactive()))
-  print(head(edges_reactive()))
-})
 
 # Re-scale sliders
 
@@ -129,7 +110,6 @@ selectInput(inputId= "dataset_selection",
             label = "Select a dataset", 
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
             selected = "diogenes")
-
 
 br()
 h4("Network Ties")
@@ -197,6 +177,34 @@ Row
 
 ```{r, echo=FALSE}
 
+nodes_reactive <- reactive ({
+  req(input$dataset_selection)
+  #print(input$dataset_selection)
+  entrada <- input$dataset_selection
+  print('entrada')
+  print(entrada)
+  data <- sourceData(entrada)
+
+  #print(class(data$nodes))
+
+  return (data$nodes)
+})
+
+edges_reactive <- reactive({
+  req(input$dataset_selection)
+  entrada <- input$dataset_selection
+  data <- sourceData(entrada)
+  return (data$edges)
+})
+
+observe({
+  print(head(nodes_reactive()))
+  print(head(edges_reactive()))
+})
+
+
+
+
 subset_graph  = function(edges_selected, g){
   
   # Who is the subset g_ ?
@@ -250,6 +258,13 @@ output$global_network = renderVisNetwork({
   
   # Use function is_directed
   directed = is_directed(input$edges_select_global)
+  
+  nodes = nodes_reactive()
+  edges = edges_reactive()
+  
+  print("en global")
+  print(head(nodes))
+  print(head(edges))
   
   try(g <- igraph::graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 	
