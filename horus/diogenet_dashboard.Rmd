@@ -2603,430 +2603,430 @@ fillCol(DT::DTOutput(outputId = 'table_centr'),
 
 ```
 
-<!-- Graph {data-navmenu="Communities"} -->
-<!-- ===================================== -->
-
-<!-- Inputs {.sidebar} -->
-<!-- ------------------------------------- -->
-
-<!-- ```{r} -->
-
-<!-- selectInput(inputId= "dataset_selection_cm", -->
-<!--             label = "Select a dataset", -->
-<!--             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"), -->
-<!--             selected = "diogenes") -->
-
-
-<!-- br() -->
-<!-- h4("Network Ties") -->
-<!-- # Selection of the edges that will appear in the relation network -->
-<!-- checkboxGroupInput("edges_select_comm", -->
-<!--                    label = NULL, -->
-<!--                    choices = list("Is teacher of" = 1, -->
-<!--                                   "Is friend of" = 2, -->
-<!--                                   "Is family of" = 3, -->
-<!--                                   "Studied the work of" = 4, -->
-<!--                                   "Sent letters to" = 5, -->
-<!--                                   #"Is associated with" = 6, -->
-<!--                                   "Is benefactor of" = 7), -->
-<!--                    selected = 1, -->
-<!--                    inline = FALSE) -->
-<!-- br() -->
-<!-- # Plot Height -->
-<!-- h4("Community Detection") -->
-<!-- # Algorithm for community detection -->
-<!-- selectInput("cmnt_dtc_alg", "Algorithm", choices=c( -->
-<!--                                                     "Cluster Edge Betweenness", -->
-<!--                                                     "Cluster Fast Greedy", -->
-<!--                                                     "Cluster Infomap", -->
-<!--                                                     "Cluster Label Prop", -->
-<!--                                                     "Cluster Leading Eigen", -->
-<!--                                                     "Cluster Louvain", -->
-<!--                                                     #"Cluster Optimal", # Crashes the system! # -->
-<!--                                                     #"Cluster Spinglass", -->
-<!--                                                     "Cluster Walktrap")) -->
-
-<!-- br() -->
-<!-- h4("Visualization") -->
-<!-- # Library for community visualization -->
-<!-- selectInput("cmnt_vsl_pck", "Library", choices=c("visNetwork", "igraph")) -->
-<!-- #br() -->
-<!-- checkboxInput("edges_format", label = "Show Crossing Ties", value = FALSE) -->
-<!-- #radioButtons("edges_format", label = h4("Ties format"), -->
-<!-- #    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2), -->
-<!-- #    selected = 2) -->
-<!-- br() -->
-<!-- # Plot Height -->
-<!-- h4("Appearance") -->
-<!-- # Nodes/Label sizes -->
-<!-- uiOutput(outputId="labelUI_vnw") -->
-<!-- uiOutput(outputId="labelUI_igp") -->
-<!-- uiOutput(outputId="nodeUI_vnw") -->
-<!-- uiOutput(outputId="nodeUI_igp") -->
-<!-- #hr() -->
-<!-- #helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees") -->
-
-<!-- #div(message, style = "color:red") -->
-<!-- ``` -->
-
-<!-- Row -->
-<!-- ------------------------------------- -->
-
-<!-- ### Graph -->
-
-<!-- ```{r} -->
-<!-- nodes_reactive <- reactive ({ -->
-<!--   req(input$dataset_selection_cm) -->
-<!--   entrada <- input$dataset_selection_cm -->
-<!--   data <- sourceData(entrada) -->
-<!--   return (data$nodes) -->
-<!-- }) -->
-
-<!-- edges_reactive <- reactive({ -->
-<!--   req(input$dataset_selection_cm) -->
-<!--   entrada <- input$dataset_selection_cm -->
-<!--   data <- sourceData(entrada) -->
-<!--   return (data$edges) -->
-<!-- }) -->
-
-
-<!-- # Community detection -->
-
-<!-- clustering = function(alg, graph){ -->
-<!--   if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph, bridges = TRUE) -->
-<!--   if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph) -->
-<!--   if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph) -->
-<!--   if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph) -->
-<!--   if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph) -->
-<!--   if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph) -->
-<!--   #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system # -->
-<!--   #if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph) -->
-<!--   if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph) -->
-<!--   return(cluster) -->
-<!-- } -->
+Graph {data-navmenu="Communities"}
+=====================================
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+selectInput(inputId= "dataset_selection_cm",
+            label = "Select a dataset",
+            choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
+            selected = "diogenes")
+
+
+br()
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network
+checkboxGroupInput("edges_select_comm",
+                   label = NULL,
+                   choices = list("Is teacher of" = 1,
+                                  "Is friend of" = 2,
+                                  "Is family of" = 3,
+                                  "Studied the work of" = 4,
+                                  "Sent letters to" = 5,
+                                  #"Is associated with" = 6,
+                                  "Is benefactor of" = 7),
+                   selected = 1,
+                   inline = FALSE)
+br()
+# Plot Height
+h4("Community Detection")
+# Algorithm for community detection
+selectInput("cmnt_dtc_alg", "Algorithm", choices=c(
+                                                    "Cluster Edge Betweenness",
+                                                    "Cluster Fast Greedy",
+                                                    "Cluster Infomap",
+                                                    "Cluster Label Prop",
+                                                    "Cluster Leading Eigen",
+                                                    "Cluster Louvain",
+                                                    #"Cluster Optimal", # Crashes the system! #
+                                                    #"Cluster Spinglass",
+                                                    "Cluster Walktrap"))
+
+br()
+h4("Visualization")
+# Library for community visualization
+selectInput("cmnt_vsl_pck", "Library", choices=c("visNetwork", "igraph"))
+#br()
+checkboxInput("edges_format", label = "Show Crossing Ties", value = FALSE)
+#radioButtons("edges_format", label = h4("Ties format"),
+#    choices = list("Communities links highlight" = 1, "Colour by tie type" = 2),
+#    selected = 2)
+br()
+# Plot Height
+h4("Appearance")
+# Nodes/Label sizes
+uiOutput(outputId="labelUI_vnw")
+uiOutput(outputId="labelUI_igp")
+uiOutput(outputId="nodeUI_vnw")
+uiOutput(outputId="nodeUI_igp")
+#hr()
+#helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees")
+
+# div(message, style = "color:red")
+```
+
+Row
+-------------------------------------
+
+### Graph
+
+```{r}
+nodes_reactive_cm <- reactive ({
+  req(input$dataset_selection_cm)
+  entrada <- input$dataset_selection_cm
+  data <- sourceData(entrada)
+  return (data$nodes)
+})
+
+edges_reactive_cm <- reactive({
+  req(input$dataset_selection_cm)
+  entrada <- input$dataset_selection_cm
+  data <- sourceData(entrada)
+  return (data$edges)
+})
+
+
+# Community detection
+
+clustering = function(alg, graph){
+  if (alg == "Cluster Edge Betweenness") cluster <- cluster_edge_betweenness(graph, bridges = TRUE)
+  if (alg == "Cluster Fast Greedy") cluster <- cluster_fast_greedy(graph)
+  if (alg == "Cluster Infomap") cluster <- cluster_infomap(graph)
+  if (alg == "Cluster Label Prop") cluster <- cluster_label_prop(graph)
+  if (alg == "Cluster Leading Eigen") cluster <- cluster_leading_eigen(graph)
+  if (alg == "Cluster Louvain") cluster <- cluster_louvain(graph)
+  #if (alg == "Cluster Optimal") cluster <- cluster_optimal(graph) # Crashes the system #
+  #if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph)
+  if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph)
+  return(cluster)
+}
 
-<!-- handledClustering = function(alg, graph){ -->
-<!--   tryCatch(clustering(alg,graph), -->
-<!--            #warning = function(w){;}, -->
-<!--            error = function(e){message = e;NULL}) -->
-<!-- } -->
+handledClustering = function(alg, graph){
+  tryCatch(clustering(alg,graph),
+           #warning = function(w){;},
+           error = function(e){message = e;NULL})
+}
 
-<!-- network_cmnt =  reactive({ -->
+network_cmnt =  reactive({
 
-<!--   nodes = nodes_reactive() -->
-<!--   edges = edges_reactive() -->
+  nodes = nodes_reactive_cm()
+  edges = edges_reactive_cm()
 
-<!--   # First validate if there are edges (Ties) selected -->
-<!--   validate( -->
-<!--     need(try(!is.null(input$edges_select_comm)), "Please select at least one tie") -->
-<!--   ) -->
+  # First validate if there are edges (Ties) selected
+  validate(
+    need(try(!is.null(input$edges_select_comm)), "Please select at least one tie")
+  )
 
-<!--   # Use function is_directed -->
-<!--   #directed = is_directed(input$edges_select_comm) -->
-<!--   directed = FALSE -->
-
-<!--   try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE) -->
+  # Use function is_directed
+  #directed = is_directed(input$edges_select_comm)
+  directed = FALSE
+
+  try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
-<!--   # ids in nodes are es required to export to Pajek format. Just in case! -->
-<!--   V(g)$id = V(g)$name -->
-
-<!--   # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges -->
-<!--   E(g)$id = seq(1:length(E(g))) -->
-
-<!--   # Subsetting according to edges selected -->
-<!--   g_ = subset_graph(input$edges_select_comm, g) -->
-
-<!--   cluster = handledClustering(input$cmnt_dtc_alg, g_) -->
-
-<!--   # Controling the colours of each group -->
-<!--   node_colours = viridis(summary(cluster$membership)[6]) -->
-<!--   setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)} -->
-
-<!--   validate( -->
-<!--     need(try(!is.null(cluster)), -->
-<!--          paste("The algorithm ", -->
-<!--                input$cmnt_dtc_alg, -->
-<!--                " could not identify communities given the current Phylosophers and Relations"," . ",  message) -->
-<!--          ) -->
-<!--   ) -->
-
-<!--   # This code is on hold until the requirement for bridges detection is -->
-<!--   # addressed -->
-<!--   #if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") { -->
-<!--     #Print in console the id's of the edges identified as bridges -->
-<!--     #print(cluster$bridges) -->
-<!--     #e = length(E(g_)$id) -->
-<!--     #e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1 -->
-<!--     #print(e_bool) -->
-<!--     #bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool] -->
-<!--   #} else -->
-
-<!--   # In the meanwhile overwriting the default behaviour -->
-<!--   bridges_edge_col  = c("#030000","#ff0400")[igraph::crossing(cluster, g_) + 1] -->
-
-<!--   # Crossing nodes detection -->
-<!--   crossing_nodes = ends(g_, seq(1:length(igraph::crossing(cluster, g_)))[igraph::crossing(cluster, g_)], names = FALSE) -->
-<!--   crossing_nodes = unique(c(crossing_nodes[,1],crossing_nodes[,2])) -->
-
-<!--   if (input$cmnt_vsl_pck == "visNetwork") { -->
-
-<!--     output$cmnt_vnw = renderVisNetwork({ -->
-
-<!--       #Set label size -->
-<!--       if (is.null(input$labelUI_vnw[1])) min_label = rescaled_value(1.0,2.0,4) -->
-<!--       else min_label = rescaled_value(1.0,2.0,input$labelUI_vnw[1]) -->
-
-<!--       if (is.null(input$labelUI_vnw[2])) max_label = rescaled_value(1.0,2.0,6) -->
-<!--       else max_label = rescaled_value(1.0,2.0,input$labelUI_vnw[2]) -->
-
-<!--       # Scaling labels -->
-<!--       labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label) -->
-<!--       V(g_)$label.cex <- labsize -->
-
-<!--       # Assign membership ids to vertex -->
-<!--       V(g_)$community  <- cluster$membership -->
-
-<!--       data <- toVisNetworkData(g_) -->
-
-<!--       # Set node size -->
-<!--       if (is.null(input$nodeUI_vnw[1])) min_node = rescaled_value(20.0,30.0,4) -->
-<!--       else min_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[1]) -->
-
-<!--       if (is.null(input$nodeUI_vnw[2])) max_node = rescaled_value(20.0,30.0,6) -->
-<!--       else max_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[2]) -->
-
-<!--       # Scaling nodes -->
-<!--       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node) -->
-<!--       data$nodes$size = nodesize -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$nodes$color.background = sapply(data$nodes$community, FUN = setColour) -->
-
-<!--       # Setting group in visnetwork format -->
-<!--       # data$nodes$group = data$nodes$community -->
-
-<!--       data$nodes$color.border = rep("#000000",length(data$nodes$community)) -->
-
-<!--       if (input$edges_format == TRUE) { -->
-<!--         data$edges$color.color = bridges_edge_col -->
-<!--         data$edges$color.highlight = bridges_edge_col -->
-<!--         data$nodes$color.background[-crossing_nodes]= "gray" -->
-<!--         data$nodes$color.border[-crossing_nodes]= "gray" -->
-
-<!--       } else { -->
-<!--         # Setting parameters straight in the data frame for visNetwork -->
-<!--         data$edges$color.color = case_when( -->
-<!--           data$edges$Relation == "is teacher of" ~ '#0000FF', -->
-<!--           data$edges$Relation == "is friend of" ~ '#228B22', -->
-<!--           data$edges$Relation == "is family of" ~ '#FF0000', -->
-<!--           data$edges$Relation == "studied the work of" ~ '#ff01d9', -->
-<!--           data$edges$Relation == "sent letters to" ~ '#ffbf00', -->
-<!--           #data$edges$Relation == "is associated with" ~ '#14ff03', -->
-<!--           data$edges$Relation == "is benefactor of" ~ '#fff23c' -->
-<!--         ) -->
-
-<!--         data$edges$color.highlight = case_when( -->
-<!--           data$edges$Relation == "is teacher of" ~ '#00ffff', -->
-<!--           data$edges$Relation == "is friend of" ~ '#568b22', -->
-<!--           data$edges$Relation == "is family of" ~ '#ff4000', -->
-<!--           data$edges$Relation == "studied the work of" ~ '#d9ff01', -->
-<!--           data$edges$Relation == "sent letters to" ~ '#8400ff', -->
-<!--           #data$edges$Relation == "is associated with" ~ '#ff0314', -->
-<!--           data$edges$Relation == "is benefactor of" ~ '#e53cff' -->
-<!--         ) -->
-<!--       } -->
-
-
-
-<!--       # nodes data.frame for legend -->
-<!--       lnodes <- data.frame(label = c("Male", "Female"), -->
-<!--                            shape = c( "dot"), -->
-<!--                            color = c("#FF6347", "#ffa500"), -->
-<!--                            id = 1:2) -->
-
-<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) -->
-
-<!--       # edges data.frame for legend -->
-<!--       ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), -->
-<!--                            arrows =arrow, -->
-<!--                            font.align = "bottom") -->
-
-<!--       # Shows the name when hovering over the node -->
-<!--       data$nodes$title = paste0('<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$nodes$color.background, -->
-<!--                                 ';">', -->
-<!--                                 data$nodes$id, -->
-<!--                                 '</p></center>', -->
-<!--                                 '<center>Community N°: ', '<b>',data$nodes$community,'</b></center>' -->
-<!--                                 ) -->
-
-<!--       if (directed) { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from, -->
-<!--                                   '</p></center>', -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color, -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>', -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to, -->
-<!--                                   '</p></center>' -->
-<!--                                   ) -->
-
-<!--       } else { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to, -->
-<!--                                   '</p></center>', -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color, -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>', -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from, -->
-<!--                                   '</p></center>' -->
-<!--                                   ) -->
-
-<!--       } -->
-
-<!--       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--         Sys.sleep(0.25) -->
-<!--         incProgress(0.6, detail = paste("Running VisNetwork")) -->
-<!--     		mod <- round(modularity(cluster),3) -->
-<!--     		subTitle = paste0("MODULARITY: ", mod) -->
-
-<!--     		# Setting seed is important so the graph is always with the same configuration when starts -->
-<!--         set.seed(123) -->
-
-<!--     		# Visnetwork graph creation -->
-<!--     		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>% -->
-<!--     		  visNodes(shape = "dot") %>% -->
-<!--     		  visEdges(arrows =list(to = list(enabled = directed))) %>% -->
-<!--           #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>% -->
-<!--     		  visIgraphLayout()%>% -->
-<!--     		  visOptions(highlightNearest = TRUE)%>% -->
-<!-- visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap; -->
-<!--  font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;') -->
-<!--       }) -->
-<!--     }) -->
-<!--     return(visNetworkOutput(outputId="cmnt_vnw")) -->
-<!--   } -->
-
-<!--   if (input$cmnt_vsl_pck == "igraph") { -->
-
-<!--     output$cmnt_igp = renderPlot({ -->
-
-<!--       #Set label size -->
-<!--       if (is.null(input$labelUI_igp[1])) min_label = rescaled_value(0.7,1.2,4) -->
-<!--       else min_label = rescaled_value(0.7,1.2,input$labelUI_igp[1]) -->
-
-<!--       if (is.null(input$labelUI_igp[2])) max_label = rescaled_value(0.7,1.2,6) -->
-<!--       else max_label = rescaled_value(0.7,1.2,input$labelUI_igp[2]) -->
-
-<!--       # Scaling labels -->
-<!--       labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label) -->
-<!--       V(g_)$label.cex <- labsize -->
-
-<!--       # Assign membership ids to vertex -->
-<!--       V(g_)$community  <- cluster$membership -->
-
-<!--       data <- toVisNetworkData(g_) -->
-
-<!--       new_cols <- node_colours[membership(cluster)] -->
-
-<!--       if (input$edges_format == FALSE) { -->
-<!--         # Setting parameters straight in the data frame for visNetwork -->
-<!--         bridges_edge_col = case_when( -->
-<!--           data$edges$Relation == "is teacher of" ~ '#0000FF', -->
-<!--           data$edges$Relation == "is friend of" ~ '#228B22', -->
-<!--           data$edges$Relation == "is family of" ~ '#FF0000', -->
-<!--           data$edges$Relation == "studied the work of" ~ '#ff01d9', -->
-<!--           data$edges$Relation == "sent letters to" ~ '#ffbf00', -->
-<!--           #data$edges$Relation == "is associated with" ~ '#14ff03', -->
-<!--           data$edges$Relation == "is benefactor of" ~ '#fff23c' -->
-<!--         ) -->
-<!--       } else { -->
-<!--           new_cols[-crossing_nodes] <- "gray" -->
-<!--       } -->
-
-<!--       # Set node size -->
-<!--       if (is.null(input$nodeUI_igp[1])) min_node = rescaled_value(4.0,9.0,4) -->
-<!--       else min_node = rescaled_value(4.0,9.0,input$nodeUI_igp[1]) -->
-
-<!--       if (is.null(input$nodeUI_igp[2])) max_node = rescaled_value(4.0,9.0,6) -->
-<!--       else max_node = rescaled_value(4.0,9.0,input$nodeUI_igp[2]) -->
-
-<!--       # Scaling nodes -->
-<!--       nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node) -->
-<!--       V(g_)$size <- nodesize -->
-
-
-<!--       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--         Sys.sleep(0.25) -->
-<!--         incProgress(0.6, detail = paste("Running igraph")) -->
-<!--         mod <- round(modularity(cluster),3) -->
-<!--         subTitle = paste0("MODULARITY: ", mod) -->
-<!--         # Setting seed is important so the graph is always with the same configuration when starts -->
-<!--         set.seed(123) -->
-<!--         coords <- layout_(g_, nicely()) -->
-<!--         plot(x=cluster, -->
-<!--              y=g_, -->
-<!--              col = new_cols, -->
-<!--              vertext.frame.color = new_cols, -->
-<!--              main = subTitle, -->
-<!--              layout = matrix(c(coords[,1], -coords[,2]), -->
-<!--                              nrow = length(coords[,1]), -->
-<!--                              ncol = 2, -->
-<!--                              byrow = FALSE, -->
-<!--                              dimnames = list()), -->
-<!--              edge.color = bridges_edge_col) -->
-<!--         }) -->
-<!--     }) -->
-<!--     return(plotOutput(outputId="cmnt_igp")) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- output$graph_cmnt <- renderUI({ -->
-<!--   network_cmnt() -->
-<!-- }) -->
-
-<!-- output$labelUI_vnw <- renderUI({ -->
-<!--   if (input$cmnt_vsl_pck == "visNetwork") { -->
-<!--     if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--     else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- output$nodeUI_vnw <- renderUI({ -->
-<!--   if (input$cmnt_vsl_pck == "visNetwork") { -->
-<!--     if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--     else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- output$labelUI_igp <- renderUI({ -->
-<!--   if (input$cmnt_vsl_pck == "igraph") { -->
-<!--     if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--     else sliderInput(inputId = "labelUI_igp", label = "Label Size",min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- output$nodeUI_igp <- renderUI({ -->
-<!--   if (input$cmnt_vsl_pck == "igraph") { -->
-<!--     if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--     else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- uiOutput(outputId="graph_cmnt") -->
-
-<!-- <!-- ``` --> -->
+  # ids in nodes are es required to export to Pajek format. Just in case!
+  V(g)$id = V(g)$name
+
+  # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+  E(g)$id = seq(1:length(E(g)))
+
+  # Subsetting according to edges selected
+  g_ = subset_graph(input$edges_select_comm, g)
+
+  cluster = handledClustering(input$cmnt_dtc_alg, g_)
+
+  # Controling the colours of each group
+  node_colours = viridis(summary(cluster$membership)[6])
+  setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)}
+
+  # validate(
+  #   need(try(!is.null(cluster)),
+  #        paste("The algorithm ",
+  #              input$cmnt_dtc_alg,
+  #              " could not identify communities given the current Phylosophers and Relations"," . ",  message)
+  #        )
+  # )
+
+  # This code is on hold until the requirement for bridges detection is
+  # addressed
+  #if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") {
+    #Print in console the id's of the edges identified as bridges
+    #print(cluster$bridges)
+    #e = length(E(g_)$id)
+    #e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1
+    #print(e_bool)
+    #bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]
+  #} else
+
+  # In the meanwhile overwriting the default behaviour
+  bridges_edge_col  = c("#030000","#ff0400")[igraph::crossing(cluster, g_) + 1]
+
+  # Crossing nodes detection
+  crossing_nodes = ends(g_, seq(1:length(igraph::crossing(cluster, g_)))[igraph::crossing(cluster, g_)], names = FALSE)
+  crossing_nodes = unique(c(crossing_nodes[,1],crossing_nodes[,2]))
+
+  if (input$cmnt_vsl_pck == "visNetwork") {
+
+    output$cmnt_vnw = renderVisNetwork({
+
+      #Set label size
+      if (is.null(input$labelUI_vnw[1])) min_label = rescaled_value(1.0,2.0,4)
+      else min_label = rescaled_value(1.0,2.0,input$labelUI_vnw[1])
+
+      if (is.null(input$labelUI_vnw[2])) max_label = rescaled_value(1.0,2.0,6)
+      else max_label = rescaled_value(1.0,2.0,input$labelUI_vnw[2])
+
+      # Scaling labels
+      labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
+      V(g_)$label.cex <- labsize
+
+      # Assign membership ids to vertex
+      V(g_)$community  <- cluster$membership
+
+      data <- toVisNetworkData(g_)
+
+      # Set node size
+      if (is.null(input$nodeUI_vnw[1])) min_node = rescaled_value(20.0,30.0,4)
+      else min_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[1])
+
+      if (is.null(input$nodeUI_vnw[2])) max_node = rescaled_value(20.0,30.0,6)
+      else max_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[2])
+
+      # Scaling nodes
+      nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+      data$nodes$size = nodesize
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$nodes$color.background = sapply(data$nodes$community, FUN = setColour)
+
+      # Setting group in visnetwork format
+      # data$nodes$group = data$nodes$community
+
+      data$nodes$color.border = rep("#000000",length(data$nodes$community))
+
+      if (input$edges_format == TRUE) {
+        data$edges$color.color = bridges_edge_col
+        data$edges$color.highlight = bridges_edge_col
+        data$nodes$color.background[-crossing_nodes]= "gray"
+        data$nodes$color.border[-crossing_nodes]= "gray"
+
+      } else {
+        # Setting parameters straight in the data frame for visNetwork
+        data$edges$color.color = case_when(
+          data$edges$Relation == "is teacher of" ~ '#0000FF',
+          data$edges$Relation == "is friend of" ~ '#228B22',
+          data$edges$Relation == "is family of" ~ '#FF0000',
+          data$edges$Relation == "studied the work of" ~ '#ff01d9',
+          data$edges$Relation == "sent letters to" ~ '#ffbf00',
+          #data$edges$Relation == "is associated with" ~ '#14ff03',
+          data$edges$Relation == "is benefactor of" ~ '#fff23c'
+        )
+
+        data$edges$color.highlight = case_when(
+          data$edges$Relation == "is teacher of" ~ '#00ffff',
+          data$edges$Relation == "is friend of" ~ '#568b22',
+          data$edges$Relation == "is family of" ~ '#ff4000',
+          data$edges$Relation == "studied the work of" ~ '#d9ff01',
+          data$edges$Relation == "sent letters to" ~ '#8400ff',
+          #data$edges$Relation == "is associated with" ~ '#ff0314',
+          data$edges$Relation == "is benefactor of" ~ '#e53cff'
+        )
+      }
+
+
+
+      # nodes data.frame for legend
+      lnodes <- data.frame(label = c("Male", "Female"),
+                           shape = c( "dot"),
+                           color = c("#FF6347", "#ffa500"),
+                           id = 1:2)
+
+      if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)
+
+      # edges data.frame for legend
+      ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                           label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),
+                           arrows =arrow,
+                           font.align = "bottom")
+
+      # Shows the name when hovering over the node
+      data$nodes$title = paste0('<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                                data$nodes$color.background,
+                                ';">',
+                                data$nodes$id,
+                                '</p></center>',
+                                '<center>Community N°: ', '<b>',data$nodes$community,'</b></center>'
+                                )
+
+      if (directed) {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>'
+                                  )
+
+      } else {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>'
+                                  )
+
+      }
+
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+        incProgress(0.6, detail = paste("Running VisNetwork"))
+    		mod <- round(modularity(cluster),3)
+    		subTitle = paste0("MODULARITY: ", mod)
+
+    		# Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+
+    		# Visnetwork graph creation
+    		visNetwork(nodes = data$nodes, edges = data$edges, main=subTitle)%>%
+    		  visNodes(shape = "dot") %>%
+    		  visEdges(arrows =list(to = list(enabled = directed))) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+    		  visIgraphLayout()%>%
+    		  visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+      })
+    })
+    return(visNetworkOutput(outputId="cmnt_vnw"))
+  }
+
+  if (input$cmnt_vsl_pck == "igraph") {
+
+    output$cmnt_igp = renderPlot({
+
+      #Set label size
+      if (is.null(input$labelUI_igp[1])) min_label = rescaled_value(0.7,1.2,4)
+      else min_label = rescaled_value(0.7,1.2,input$labelUI_igp[1])
+
+      if (is.null(input$labelUI_igp[2])) max_label = rescaled_value(0.7,1.2,6)
+      else max_label = rescaled_value(0.7,1.2,input$labelUI_igp[2])
+
+      # Scaling labels
+      labsize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_label, max_label)
+      V(g_)$label.cex <- labsize
+
+      # Assign membership ids to vertex
+      V(g_)$community  <- cluster$membership
+
+      data <- toVisNetworkData(g_)
+
+      new_cols <- node_colours[membership(cluster)]
+
+      if (input$edges_format == FALSE) {
+        # Setting parameters straight in the data frame for visNetwork
+        bridges_edge_col = case_when(
+          data$edges$Relation == "is teacher of" ~ '#0000FF',
+          data$edges$Relation == "is friend of" ~ '#228B22',
+          data$edges$Relation == "is family of" ~ '#FF0000',
+          data$edges$Relation == "studied the work of" ~ '#ff01d9',
+          data$edges$Relation == "sent letters to" ~ '#ffbf00',
+          #data$edges$Relation == "is associated with" ~ '#14ff03',
+          data$edges$Relation == "is benefactor of" ~ '#fff23c'
+        )
+      } else {
+          new_cols[-crossing_nodes] <- "gray"
+      }
+
+      # Set node size
+      if (is.null(input$nodeUI_igp[1])) min_node = rescaled_value(4.0,9.0,4)
+      else min_node = rescaled_value(4.0,9.0,input$nodeUI_igp[1])
+
+      if (is.null(input$nodeUI_igp[2])) max_node = rescaled_value(4.0,9.0,6)
+      else max_node = rescaled_value(4.0,9.0,input$nodeUI_igp[2])
+
+      # Scaling nodes
+      nodesize <- rescale(degree(g_), min(degree(g_)), max(degree(g_)), min_node, max_node)
+      V(g_)$size <- nodesize
+
+
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+        incProgress(0.6, detail = paste("Running igraph"))
+        mod <- round(modularity(cluster),3)
+        subTitle = paste0("MODULARITY: ", mod)
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+        coords <- layout_(g_, nicely())
+        plot(x=cluster,
+             y=g_,
+             col = new_cols,
+             vertext.frame.color = new_cols,
+             main = subTitle,
+             layout = matrix(c(coords[,1], -coords[,2]),
+                             nrow = length(coords[,1]),
+                             ncol = 2,
+                             byrow = FALSE,
+                             dimnames = list()),
+             edge.color = bridges_edge_col)
+        })
+    })
+    return(plotOutput(outputId="cmnt_igp"))
+  }
+})
+
+output$graph_cmnt <- renderUI({
+  network_cmnt()
+})
+
+output$labelUI_vnw <- renderUI({
+  if (input$cmnt_vsl_pck == "visNetwork") {
+    if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+  }
+})
+
+output$nodeUI_vnw <- renderUI({
+  if (input$cmnt_vsl_pck == "visNetwork") {
+    if (!is.null(input$nodeUI_vnw)) sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "nodeUI_vnw", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+  }
+})
+
+output$labelUI_igp <- renderUI({
+  if (input$cmnt_vsl_pck == "igraph") {
+    if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "labelUI_igp", label = "Label Size",min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+  }
+})
+
+output$nodeUI_igp <- renderUI({
+  if (input$cmnt_vsl_pck == "igraph") {
+    if (!is.null(input$nodeUI_igp)) sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+    else sliderInput(inputId = "nodeUI_igp", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+  }
+})
+
+uiOutput(outputId="graph_cmnt")
+
+```
 
 <!-- Treemap View {data-navmenu="Communities"} -->
 <!-- ===================================== -->
