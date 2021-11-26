@@ -530,20 +530,14 @@ Column {.tabset .tabset-fade}
 
 ```{r, echo = FALSE}
 
-nodes_reactive <- reactive ({
+nodes_reactive_gc <- reactive ({
   req(input$dataset_selection_gc)
-  #print(input$dataset_selection)
   entrada <- input$dataset_selection_gc
-  #print('entrada')
-  #print(entrada)
   data <- sourceData(entrada)
-
-  #print(class(data$nodes))
-
   return (data$nodes)
 })
 
-edges_reactive <- reactive({
+edges_reactive_gc <- reactive({
   req(input$dataset_selection_gc)
   entrada <- input$dataset_selection_gc
   data <- sourceData(entrada)
@@ -560,9 +554,9 @@ g = reactive({
 
   # Use function is_directed
   directed = directed_global()
-  
-  nodes = nodes_reactive()
-  edges = edges_reactive()
+
+  nodes = nodes_reactive_gc()
+  edges = edges_reactive_gc()
 
   try(g <- igraph::graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
@@ -1399,11 +1393,12 @@ output$global_heatmap = renderPlotly({
 
     incProgress(1, detail = paste("Running Heatmapply"))
 
-    validate(
-      need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
-    )
+    # validate(
+    #   need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
+    # )
 
     values = values_global()
+
     heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"), fontsize_row = 4)
 
   })
@@ -1423,1143 +1418,1204 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 
 ```
 
-<!-- Graph {data-navmenu="Local Network"} -->
-<!-- =====================================  -->
+Graph {data-navmenu="Local Network"}
+=====================================
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+# Dataset selection menu
+
+selectInput(inputId= "dataset_selection_ln",
+            label = "Select a dataset",
+            choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
+            selected = "diogenes")
+
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network
+checkboxGroupInput("edges_select_local",
+                   label = NULL,
+                   choices = list("Is teacher of" = 1,
+                                  "Is friend of" = 2,
+                                  "Is family of" = 3,
+                                  "Studied the work of" = 4,
+                                  "Sent letters to" = 5,
+                                  #"Is associated with" = 6,
+                                  "Is benefactor of" = 7),
+                   selected = 1,
+                   inline = FALSE)
+br()
+# Egonet configuration
+h4("Ego")
+# Node selection
+uiOutput(outputId = "node_sel")
+#br()
+# Order
+sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
+# Node and Label Size
+br()
+h4("Appearance")
+sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+#hr()
+#helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+#div(message, style = "color:red")
+```
+
+Row
+-------------------------------------
+
+### Local Network
+
+```{r}
+
+nodes_reactive_ln <- reactive ({
+  req(input$dataset_selection_ln)
+  entrada <- input$dataset_selection_ln
+  data <- sourceData(entrada)
+  return (data$nodes)
+})
+
+edges_reactive_ln <- reactive({
+  req(input$dataset_selection_ln)
+  entrada <- input$dataset_selection_ln
+  data <- sourceData(entrada)
+  return (data$edges)
+})
+
+output$local_network = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local)), "Please select at least one tie")
+  )
+
+  if (!is.null(input$node_sel) && !is.null(input$order)) {
+
+    # Use function is_directed
+    directed = is_directed(input$edges_select_local)
+
+    nodes = nodes_reactive_ln()
+    edges = edges_reactive_ln()
+
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local, g)
+
+    # Egonet
+    d <- make_ego_graph(g_,
+                        order = input$order,
+                        nodes = input$node_sel,
+                        mode = c("all"),
+                        mindist = 0)
+
+    # The following line could be used to export to pajek. Should be linked to a "download" button.
+    #write_graph(d[[1]], "pajek.txt", format = "pajek")
+
+    #Set label size
+    if (is.null(input$label_size_local[1])) min_label = rescaled_value(0.3,1.0,4)
+    else min_label = rescaled_value(0.3,1.0,input$label_size_local[1])
+
+    if (is.null(input$label_size_local[2])) max_label = rescaled_value(0.3,1.0,6)
+    else max_label = rescaled_value(0.3,1.0,input$label_size_local[2])
+
+    labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label)
+    V(d[[1]])$label.cex <- labsize
+
+    #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+    data <- toVisNetworkData(d[[1]])
+
+    # Set node size
+    if (is.null(input$node_size_local[1])) min_node = rescaled_value(10.0,30.0,4)
+    else min_node = rescaled_value(10.0,30.0,input$node_size_local[1])
+
+    if (is.null(input$node_size_local[2])) max_node = rescaled_value(10.0,30.0,6)
+    else max_node = rescaled_value(10.0,30.0,input$node_size_local[2])
+
+    nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node)
+    data$nodes$size = nodesize
+
+    # Setting parameters straight in the data frame for visNetwork
+    data$nodes$color.background = case_when(
+      data$nodes$Group == "Male" ~ '#FF6347',
+      data$nodes$Group == "Female" ~ '#ffa500',
+      data$nodes$Group == "Place" ~ '#31e001',
+      data$nodes$Group == "God" ~ '#05e2ff'
+    )
+
+    # Setting group in visnetwork format
+    data$nodes$group = data$nodes$Group
+
+    data$nodes$color.border = rep("#000000",length(data$nodes$color.background))
+
+    data$nodes$color.highlight = case_when(
+      data$nodes$Group == "Male" ~ '#47e3ff',
+      data$nodes$Group == "Female" ~ '#4d00ff',
+      data$nodes$Group == "Place" ~ '#ff0134',
+      data$nodes$Group == "God" ~ '#ff4c05'
+    )
+
+    # Setting parameters straight in the data frame for visNetwork
+    data$edges$color.color = case_when(
+      data$edges$Relation == "is teacher of" ~ '#0000FF',
+      data$edges$Relation == "is friend of" ~ '#228B22',
+      data$edges$Relation == "is family of" ~ '#FF0000',
+      data$edges$Relation == "studied the work of" ~ '#ff01d9',
+      data$edges$Relation == "sent letters to" ~ '#ffbf00',
+      #data$edges$Relation == "is associated with" ~ '#14ff03',
+      data$edges$Relation == "is benefactor of" ~ '#fff23c'
+    )
+
+    data$edges$color.highlight = case_when(
+      data$edges$Relation == "is teacher of" ~ '#00ffff',
+      data$edges$Relation == "is friend of" ~ '#568b22',
+      data$edges$Relation == "is family of" ~ '#ff4000',
+      data$edges$Relation == "studied the work of" ~ '#d9ff01',
+      data$edges$Relation == "sent letters to" ~ '#8400ff',
+      #data$edges$Relation == "is associated with" ~ '#ff0314',
+      data$edges$Relation == "is benefactor of" ~ '#e53cff'
+    )
+
+    # nodes data.frame for legend
+    lnodes <- data.frame(label = c("Male", "Female"),
+                         shape = c( "dot"),
+                         color = c("#FF6347", "#ffa500"),
+                         id = 1:2)
+
+    if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)
+
+    # edges data.frame for legend
+    ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                         label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),
+                         arrows = arrow,
+                         font.align = "bottom")
+
+    # Shows the name when hovering over the node
+    data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                              data$nodes$id,
+                              '</p>',
+                              '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                              data$nodes$color.background,
+                              ';">',
+                              data$nodes$Group,
+                              '</p></center>'
+                              )
+
+    if (directed) {
+
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>',
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color,
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>',
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>'
+                                )
+
+    } else {
+
+      # Shows the relation when hovering over the edge
+      data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$to,
+                                '</p></center>',
+                                '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                data$edges$color.color,
+                                ';">',
+                                data$edges$Relation,
+                                '</p></center>',
+                                '<center><p style = "font-size:14px;font-family:verdana;">',
+                                data$edges$from,
+                                '</p></center>'
+                                )
+
+    }
+
+    withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+      Sys.sleep(0.25)
+
+      incProgress(1, detail = paste("Running visnetwork"))
+
+      # Setting seed is important so the graph is always with the same configuration when starts
+      set.seed(123)
+
+	    visNetwork(nodes = data$nodes, edges = data$edges)%>%
+	      visNodes(shape = "dot") %>%
+	      visEdges(arrows =list(to = list(enabled = directed)),
+	               color = list(color = "gray",
+	                            highlight = "red")) %>%
+        #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+	      visIgraphLayout()%>%
+	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+ font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+	    })
+  }
+})
+
+# This function creates the selectInput object dynamically.
+# The options for nodes in the list depends on the edges selected
+
+output$node_sel <- renderUI({
+
+  validate(
+    need(try(!is.null(input$edges_select_local)), "Select at least one Tie")
+  )
+
+  all_nodes = c()
+
+  nodes = nodes_reactive_ln()
+  edges = edges_reactive_ln()
+
+  if (1 %in% input$edges_select_local){
+      all_nodes = c(all_nodes,
+                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
+      }
+
+  if (2 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
+                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
+    }
+
+  if (3 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "is family of")]),
+                  as.character(edges$Target[which(edges$Relation == "is family of")]))
+  }
+
+  if (4 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
+                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
+  }
+
+  if (5 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
+                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
+  }
+
+  if (7 %in% input$edges_select_local){
+  all_nodes = c(all_nodes,
+                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
+                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
+  }
+
+  all_nodes = sort(unique(all_nodes))
+
+  if (!is.null(input$node_sel)) selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = input$node_sel)
+  else selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = "Plato")
+})
+
+visNetworkOutput(outputId="local_network")
+
+```
+
+Graph + Centrality {data-navmenu="Local Network" data-orientation="columns"}
+=====================================
+
+Inputs {.sidebar}
+-------------------------------------
+
+```{r}
+
+selectInput(inputId= "dataset_selection_ln_gc",
+            label = "Select a dataset",
+            choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
+            selected = "diogenes")
+
+h4("Network Ties")
+# Selection of the edges that will appear in the relation network
+checkboxGroupInput("edges_select_local_m",
+                   label = NULL,
+                   choices = list("Is teacher of" = 1,
+                                  "Is friend of" = 2,
+                                  "Is family of" = 3,
+                                  "Studied the work of" = 4,
+                                  "Sent letters to" = 5,
+                                  #"Is associated with" = 6,
+                                  "Is benefactor of" = 7),
+                   selected = 1,
+                   inline = FALSE)
+br()
+# Egonet configuration
+h4("Egos")
+# Node selection
+uiOutput(outputId = "node_sel_m")
+#br()
+# Order
+sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1)
+br()
+h4("Centrality Index")
+selectInput("variable_type", NULL,
+                c("Degree" = "degree",
+                  "Betweenness" = "betweenness",
+                  "Closeness" = "closeness",
+                  "Eigenvector" = "eigenvector"))
+# Node and Label Size
+br()
+h4("Appearance")
+sliderInput(inputId = "label_size_local_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+
+#hr()
+#helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+#div(message, style = "color:red")
+```
+
+Column {.tabset .tabset-fade}
+-------------------------------------
+
+```{r, echo = FALSE}
+
+nodes_reactive_ln_gc <- reactive ({
+  req(input$dataset_selection_ln_gc)
+  entrada <- input$dataset_selection_ln_gc
+  data <- sourceData(entrada)
+  return (data$nodes)
+})
+
+edges_reactive_ln_gc <- reactive({
+  req(input$dataset_selection_ln_gc)
+  entrada <- input$dataset_selection_ln_gc
+  data <- sourceData(entrada)
+  return (data$edges)
+})
+
+
+directed = reactive({
+  return(is_directed(input$edges_select_local_m))
+})
+
+d = reactive({
+
+    nodes = nodes_reactive_ln_gc()
+    edges = edges_reactive_ln_gc()
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Use function is_directed in reactive directed
+    directed = directed()
+
+    try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
+
+    # id en nodos es necesario para exportar al formato Pajek
+    V(g)$id = V(g)$name
+
+    # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges
+    E(g)$id = seq(1:length(E(g)))
+
+    # Subsetting according to edges selected
+    g_ = subset_graph(input$edges_select_local_m, g)
+
+    # Egonet
+    local_ntwk <- make_ego_graph(g_,
+                        order = input$order_m,
+                        nodes = input$node_sel_m,
+                        mode = c("all"),
+                        mindist = 0)
+  return(local_ntwk)
+  }
+})
+
+
+
+values = reactive({
+
+    validate(
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
+    )
+
+    if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+      d = d()
+      val =  data.frame(degree = igraph::degree(d[[1]]),
+                         betweenness = as.numeric(format(igraph::betweenness(d[[1]], normalized =TRUE), digits = 3, nsmall = 3)),
+                         closeness = as.numeric(format(igraph::closeness(d[[1]]), digits = 3, nsmall = 3)),
+                         eigenvector = as.numeric(format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)))
+      val = val[order(val$degree, decreasing = TRUE),]
+      return(val)
+    }
+})
+
+centr = reactive({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+    d = d()
+    centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(d[[1]])$centralization[1],
+                                                   digits = 3, nsmall = 3)),
+                     betweenness = as.numeric(format(igraph::centralization.betweenness(d[[1]])$centralization[1],
+                                                     digits = 3, nsmall = 3)),
+                     closeness = as.numeric(format(igraph::centralization.closeness(d[[1]])$centralization[1],
+                                                   digits = 3, nsmall = 3)),
+                     eigenvector = as.numeric(format(igraph::centralization.evcent(d[[1]])$centralization[1],
+                                                     digits = 3, nsmall = 3))
+                     )
+    row.names(centr_) = c("Graph")
+    return(centr_)
+  }
+})
+
+output$table_values = DT::renderDataTable({datatable(values(), selection = 'none', caption = 'Centrality scores',
+                                   options = list(
+                                                 initComplete = JS(
+                                                  "function(settings, json){",
+                                                  "$(this.api().table().body()).css({'font-size': '14px'});",
+                                                  "$(this.api().table().header()).css({'font-size': '12px'});",
+                                                  "}"),
+                                                  pageLength = 10,
+                                                  lengthChange = FALSE,
+                                                  processing = FALSE,
+                                                  scrollX = TRUE
+                                                  #,
+                                                  #scrollY = TRUE,
+                                                  #scrollCollapse = TRUE,
+                                                  #autoWidth = TRUE
+                                                  ,
+                                                  columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
+                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                  ))})
+
+output$table_centr = DT::renderDataTable({datatable(centr(), selection = 'none', caption = 'Centralization scores',
+                                  options = list(lengthChange = FALSE,
+                                                 processing = FALSE,
+                                                 ordering = FALSE,
+                                                 #autoWidth = TRUE,
+                                                 scrollX = TRUE,
+                                                 searching = FALSE,
+                                                 paging = FALSE,
+                                                 info = FALSE
+                                                 ,
+                                                 columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)),
+                                                                   list(className = 'dt-center', targets = c(1, 2, 3, 4)))
+                                                 ,
+                                                 initComplete = JS(
+                                                    "function(settings, json){",
+                                                    "$(this.api().table().body()).css({'font-size': '14px'});",
+                                                    "$(this.api().table().header()).css({'font-size': '12px'});",
+                                                    "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});",
+                                                    "}")
+                                                 ))})
+
+# This function creates the selectInput object dynamically.
+# The options for nodes in the list depends on the edges selected
+
+output$node_sel_m <- renderUI({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Select at least one Tie")
+  )
+
+  all_nodes = c()
+
+  nodes = nodes_reactive_ln_gc()
+  edges = edges_reactive_ln_gc()
+
+  if (1 %in% input$edges_select_local_m){
+      all_nodes = c(all_nodes,
+                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
+      }
+
+  if (2 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
+                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
+    }
+
+  if (3 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "is family of")]),
+                  as.character(edges$Target[which(edges$Relation == "is family of")]))
+  }
+
+  if (4 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
+                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
+  }
+
+  if (5 %in% input$edges_select_local_m){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
+                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
+  }
+
+  if (7 %in% input$edges_select_local_m){
+  all_nodes = c(all_nodes,
+                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
+                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
+  }
+
+  all_nodes = sort(unique(all_nodes))
+
+  if (!is.null(input$node_sel_m)) selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = input$node_sel_m)
+  else selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = "Plato")
+})
+
+```
+
+### Graph
+
+```{r, echo = FALSE}
+
+output$local_network_monitor = renderVisNetwork({
+
+  validate(
+    need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
+  )
+
+  if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+
+    # Update reactive values
+    directed = directed()
+    d = d()
+
+    if (input$variable_type == 'degree'){
+
+      #Set label size
+      if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+      else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+      if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+      else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+      labsize <- rescale(igraph::degree(d[[1]]),
+                         min(igraph::degree(d[[1]])),
+                         max(igraph::degree(d[[1]])),
+                         min_label, max_label)
+
+      V(d[[1]])$label.cex <- labsize
+
+      #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle)
+
+      data <- toVisNetworkData(d[[1]])
+
+      # Set node size
+      if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+      else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
+
+      if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+      else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
+
+      nodesize <- rescale(igraph::degree(d[[1]]),
+                          min(igraph::degree(d[[1]])),
+                          max(igraph::degree(d[[1]])),
+                          min_node, max_node)
+      data$nodes$size = nodesize
+
+      min_deg = min(degree(d[[1]]))
+      max_deg = max(degree(d[[1]]))
+      n_col =  50
+      node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+
+      # x in this function is degree
+      col_index = function(x) {((n_col -1)/(max_deg - min_deg))*(x-min_deg)+1}
+
+      returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$nodes$color.background = sapply(igraph::degree(d[[1]]), FUN = returnColor)
+
+      data$nodes$degree = igraph::degree(d[[1]])
+
+      # Setting group in visnetwork format
+      data$nodes$group = data$nodes$Group
+
+      data$nodes$color.border = sapply(degree(d[[1]]), FUN = returnColor)
+
+      data$nodes$color.highlight = case_when(
+        data$nodes$Group == "Male" ~ '#47e3ff',
+        data$nodes$Group == "Female" ~ '#4d00ff',
+        data$nodes$Group == "Place" ~ '#ff0134',
+        data$nodes$Group == "God" ~ '#ff4c05'
+      )
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$edges$color.color = rep("gray",length(data$edges$Relation))
+
+      data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+
+      # nodes data.frame for legend
+      lnodes <- data.frame(label = c("Male", "Female"),
+                           shape = c( "dot"),
+                           color = c("#FF6347", "#ffa500"),
+                           id = 1:2)
+
+      if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)
+
+      # edges data.frame for legend
+      ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                           label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),
+                           arrows = arrow,
+                           font.align = "bottom")
+
+      # Shows the name when hovering over the node
+      data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                                data$nodes$id,
+                                '</p>',
+                                '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                                data$nodes$color.background,
+                                ';">',
+                                data$nodes$degree,
+                                '</p></center>'
+                                )
+
+      if (directed) {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>'
+                                  )
+
+      } else {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>'
+                                  )
+
+      }
+
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+
+        incProgress(1, detail = paste("Running visnetwork"))
+
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+
+  	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  	      visNodes(shape = "dot") %>%
+  	      visEdges(arrows =list(to = list(enabled = directed)),
+  	               color = list(color = "gray",
+  	                            highlight = "red")) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+  	      visIgraphLayout()%>%
+  	      visOptions(highlightNearest = TRUE)%>%
+visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+  	    })
+    }
+    if (input$variable_type == 'betweenness'){
+
+      #Set label size
+      if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+      else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+      if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+      else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+      labsize <- rescale(igraph::betweenness(d[[1]]),
+                         min(igraph::betweenness(d[[1]])),
+                         max(igraph::betweenness(d[[1]])),
+                         min_label,
+                         max_label)
+      V(d[[1]])$label.cex <- labsize
+
+      data <- toVisNetworkData(d[[1]])
+
+      # Set node size
+      if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+      else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
+
+      if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+      else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
+
+      nodesize <- rescale(igraph::betweenness(d[[1]]),
+                          min(igraph::betweenness(d[[1]])),
+                          max(igraph::betweenness(d[[1]])),
+                          min_node, max_node)
+      data$nodes$size = nodesize
+
+      min_bet = min(betweenness(d[[1]]))
+      max_bet = max(betweenness(d[[1]]))
+      n_col =  50
+      node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+
+      # x in this function is degree
+      col_index = function(x) {((n_col -1)/(max_bet - min_bet))*(x-min_bet)+1}
+
+      returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$nodes$color.background = sapply(betweenness(d[[1]]), FUN = returnColor)
+
+      data$nodes$betweenness = format(betweenness(d[[1]]), digits = 3, nsmall = 3)
+
+      # Setting group in visnetwork format
+      data$nodes$group = data$nodes$Group
+
+      data$nodes$color.border = sapply(betweenness(d[[1]]), FUN = returnColor)
+
+      data$nodes$color.highlight = case_when(
+        data$nodes$Group == "Male" ~ '#47e3ff',
+        data$nodes$Group == "Female" ~ '#4d00ff',
+        data$nodes$Group == "Place" ~ '#ff0134',
+        data$nodes$Group == "God" ~ '#ff4c05'
+      )
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$edges$color.color = rep("gray",length(data$edges$Relation))
+
+      data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+
+      # nodes data.frame for legend
+      lnodes <- data.frame(label = c("Male", "Female"),
+                           shape = c( "dot"),
+                           color = c("#FF6347", "#ffa500"),
+                           id = 1:2)
+
+      if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)
+
+      # edges data.frame for legend
+      ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                           label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),
+                           arrows = arrow,
+                           font.align = "bottom")
+
+      # Shows the name when hovering over the node
+      data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                                data$nodes$id,
+                                '</p>',
+                                '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                                data$nodes$color.background,
+                                ';">',
+                                data$nodes$betweenness,
+                                '</p></center>'
+                                )
+
+      if (directed) {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>'
+                                  )
+
+      } else {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>'
+                                  )
+
+      }
+
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+
+        incProgress(1, detail = paste("Running visnetwork"))
+
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+
+  	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  	      visNodes(shape = "dot") %>%
+  	      visEdges(arrows =list(to = list(enabled = directed)),
+  	               color = list(color = "gray",
+  	                            highlight = "red")) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+  	      visIgraphLayout()%>%
+  	      visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+  	    })
+    }
+    if (input$variable_type == 'closeness'){
+
+      #Set label size
+      if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+      else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+      if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+      else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+      labsize <- rescale(igraph::closeness(d[[1]]),
+                         min(igraph::closeness(d[[1]])),
+                         max(igraph::closeness(d[[1]])),
+                         min_label, max_label)
+      V(d[[1]])$label.cex <- labsize
+
+      data <- toVisNetworkData(d[[1]])
+
+      # Set node size
+      if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+      else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
+
+      if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+      else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
+
+      nodesize <- rescale(igraph::closeness(d[[1]]),
+                          min(igraph::closeness(d[[1]])),
+                          max(igraph::closeness(d[[1]])),
+                          min_node, max_node)
+      data$nodes$size = nodesize
+
+      min_close = min(igraph::closeness(d[[1]]))
+      max_close = max(igraph::closeness(d[[1]]))
+      n_col =  50
+      node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+
+      # x in this function is degree
+      col_index = function(x) {((n_col -1)/(max_close - min_close))*(x-min_close)+1}
+
+      returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)}
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$nodes$color.background = sapply(closeness(d[[1]]), FUN = returnColor)
+
+      data$nodes$closeness =  format(closeness(d[[1]]), digits = 3, nsmall = 3)
+
+      # Setting group in visnetwork format
+      data$nodes$group = data$nodes$Group
+
+      data$nodes$color.border = sapply(closeness(d[[1]]), FUN = returnColor)
+
+      data$nodes$color.highlight = case_when(
+        data$nodes$Group == "Male" ~ '#47e3ff',
+        data$nodes$Group == "Female" ~ '#4d00ff',
+        data$nodes$Group == "Place" ~ '#ff0134',
+        data$nodes$Group == "God" ~ '#ff4c05'
+      )
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$edges$color.color = rep("gray",length(data$edges$Relation))
+
+      data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+
+      # nodes data.frame for legend
+      lnodes <- data.frame(label = c("Male", "Female"),
+                           shape = c( "dot"),
+                           color = c("#FF6347", "#ffa500"),
+                           id = 1:2)
+
+      if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)
+
+      # edges data.frame for legend
+      ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                           label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),
+                           arrows = arrow,
+                           font.align = "bottom")
+
+      # Shows the name when hovering over the node
+      data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                                data$nodes$id,
+                                '</p>',
+                                '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                                data$nodes$color.background,
+                                ';">',
+                                data$nodes$closeness,
+                                '</p></center>'
+                                )
+
+      if (directed) {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>'
+                                  )
+
+      } else {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>'
+                                  )
+
+      }
+
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+
+        incProgress(1, detail = paste("Running visnetwork"))
+
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+
+  	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  	      visNodes(shape = "dot") %>%
+  	      visEdges(arrows =list(to = list(enabled = directed)),
+  	               color = list(color = "gray",
+  	                            highlight = "red")) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+  	      visIgraphLayout()%>%
+  	      visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+  	    })
+    }
+    if (input$variable_type == 'eigenvector'){
+
+      #Set label size
+      if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4)
+      else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1])
+
+      if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6)
+      else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2])
+
+      labsize <- rescale(igraph::eigen_centrality(d[[1]])$vector,
+                         min(igraph::eigen_centrality(d[[1]])$vector),
+                         max(igraph::eigen_centrality(d[[1]])$vector),
+                         min_label, max_label)
+      V(d[[1]])$label.cex <- labsize
+
+      data <- toVisNetworkData(d[[1]])
+
+      # Set node size
+      if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
+      else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
+
+      if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6)
+      else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2])
+
+      nodesize <- rescale(igraph::eigen_centrality(d[[1]])$vector,
+                          min(igraph::eigen_centrality(d[[1]])$vector),
+                          max(igraph::eigen_centrality(d[[1]])$vector),
+                          min_node, max_node)
+      data$nodes$size = nodesize
+
+      min_eigen = min(igraph::eigen_centrality(d[[1]])$vector)
+      max_eigen = max(igraph::eigen_centrality(d[[1]])$vector)
+      n_col =  50
+      node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma")
+
+      # x in this function is eigen_centrality
+      col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00}
+
+      col_index_evc_data = col_index_evc(igraph::eigen_centrality(d[[1]])$vector)
+
+      returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)}
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$nodes$color.background = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
+
+      data$nodes$eigen = format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3)
+
+      data$nodes$color.border = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
+
+      data$nodes$color.highlight = case_when(
+        data$nodes$Group == "Male" ~ '#47e3ff',
+        data$nodes$Group == "Female" ~ '#4d00ff',
+        data$nodes$Group == "Place" ~ '#ff0134',
+        data$nodes$Group == "God" ~ '#ff4c05'
+      )
+
+      # Setting parameters straight in the data frame for visNetwork
+      data$edges$color.color = rep("gray",length(data$edges$Relation))
+
+      data$edges$color.highlight = rep("gray",length(data$edges$Relation))
+
+      # nodes data.frame for legend
+      lnodes <- data.frame(label = c("Male", "Female"),
+                           shape = c( "dot"),
+                           color = c("#FF6347", "#ffa500"),
+                           id = 1:2)
+
+      if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)
+
+      # edges data.frame for legend
+      ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'),
+                           label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),
+                           arrows = arrow,
+                           font.align = "bottom")
+
+      # Shows the name when hovering over the node
+      data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">',
+                                data$nodes$id,
+                                '</p>',
+                                '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:',
+                                data$nodes$color.background,
+                                ';">',
+                                data$nodes$eigen,
+                                '</p></center>'
+                                )
+
+      if (directed) {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>'
+                                  )
+
+      } else {
+
+        # Shows the relation when hovering over the edge
+        data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$to,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:',
+                                  data$edges$color.color,
+                                  ';">',
+                                  data$edges$Relation,
+                                  '</p></center>',
+                                  '<center><p style = "font-size:14px;font-family:verdana;">',
+                                  data$edges$from,
+                                  '</p></center>'
+                                  )
+
+      }
+
+      withProgress(message = 'Creating graph', style = 'notification', value = 0.1, {
+        Sys.sleep(0.25)
+
+        incProgress(1, detail = paste("Running visnetwork"))
+
+        # Setting seed is important so the graph is always with the same configuration when starts
+        set.seed(123)
+
+  	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>%
+  	      visNodes(shape = "dot") %>%
+  	      visEdges(arrows =list(to = list(enabled = directed)),
+  	               color = list(color = "gray",
+  	                            highlight = "red")) %>%
+          #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>%
+  	      visIgraphLayout()%>%
+  	      visOptions(highlightNearest = TRUE)%>%
+  visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap;
+   font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;')
+  	    })
+    }
+    return(ntw)
+  }
+})
+
+visNetworkOutput(outputId="local_network_monitor")
+
+```
+
+### Heatmap
+
+```{r, echo = FALSE}
+
+output$local_heatmap = renderPlotly({
+
+  withProgress(message = 'Creating heatmap', style = 'notification', value = 0.1, {
+    Sys.sleep(0.25)
+
+    incProgress(1, detail = paste("Running Heatmapply"))
+
+    validate(
+      need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie")
+    )
+
+    if (!is.null(input$node_sel_m) && !is.null(input$order_m)) {
+      values = values()
+      heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma"))
+      }
+  })
+})
+
+plotlyOutput(outputId="local_heatmap")
+
+```
+
+### Metrics
+
+```{r}
+
+fillCol(DT::DTOutput(outputId = 'table_centr'),
+        br(),
+        DT::DTOutput(outputId = 'table_values'), flex = c(NA,NA,NA))
+
+```
+
+<!-- Graph {data-navmenu="Communities"} -->
+<!-- ===================================== -->
 
 <!-- Inputs {.sidebar} -->
 <!-- ------------------------------------- -->
 
 <!-- ```{r} -->
 
-<!-- h4("Network Ties") -->
-<!-- # Selection of the edges that will appear in the relation network -->
-<!-- checkboxGroupInput("edges_select_local", -->
-<!--                    label = NULL, -->
-<!--                    choices = list("Is teacher of" = 1,  -->
-<!--                                   "Is friend of" = 2,  -->
-<!--                                   "Is family of" = 3,  -->
-<!--                                   "Studied the work of" = 4,  -->
-<!--                                   "Sent letters to" = 5,  -->
-<!--                                   #"Is associated with" = 6,  -->
-<!--                                   "Is benefactor of" = 7), -->
-<!--                    selected = 1, -->
-<!--                    inline = FALSE) -->
-<!-- br() -->
-<!-- # Egonet configuration -->
-<!-- h4("Ego") -->
-<!-- # Node selection -->
-<!-- uiOutput(outputId = "node_sel") -->
-<!-- #br() -->
-<!-- # Order -->
-<!-- sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1) -->
-<!-- # Node and Label Size -->
-<!-- br() -->
-<!-- h4("Appearance") -->
-<!-- sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!-- sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!-- #hr() -->
-<!-- #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels") -->
+<!-- selectInput(inputId= "dataset_selection_cm", -->
+<!--             label = "Select a dataset", -->
+<!--             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"), -->
+<!--             selected = "diogenes") -->
 
-<!-- div(message, style = "color:red") -->
-<!-- ``` -->
-
-<!-- Row  -->
-<!-- ------------------------------------- -->
-
-<!-- ### Local Network -->
-
-<!-- ```{r} -->
-
-<!-- output$local_network = renderVisNetwork({ -->
-
-<!--   validate( -->
-<!--     need(try(!is.null(input$edges_select_local)), "Please select at least one tie") -->
-<!--   ) -->
-
-<!--   if (!is.null(input$node_sel) && !is.null(input$order)) { -->
-
-<!--     # Use function is_directed -->
-<!--     directed = is_directed(input$edges_select_local) -->
-
-<!--     try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE) -->
-
-<!--     # id en nodos es necesario para exportar al formato Pajek -->
-<!--     V(g)$id = V(g)$name -->
-
-<!--     # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges -->
-<!--     E(g)$id = seq(1:length(E(g))) -->
-
-<!--     # Subsetting according to edges selected -->
-<!--     g_ = subset_graph(input$edges_select_local, g) -->
-
-<!--     # Egonet -->
-<!--     d <- make_ego_graph(g_, -->
-<!--                         order = input$order, -->
-<!--                         nodes = input$node_sel, -->
-<!--                         mode = c("all"), -->
-<!--                         mindist = 0) -->
-
-<!--     # The following line could be used to export to pajek. Should be linked to a "download" button.  -->
-<!--     #write_graph(d[[1]], "pajek.txt", format = "pajek") -->
-
-<!--     #Set label size -->
-<!--     if (is.null(input$label_size_local[1])) min_label = rescaled_value(0.3,1.0,4) -->
-<!--     else min_label = rescaled_value(0.3,1.0,input$label_size_local[1]) -->
-
-<!--     if (is.null(input$label_size_local[2])) max_label = rescaled_value(0.3,1.0,6) -->
-<!--     else max_label = rescaled_value(0.3,1.0,input$label_size_local[2]) -->
-
-<!--     labsize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_label, max_label) -->
-<!--     V(d[[1]])$label.cex <- labsize -->
-
-<!--     #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle) -->
-
-<!--     data <- toVisNetworkData(d[[1]]) -->
-
-<!--     # Set node size -->
-<!--     if (is.null(input$node_size_local[1])) min_node = rescaled_value(10.0,30.0,4) -->
-<!--     else min_node = rescaled_value(10.0,30.0,input$node_size_local[1]) -->
-
-<!--     if (is.null(input$node_size_local[2])) max_node = rescaled_value(10.0,30.0,6) -->
-<!--     else max_node = rescaled_value(10.0,30.0,input$node_size_local[2]) -->
-
-<!--     nodesize <- rescale(degree(d[[1]]), min(degree(d[[1]])), max(degree(d[[1]])), min_node, max_node) -->
-<!--     data$nodes$size = nodesize -->
-
-<!--     # Setting parameters straight in the data frame for visNetwork -->
-<!--     data$nodes$color.background = case_when( -->
-<!--       data$nodes$Group == "Male" ~ '#FF6347', -->
-<!--       data$nodes$Group == "Female" ~ '#ffa500', -->
-<!--       data$nodes$Group == "Place" ~ '#31e001', -->
-<!--       data$nodes$Group == "God" ~ '#05e2ff' -->
-<!--     ) -->
-
-<!--     # Setting group in visnetwork format -->
-<!--     data$nodes$group = data$nodes$Group -->
-
-<!--     data$nodes$color.border = rep("#000000",length(data$nodes$color.background)) -->
-
-<!--     data$nodes$color.highlight = case_when( -->
-<!--       data$nodes$Group == "Male" ~ '#47e3ff', -->
-<!--       data$nodes$Group == "Female" ~ '#4d00ff', -->
-<!--       data$nodes$Group == "Place" ~ '#ff0134', -->
-<!--       data$nodes$Group == "God" ~ '#ff4c05' -->
-<!--     ) -->
-
-<!--     # Setting parameters straight in the data frame for visNetwork -->
-<!--     data$edges$color.color = case_when( -->
-<!--       data$edges$Relation == "is teacher of" ~ '#0000FF', -->
-<!--       data$edges$Relation == "is friend of" ~ '#228B22', -->
-<!--       data$edges$Relation == "is family of" ~ '#FF0000',  -->
-<!--       data$edges$Relation == "studied the work of" ~ '#ff01d9', -->
-<!--       data$edges$Relation == "sent letters to" ~ '#ffbf00', -->
-<!--       #data$edges$Relation == "is associated with" ~ '#14ff03', -->
-<!--       data$edges$Relation == "is benefactor of" ~ '#fff23c' -->
-<!--     ) -->
-
-<!--     data$edges$color.highlight = case_when( -->
-<!--       data$edges$Relation == "is teacher of" ~ '#00ffff', -->
-<!--       data$edges$Relation == "is friend of" ~ '#568b22', -->
-<!--       data$edges$Relation == "is family of" ~ '#ff4000', -->
-<!--       data$edges$Relation == "studied the work of" ~ '#d9ff01', -->
-<!--       data$edges$Relation == "sent letters to" ~ '#8400ff', -->
-<!--       #data$edges$Relation == "is associated with" ~ '#ff0314', -->
-<!--       data$edges$Relation == "is benefactor of" ~ '#e53cff' -->
-<!--     ) -->
-
-<!--     # nodes data.frame for legend -->
-<!--     lnodes <- data.frame(label = c("Male", "Female"), -->
-<!--                          shape = c( "dot"),  -->
-<!--                          color = c("#FF6347", "#ffa500"), -->
-<!--                          id = 1:2) -->
-
-<!--     if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)  -->
-
-<!--     # edges data.frame for legend -->
-<!--     ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                          label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),  -->
-<!--                          arrows = arrow,  -->
-<!--                          font.align = "bottom") -->
-
-<!--     # Shows the name when hovering over the node -->
-<!--     data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">', -->
-<!--                               data$nodes$id, -->
-<!--                               '</p>',  -->
-<!--                               '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                               data$nodes$color.background,  -->
-<!--                               ';">', -->
-<!--                               data$nodes$Group, -->
-<!--                               '</p></center>' -->
-<!--                               ) -->
-
-<!--     if (directed) { -->
-
-<!--       # Shows the relation when hovering over the edge -->
-<!--       data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                 data$edges$from, -->
-<!--                                 '</p></center>',  -->
-<!--                                 '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$edges$color.color,  -->
-<!--                                 ';">', -->
-<!--                                 data$edges$Relation, -->
-<!--                                 '</p></center>',  -->
-<!--                                 '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                 data$edges$to,  -->
-<!--                                 '</p></center>' -->
-<!--                                 )   -->
-
-<!--     } else { -->
-
-<!--       # Shows the relation when hovering over the edge -->
-<!--       data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                 data$edges$to, -->
-<!--                                 '</p></center>',  -->
-<!--                                 '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$edges$color.color,  -->
-<!--                                 ';">', -->
-<!--                                 data$edges$Relation, -->
-<!--                                 '</p></center>',  -->
-<!--                                 '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                 data$edges$from,  -->
-<!--                                 '</p></center>' -->
-<!--                                 ) -->
-
-<!--     } -->
-
-<!--     withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--       Sys.sleep(0.25) -->
-
-<!--       incProgress(1, detail = paste("Running visnetwork")) -->
-
-<!--       # Setting seed is important so the graph is always with the same configuration when starts -->
-<!--       set.seed(123) -->
-
-<!-- 	    visNetwork(nodes = data$nodes, edges = data$edges)%>% -->
-<!-- 	      visNodes(shape = "dot") %>% -->
-<!-- 	      visEdges(arrows =list(to = list(enabled = directed)), -->
-<!-- 	               color = list(color = "gray", -->
-<!-- 	                            highlight = "red")) %>% -->
-<!--         #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>% -->
-<!-- 	      visIgraphLayout()%>% -->
-<!-- 	      visOptions(highlightNearest = TRUE)%>% -->
-<!-- visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap; -->
-<!--  font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;') -->
-<!-- 	    }) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- # This function creates the selectInput object dynamically. -->
-<!-- # The options for nodes in the list depends on the edges selected -->
-
-<!-- output$node_sel <- renderUI({ -->
-
-<!--   validate( -->
-<!--     need(try(!is.null(input$edges_select_local)), "Select at least one Tie") -->
-<!--   ) -->
-
-<!--   all_nodes = c() -->
-
-<!--   if (1 %in% input$edges_select_local){ -->
-<!--       all_nodes = c(all_nodes,  -->
-<!--                     as.character(edges$Source[which(edges$Relation == "is teacher of")]), -->
-<!--                     as.character(edges$Target[which(edges$Relation == "is teacher of")])) -->
-<!--       } -->
-
-<!--   if (2 %in% input$edges_select_local){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "is friend of")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "is friend of")])) -->
-<!--     } -->
-
-<!--   if (3 %in% input$edges_select_local){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "is family of")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "is family of")])) -->
-<!--   } -->
-
-<!--   if (4 %in% input$edges_select_local){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "studied the work of")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "studied the work of")])) -->
-<!--   } -->
-
-<!--   if (5 %in% input$edges_select_local){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "sent letters to")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "sent letters to")])) -->
-<!--   } -->
-
-<!--   if (7 %in% input$edges_select_local){ -->
-<!--   all_nodes = c(all_nodes,  -->
-<!--                 as.character(edges$Source[which(edges$Relation == "is benefactor of")]), -->
-<!--                 as.character(edges$Target[which(edges$Relation == "is benefactor of")])) -->
-<!--   } -->
-
-<!--   all_nodes = sort(unique(all_nodes)) -->
-
-<!--   if (!is.null(input$node_sel)) selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = input$node_sel) -->
-<!--   else selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = "Plato") -->
-<!-- }) -->
-
-<!-- visNetworkOutput(outputId="local_network") -->
-
-<!-- ``` -->
-
-<!-- Graph + Centrality {data-navmenu="Local Network" data-orientation="columns"} -->
-<!-- =====================================  -->
-
-<!-- Inputs {.sidebar} -->
-<!-- ------------------------------------- -->
-
-<!-- ```{r} -->
-
-<!-- h4("Network Ties") -->
-<!-- # Selection of the edges that will appear in the relation network -->
-<!-- checkboxGroupInput("edges_select_local_m", -->
-<!--                    label = NULL, -->
-<!--                    choices = list("Is teacher of" = 1,  -->
-<!--                                   "Is friend of" = 2,  -->
-<!--                                   "Is family of" = 3,  -->
-<!--                                   "Studied the work of" = 4,  -->
-<!--                                   "Sent letters to" = 5,  -->
-<!--                                   #"Is associated with" = 6,  -->
-<!--                                   "Is benefactor of" = 7), -->
-<!--                    selected = 1, -->
-<!--                    inline = FALSE) -->
-<!-- br() -->
-<!-- # Egonet configuration -->
-<!-- h4("Egos") -->
-<!-- # Node selection -->
-<!-- uiOutput(outputId = "node_sel_m") -->
-<!-- #br() -->
-<!-- # Order -->
-<!-- sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1) -->
-<!-- br() -->
-<!-- h4("Centrality Index") -->
-<!-- selectInput("variable_type", NULL, -->
-<!--                 c("Degree" = "degree", -->
-<!--                   "Betweenness" = "betweenness", -->
-<!--                   "Closeness" = "closeness", -->
-<!--                   "Eigenvector" = "eigenvector")) -->
-<!-- # Node and Label Size -->
-<!-- br() -->
-<!-- h4("Appearance") -->
-<!-- sliderInput(inputId = "label_size_local_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!-- sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-
-<!-- #hr() -->
-<!-- #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels") -->
-
-<!-- div(message, style = "color:red") -->
-<!-- ``` -->
-
-<!-- Column {.tabset .tabset-fade} -->
-<!-- ------------------------------------- -->
-
-<!-- ```{r, echo = FALSE} -->
-
-<!-- directed = reactive({ -->
-<!--   return(is_directed(input$edges_select_local_m)) -->
-<!-- }) -->
-
-<!-- d = reactive({ -->
-
-<!--   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) { -->
-
-<!--     # Use function is_directed in reactive directed -->
-<!--     directed = directed() -->
-
-<!--     try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE) -->
-
-<!--     # id en nodos es necesario para exportar al formato Pajek -->
-<!--     V(g)$id = V(g)$name -->
-
-<!--     # id en ejes es necesario para visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges -->
-<!--     E(g)$id = seq(1:length(E(g))) -->
-
-<!--     # Subsetting according to edges selected -->
-<!--     g_ = subset_graph(input$edges_select_local_m, g) -->
-
-<!--     # Egonet -->
-<!--     local_ntwk <- make_ego_graph(g_, -->
-<!--                         order = input$order_m, -->
-<!--                         nodes = input$node_sel_m, -->
-<!--                         mode = c("all"), -->
-<!--                         mindist = 0) -->
-<!--   return(local_ntwk) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- values = reactive({ -->
-
-<!--     validate( -->
-<!--       need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie") -->
-<!--     ) -->
-
-<!--     if (!is.null(input$node_sel_m) && !is.null(input$order_m)) { -->
-<!--       d = d() -->
-<!--       val =  data.frame(degree = igraph::degree(d[[1]]), -->
-<!--                          betweenness = as.numeric(format(igraph::betweenness(d[[1]], normalized =TRUE), digits = 3, nsmall = 3)), -->
-<!--                          closeness = as.numeric(format(igraph::closeness(d[[1]]), digits = 3, nsmall = 3)), -->
-<!--                          eigenvector = as.numeric(format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3))) -->
-<!--       val = val[order(val$degree, decreasing = TRUE),] -->
-<!--       return(val) -->
-<!--     } -->
-<!-- }) -->
-
-<!-- centr = reactive({ -->
-
-<!--   validate( -->
-<!--     need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie") -->
-<!--   ) -->
-
-<!--   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) { -->
-<!--     d = d() -->
-<!--     centr_ = data.frame(degree = as.numeric(format(igraph::centralization.degree(d[[1]])$centralization[1],  -->
-<!--                                                    digits = 3, nsmall = 3)), -->
-<!--                      betweenness = as.numeric(format(igraph::centralization.betweenness(d[[1]])$centralization[1],  -->
-<!--                                                      digits = 3, nsmall = 3)), -->
-<!--                      closeness = as.numeric(format(igraph::centralization.closeness(d[[1]])$centralization[1],  -->
-<!--                                                    digits = 3, nsmall = 3)), -->
-<!--                      eigenvector = as.numeric(format(igraph::centralization.evcent(d[[1]])$centralization[1],  -->
-<!--                                                      digits = 3, nsmall = 3)) -->
-<!--                      ) -->
-<!--     row.names(centr_) = c("Graph") -->
-<!--     return(centr_) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- output$table_values = DT::renderDataTable({datatable(values(), selection = 'none', caption = 'Centrality scores',  -->
-<!--                                    options = list( -->
-<!--                                                  initComplete = JS( -->
-<!--                                                   "function(settings, json){", -->
-<!--                                                   "$(this.api().table().body()).css({'font-size': '14px'});", -->
-<!--                                                   "$(this.api().table().header()).css({'font-size': '12px'});", -->
-<!--                                                   "}"), -->
-<!--                                                   pageLength = 10, -->
-<!--                                                   lengthChange = FALSE, -->
-<!--                                                   processing = FALSE, -->
-<!--                                                   scrollX = TRUE -->
-<!--                                                   #, -->
-<!--                                                   #scrollY = TRUE, -->
-<!--                                                   #scrollCollapse = TRUE, -->
-<!--                                                   #autoWidth = TRUE -->
-<!--                                                   , -->
-<!--                                                   columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)), -->
-<!--                                                                     list(className = 'dt-center', targets = c(1, 2, 3, 4))) -->
-<!--                                                   ))}) -->
-
-<!-- output$table_centr = DT::renderDataTable({datatable(centr(), selection = 'none', caption = 'Centralization scores', -->
-<!--                                   options = list(lengthChange = FALSE, -->
-<!--                                                  processing = FALSE, -->
-<!--                                                  ordering = FALSE, -->
-<!--                                                  #autoWidth = TRUE, -->
-<!--                                                  scrollX = TRUE, -->
-<!--                                                  searching = FALSE, -->
-<!--                                                  paging = FALSE, -->
-<!--                                                  info = FALSE -->
-<!--                                                  , -->
-<!--                                                  columnDefs = list(list(width = '20%', targets = c(1, 2, 3, 4)), -->
-<!--                                                                    list(className = 'dt-center', targets = c(1, 2, 3, 4))) -->
-<!--                                                  , -->
-<!--                                                  initComplete = JS( -->
-<!--                                                     "function(settings, json){", -->
-<!--                                                     "$(this.api().table().body()).css({'font-size': '14px'});", -->
-<!--                                                     "$(this.api().table().header()).css({'font-size': '12px'});", -->
-<!--                                                     "$(this.api().table().header()).css({'background-color': '#326ed6', 'color': '#fff'});", -->
-<!--                                                     "}") -->
-<!--                                                  ))}) -->
-
-<!-- # This function creates the selectInput object dynamically. -->
-<!-- # The options for nodes in the list depends on the edges selected -->
-
-<!-- output$node_sel_m <- renderUI({ -->
-
-<!--   validate( -->
-<!--     need(try(!is.null(input$edges_select_local_m)), "Select at least one Tie") -->
-<!--   ) -->
-
-<!--   all_nodes = c() -->
-
-<!--   if (1 %in% input$edges_select_local_m){ -->
-<!--       all_nodes = c(all_nodes,  -->
-<!--                     as.character(edges$Source[which(edges$Relation == "is teacher of")]), -->
-<!--                     as.character(edges$Target[which(edges$Relation == "is teacher of")])) -->
-<!--       } -->
-
-<!--   if (2 %in% input$edges_select_local_m){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "is friend of")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "is friend of")])) -->
-<!--     } -->
-
-<!--   if (3 %in% input$edges_select_local_m){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "is family of")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "is family of")])) -->
-<!--   } -->
-
-<!--   if (4 %in% input$edges_select_local_m){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "studied the work of")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "studied the work of")])) -->
-<!--   } -->
-
-<!--   if (5 %in% input$edges_select_local_m){ -->
-<!--     all_nodes = c(all_nodes,  -->
-<!--                   as.character(edges$Source[which(edges$Relation == "sent letters to")]), -->
-<!--                   as.character(edges$Target[which(edges$Relation == "sent letters to")])) -->
-<!--   } -->
-
-<!--   if (7 %in% input$edges_select_local_m){ -->
-<!--   all_nodes = c(all_nodes,  -->
-<!--                 as.character(edges$Source[which(edges$Relation == "is benefactor of")]), -->
-<!--                 as.character(edges$Target[which(edges$Relation == "is benefactor of")])) -->
-<!--   } -->
-
-<!--   all_nodes = sort(unique(all_nodes)) -->
-
-<!--   if (!is.null(input$node_sel_m)) selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = input$node_sel_m) -->
-<!--   else selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = "Plato") -->
-<!-- }) -->
-
-<!-- ``` -->
-
-<!-- ### Graph -->
-
-<!-- ```{r, echo = FALSE} -->
-
-<!-- output$local_network_monitor = renderVisNetwork({ -->
-
-<!--   validate( -->
-<!--     need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie") -->
-<!--   ) -->
-
-<!--   if (!is.null(input$node_sel_m) && !is.null(input$order_m)) { -->
-
-<!--     # Update reactive values -->
-<!--     directed = directed() -->
-<!--     d = d() -->
-
-<!--     if (input$variable_type == 'degree'){ -->
-
-<!--       #Set label size -->
-<!--       if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4) -->
-<!--       else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1]) -->
-
-<!--       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6) -->
-<!--       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2]) -->
-
-<!--       labsize <- rescale(igraph::degree(d[[1]]),  -->
-<!--                          min(igraph::degree(d[[1]])),  -->
-<!--                          max(igraph::degree(d[[1]])),  -->
-<!--                          min_label, max_label) -->
-
-<!--       V(d[[1]])$label.cex <- labsize -->
-
-<!--       #subTitle = paste0("Egonet of Variable ", ego_node, ", ",subTitle) -->
-
-<!--       data <- toVisNetworkData(d[[1]]) -->
-
-<!--       # Set node size -->
-<!--       if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4) -->
-<!--       else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1]) -->
-
-<!--       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6) -->
-<!--       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2]) -->
-
-<!--       nodesize <- rescale(igraph::degree(d[[1]]),  -->
-<!--                           min(igraph::degree(d[[1]])),  -->
-<!--                           max(igraph::degree(d[[1]])),  -->
-<!--                           min_node, max_node) -->
-<!--       data$nodes$size = nodesize -->
-
-<!--       min_deg = min(degree(d[[1]])) -->
-<!--       max_deg = max(degree(d[[1]])) -->
-<!--       n_col =  50 -->
-<!--       node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma") -->
-
-<!--       # x in this function is degree -->
-<!--       col_index = function(x) {((n_col -1)/(max_deg - min_deg))*(x-min_deg)+1} -->
-
-<!--       returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)} -->
-
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$nodes$color.background = sapply(igraph::degree(d[[1]]), FUN = returnColor) -->
-
-<!--       data$nodes$degree = igraph::degree(d[[1]]) -->
-
-<!--       # Setting group in visnetwork format -->
-<!--       data$nodes$group = data$nodes$Group -->
-
-<!--       data$nodes$color.border = sapply(degree(d[[1]]), FUN = returnColor) -->
-
-<!--       data$nodes$color.highlight = case_when( -->
-<!--         data$nodes$Group == "Male" ~ '#47e3ff', -->
-<!--         data$nodes$Group == "Female" ~ '#4d00ff', -->
-<!--         data$nodes$Group == "Place" ~ '#ff0134', -->
-<!--         data$nodes$Group == "God" ~ '#ff4c05' -->
-<!--       ) -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$edges$color.color = rep("gray",length(data$edges$Relation)) -->
-
-<!--       data$edges$color.highlight = rep("gray",length(data$edges$Relation)) -->
-
-<!--       # nodes data.frame for legend -->
-<!--       lnodes <- data.frame(label = c("Male", "Female"), -->
-<!--                            shape = c( "dot"),  -->
-<!--                            color = c("#FF6347", "#ffa500"), -->
-<!--                            id = 1:2) -->
-
-<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)  -->
-
-<!--       # edges data.frame for legend -->
-<!--       ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),  -->
-<!--                            arrows = arrow,  -->
-<!--                            font.align = "bottom") -->
-
-<!--       # Shows the name when hovering over the node -->
-<!--       data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">', -->
-<!--                                 data$nodes$id, -->
-<!--                                 '</p>',  -->
-<!--                                 '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$nodes$color.background,  -->
-<!--                                 ';">', -->
-<!--                                 data$nodes$degree, -->
-<!--                                 '</p></center>' -->
-<!--                                 ) -->
-
-<!--       if (directed) { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to,  -->
-<!--                                   '</p></center>' -->
-<!--                                   )   -->
-
-<!--       } else { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from,  -->
-<!--                                   '</p></center>' -->
-<!--                                   ) -->
-
-<!--       } -->
-
-<!--       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--         Sys.sleep(0.25) -->
-
-<!--         incProgress(1, detail = paste("Running visnetwork")) -->
-
-<!--         # Setting seed is important so the graph is always with the same configuration when starts -->
-<!--         set.seed(123) -->
-
-<!--   	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>% -->
-<!--   	      visNodes(shape = "dot") %>% -->
-<!--   	      visEdges(arrows =list(to = list(enabled = directed)), -->
-<!--   	               color = list(color = "gray", -->
-<!--   	                            highlight = "red")) %>% -->
-<!--           #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>% -->
-<!--   	      visIgraphLayout()%>% -->
-<!--   	      visOptions(highlightNearest = TRUE)%>% -->
-<!-- visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap; -->
-<!--    font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;') -->
-<!--   	    })  -->
-<!--     } -->
-<!--     if (input$variable_type == 'betweenness'){ -->
-
-<!--       #Set label size -->
-<!--       if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4) -->
-<!--       else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1]) -->
-
-<!--       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6) -->
-<!--       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2]) -->
-
-<!--       labsize <- rescale(igraph::betweenness(d[[1]]),  -->
-<!--                          min(igraph::betweenness(d[[1]])),  -->
-<!--                          max(igraph::betweenness(d[[1]])),  -->
-<!--                          min_label,  -->
-<!--                          max_label) -->
-<!--       V(d[[1]])$label.cex <- labsize -->
-
-<!--       data <- toVisNetworkData(d[[1]]) -->
-
-<!--       # Set node size -->
-<!--       if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4) -->
-<!--       else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1]) -->
-
-<!--       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6) -->
-<!--       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2]) -->
-
-<!--       nodesize <- rescale(igraph::betweenness(d[[1]]),  -->
-<!--                           min(igraph::betweenness(d[[1]])),  -->
-<!--                           max(igraph::betweenness(d[[1]])),  -->
-<!--                           min_node, max_node) -->
-<!--       data$nodes$size = nodesize -->
-
-<!--       min_bet = min(betweenness(d[[1]])) -->
-<!--       max_bet = max(betweenness(d[[1]])) -->
-<!--       n_col =  50 -->
-<!--       node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma") -->
-
-<!--       # x in this function is degree -->
-<!--       col_index = function(x) {((n_col -1)/(max_bet - min_bet))*(x-min_bet)+1} -->
-
-<!--       returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)} -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$nodes$color.background = sapply(betweenness(d[[1]]), FUN = returnColor) -->
-
-<!--       data$nodes$betweenness = format(betweenness(d[[1]]), digits = 3, nsmall = 3)  -->
-
-<!--       # Setting group in visnetwork format -->
-<!--       data$nodes$group = data$nodes$Group -->
-
-<!--       data$nodes$color.border = sapply(betweenness(d[[1]]), FUN = returnColor) -->
-
-<!--       data$nodes$color.highlight = case_when( -->
-<!--         data$nodes$Group == "Male" ~ '#47e3ff', -->
-<!--         data$nodes$Group == "Female" ~ '#4d00ff', -->
-<!--         data$nodes$Group == "Place" ~ '#ff0134', -->
-<!--         data$nodes$Group == "God" ~ '#ff4c05' -->
-<!--       ) -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$edges$color.color = rep("gray",length(data$edges$Relation)) -->
-
-<!--       data$edges$color.highlight = rep("gray",length(data$edges$Relation)) -->
-
-<!--       # nodes data.frame for legend -->
-<!--       lnodes <- data.frame(label = c("Male", "Female"), -->
-<!--                            shape = c( "dot"),  -->
-<!--                            color = c("#FF6347", "#ffa500"), -->
-<!--                            id = 1:2) -->
-
-<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)  -->
-
-<!--       # edges data.frame for legend -->
-<!--       ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),  -->
-<!--                            arrows = arrow,  -->
-<!--                            font.align = "bottom") -->
-
-<!--       # Shows the name when hovering over the node -->
-<!--       data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">', -->
-<!--                                 data$nodes$id, -->
-<!--                                 '</p>',  -->
-<!--                                 '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$nodes$color.background,  -->
-<!--                                 ';">', -->
-<!--                                 data$nodes$betweenness, -->
-<!--                                 '</p></center>' -->
-<!--                                 ) -->
-
-<!--       if (directed) { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to,  -->
-<!--                                   '</p></center>' -->
-<!--                                   )   -->
-
-<!--       } else { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from,  -->
-<!--                                   '</p></center>' -->
-<!--                                   ) -->
-
-<!--       } -->
-
-<!--       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--         Sys.sleep(0.25) -->
-
-<!--         incProgress(1, detail = paste("Running visnetwork")) -->
-
-<!--         # Setting seed is important so the graph is always with the same configuration when starts -->
-<!--         set.seed(123) -->
-
-<!--   	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>% -->
-<!--   	      visNodes(shape = "dot") %>% -->
-<!--   	      visEdges(arrows =list(to = list(enabled = directed)), -->
-<!--   	               color = list(color = "gray", -->
-<!--   	                            highlight = "red")) %>% -->
-<!--           #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>% -->
-<!--   	      visIgraphLayout()%>% -->
-<!--   	      visOptions(highlightNearest = TRUE)%>% -->
-<!--   visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap; -->
-<!--    font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;') -->
-<!--   	    }) -->
-<!--     } -->
-<!--     if (input$variable_type == 'closeness'){ -->
-
-<!--       #Set label size -->
-<!--       if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4) -->
-<!--       else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1]) -->
-
-<!--       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6) -->
-<!--       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2]) -->
-
-<!--       labsize <- rescale(igraph::closeness(d[[1]]),  -->
-<!--                          min(igraph::closeness(d[[1]])),  -->
-<!--                          max(igraph::closeness(d[[1]])),  -->
-<!--                          min_label, max_label) -->
-<!--       V(d[[1]])$label.cex <- labsize -->
-
-<!--       data <- toVisNetworkData(d[[1]]) -->
-
-<!--       # Set node size -->
-<!--       if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4) -->
-<!--       else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1]) -->
-
-<!--       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6) -->
-<!--       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2]) -->
-
-<!--       nodesize <- rescale(igraph::closeness(d[[1]]),  -->
-<!--                           min(igraph::closeness(d[[1]])),  -->
-<!--                           max(igraph::closeness(d[[1]])), -->
-<!--                           min_node, max_node) -->
-<!--       data$nodes$size = nodesize -->
-
-<!--       min_close = min(igraph::closeness(d[[1]])) -->
-<!--       max_close = max(igraph::closeness(d[[1]])) -->
-<!--       n_col =  50 -->
-<!--       node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma") -->
-
-<!--       # x in this function is degree -->
-<!--       col_index = function(x) {((n_col -1)/(max_close - min_close))*(x-min_close)+1} -->
-
-<!--       returnColor = function(x) {substr(node_vir_col[col_index(x)],1,nchar(node_vir_col[col_index(x)])-2)} -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$nodes$color.background = sapply(closeness(d[[1]]), FUN = returnColor) -->
-
-<!--       data$nodes$closeness =  format(closeness(d[[1]]), digits = 3, nsmall = 3)  -->
-
-<!--       # Setting group in visnetwork format -->
-<!--       data$nodes$group = data$nodes$Group -->
-
-<!--       data$nodes$color.border = sapply(closeness(d[[1]]), FUN = returnColor) -->
-
-<!--       data$nodes$color.highlight = case_when( -->
-<!--         data$nodes$Group == "Male" ~ '#47e3ff', -->
-<!--         data$nodes$Group == "Female" ~ '#4d00ff', -->
-<!--         data$nodes$Group == "Place" ~ '#ff0134', -->
-<!--         data$nodes$Group == "God" ~ '#ff4c05' -->
-<!--       ) -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$edges$color.color = rep("gray",length(data$edges$Relation)) -->
-
-<!--       data$edges$color.highlight = rep("gray",length(data$edges$Relation)) -->
-
-<!--       # nodes data.frame for legend -->
-<!--       lnodes <- data.frame(label = c("Male", "Female"), -->
-<!--                            shape = c( "dot"),  -->
-<!--                            color = c("#FF6347", "#ffa500"), -->
-<!--                            id = 1:2) -->
-
-<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)  -->
-
-<!--       # edges data.frame for legend -->
-<!--       ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),  -->
-<!--                            arrows = arrow,  -->
-<!--                            font.align = "bottom") -->
-
-<!--       # Shows the name when hovering over the node -->
-<!--       data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">', -->
-<!--                                 data$nodes$id, -->
-<!--                                 '</p>',  -->
-<!--                                 '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$nodes$color.background,  -->
-<!--                                 ';">', -->
-<!--                                 data$nodes$closeness, -->
-<!--                                 '</p></center>' -->
-<!--                                 ) -->
-
-<!--       if (directed) { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to,  -->
-<!--                                   '</p></center>' -->
-<!--                                   )   -->
-
-<!--       } else { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from,  -->
-<!--                                   '</p></center>' -->
-<!--                                   ) -->
-
-<!--       } -->
-
-<!--       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--         Sys.sleep(0.25) -->
-
-<!--         incProgress(1, detail = paste("Running visnetwork")) -->
-
-<!--         # Setting seed is important so the graph is always with the same configuration when starts -->
-<!--         set.seed(123) -->
-
-<!--   	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>% -->
-<!--   	      visNodes(shape = "dot") %>% -->
-<!--   	      visEdges(arrows =list(to = list(enabled = directed)), -->
-<!--   	               color = list(color = "gray", -->
-<!--   	                            highlight = "red")) %>% -->
-<!--           #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>% -->
-<!--   	      visIgraphLayout()%>% -->
-<!--   	      visOptions(highlightNearest = TRUE)%>% -->
-<!--   visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap; -->
-<!--    font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;') -->
-<!--   	    }) -->
-<!--     } -->
-<!--     if (input$variable_type == 'eigenvector'){ -->
-
-<!--       #Set label size -->
-<!--       if (is.null(input$label_size_local_m[1])) min_label = rescaled_value(0.3,1.0,4) -->
-<!--       else min_label = rescaled_value(0.3,1.0,input$label_size_local_m[1]) -->
-
-<!--       if (is.null(input$label_size_local_m[2])) max_label = rescaled_value(0.3,1.0,6) -->
-<!--       else max_label = rescaled_value(0.3,1.0,input$label_size_local_m[2]) -->
-
-<!--       labsize <- rescale(igraph::eigen_centrality(d[[1]])$vector,  -->
-<!--                          min(igraph::eigen_centrality(d[[1]])$vector),  -->
-<!--                          max(igraph::eigen_centrality(d[[1]])$vector),  -->
-<!--                          min_label, max_label) -->
-<!--       V(d[[1]])$label.cex <- labsize -->
-
-<!--       data <- toVisNetworkData(d[[1]]) -->
-
-<!--       # Set node size -->
-<!--       if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4) -->
-<!--       else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1]) -->
-
-<!--       if (is.null(input$node_size_local_m[2])) max_node = rescaled_value(10.0,30.0,6) -->
-<!--       else max_node = rescaled_value(10.0,30.0,input$node_size_local_m[2]) -->
-
-<!--       nodesize <- rescale(igraph::eigen_centrality(d[[1]])$vector,  -->
-<!--                           min(igraph::eigen_centrality(d[[1]])$vector),  -->
-<!--                           max(igraph::eigen_centrality(d[[1]])$vector),  -->
-<!--                           min_node, max_node) -->
-<!--       data$nodes$size = nodesize -->
-
-<!--       min_eigen = min(igraph::eigen_centrality(d[[1]])$vector) -->
-<!--       max_eigen = max(igraph::eigen_centrality(d[[1]])$vector) -->
-<!--       n_col =  50 -->
-<!--       node_vir_col = viridis(n = n_col, begin = 0, end = 1, direction = 1, option = "plasma") -->
-
-<!--       # x in this function is eigen_centrality -->
-<!--       col_index_evc = function(x) {((n_col -1.00)/(max_eigen - min_eigen))*(x - min_eigen)+1.00} -->
-
-<!--       col_index_evc_data = col_index_evc(igraph::eigen_centrality(d[[1]])$vector) -->
-
-<!--       returnColor_evc = function(x) {substr(node_vir_col[x],1,nchar(node_vir_col[x])-2)} -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$nodes$color.background = sapply(trunc(col_index_evc_data), FUN = returnColor_evc) -->
-
-<!--       data$nodes$eigen = format(igraph::eigen_centrality(d[[1]])$vector, digits = 3, nsmall = 3) -->
-
-<!--       data$nodes$color.border = sapply(trunc(col_index_evc_data), FUN = returnColor_evc) -->
-
-<!--       data$nodes$color.highlight = case_when( -->
-<!--         data$nodes$Group == "Male" ~ '#47e3ff', -->
-<!--         data$nodes$Group == "Female" ~ '#4d00ff', -->
-<!--         data$nodes$Group == "Place" ~ '#ff0134', -->
-<!--         data$nodes$Group == "God" ~ '#ff4c05' -->
-<!--       ) -->
-
-<!--       # Setting parameters straight in the data frame for visNetwork -->
-<!--       data$edges$color.color = rep("gray",length(data$edges$Relation)) -->
-
-<!--       data$edges$color.highlight = rep("gray",length(data$edges$Relation)) -->
-
-<!--       # nodes data.frame for legend -->
-<!--       lnodes <- data.frame(label = c("Male", "Female"), -->
-<!--                            shape = c( "dot"),  -->
-<!--                            color = c("#FF6347", "#ffa500"), -->
-<!--                            id = 1:2) -->
-
-<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)  -->
-
-<!--       # edges data.frame for legend -->
-<!--       ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),  -->
-<!--                            arrows = arrow,  -->
-<!--                            font.align = "bottom") -->
-
-<!--       # Shows the name when hovering over the node -->
-<!--       data$nodes$title = paste0('<p style = "font-size:18px;font-weight:bold; font-family: verdana;">', -->
-<!--                                 data$nodes$id, -->
-<!--                                 '</p>',  -->
-<!--                                 '<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$nodes$color.background,  -->
-<!--                                 ';">', -->
-<!--                                 data$nodes$eigen, -->
-<!--                                 '</p></center>' -->
-<!--                                 ) -->
-
-<!--       if (directed) { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to,  -->
-<!--                                   '</p></center>' -->
-<!--                                   )   -->
-
-<!--       } else { -->
-
-<!--         # Shows the relation when hovering over the edge -->
-<!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
-<!--                                   ';">', -->
-<!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
-<!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from,  -->
-<!--                                   '</p></center>' -->
-<!--                                   ) -->
-
-<!--       } -->
-
-<!--       withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
-<!--         Sys.sleep(0.25) -->
-
-<!--         incProgress(1, detail = paste("Running visnetwork")) -->
-
-<!--         # Setting seed is important so the graph is always with the same configuration when starts -->
-<!--         set.seed(123) -->
-
-<!--   	    ntw = visNetwork(nodes = data$nodes, edges = data$edges)%>% -->
-<!--   	      visNodes(shape = "dot") %>% -->
-<!--   	      visEdges(arrows =list(to = list(enabled = directed)), -->
-<!--   	               color = list(color = "gray", -->
-<!--   	                            highlight = "red")) %>% -->
-<!--           #visLegend(addEdges = ledges, addNodes = lnodes, useGroups = FALSE, width = 0.1, zoom = FALSE, position = "right")%>% -->
-<!--   	      visIgraphLayout()%>% -->
-<!--   	      visOptions(highlightNearest = TRUE)%>% -->
-<!--   visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;white-space: nowrap; -->
-<!--    font-family: verdana;font-size:14px;font-color:black;background-color: white;border: 1px solid #808074;') -->
-<!--   	    })        -->
-<!--     } -->
-<!--     return(ntw) -->
-<!--   } -->
-<!-- }) -->
-
-<!-- visNetworkOutput(outputId="local_network_monitor")    -->
-
-<!-- ``` -->
-
-<!-- ### Heatmap -->
-
-<!-- ```{r, echo = FALSE} -->
-
-<!-- output$local_heatmap = renderPlotly({ -->
-
-<!--   withProgress(message = 'Creating heatmap', style = 'notification', value = 0.1, { -->
-<!--     Sys.sleep(0.25) -->
-
-<!--     incProgress(1, detail = paste("Running Heatmapply")) -->
-
-<!--     validate( -->
-<!--       need(try(!is.null(input$edges_select_local_m)), "Please select at least one tie") -->
-<!--     ) -->
-
-<!--     if (!is.null(input$node_sel_m) && !is.null(input$order_m)) { -->
-<!--       values = values() -->
-<!--       heatmaply(percentize(values), dendrogram = 'none', colors = viridis(n = 50, begin = 0, end = 1, direction = 1, option = "plasma")) -->
-<!--       } -->
-<!--   }) -->
-<!-- }) -->
-
-<!-- plotlyOutput(outputId="local_heatmap") -->
-
-<!-- ``` -->
-
-<!-- ### Metrics -->
-
-<!-- ```{r} -->
-
-<!-- fillCol(DT::DTOutput(outputId = 'table_centr'), -->
-<!--         br(), -->
-<!--         DT::DTOutput(outputId = 'table_values'), flex = c(NA,NA,NA)) -->
-
-<!-- ``` -->
-
-<!-- Graph {data-navmenu="Communities"}  -->
-<!-- =====================================  -->
-
-<!-- Inputs {.sidebar} -->
-<!-- ------------------------------------- -->
-
-<!-- ```{r} -->
 
 <!-- br() -->
 <!-- h4("Network Ties") -->
@@ -2610,8 +2666,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!-- #hr() -->
 <!-- #helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees") -->
 
-<!-- div(message, style = "color:red") -->
-
+<!-- #div(message, style = "color:red") -->
 <!-- ``` -->
 
 <!-- Row -->
@@ -2620,6 +2675,20 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!-- ### Graph -->
 
 <!-- ```{r} -->
+<!-- nodes_reactive <- reactive ({ -->
+<!--   req(input$dataset_selection_cm) -->
+<!--   entrada <- input$dataset_selection_cm -->
+<!--   data <- sourceData(entrada) -->
+<!--   return (data$nodes) -->
+<!-- }) -->
+
+<!-- edges_reactive <- reactive({ -->
+<!--   req(input$dataset_selection_cm) -->
+<!--   entrada <- input$dataset_selection_cm -->
+<!--   data <- sourceData(entrada) -->
+<!--   return (data$edges) -->
+<!-- }) -->
+
 
 <!-- # Community detection -->
 
@@ -2634,15 +2703,18 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   #if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph) -->
 <!--   if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph) -->
 <!--   return(cluster) -->
-<!-- }  -->
+<!-- } -->
 
 <!-- handledClustering = function(alg, graph){ -->
-<!--   tryCatch(clustering(alg,graph),  -->
+<!--   tryCatch(clustering(alg,graph), -->
 <!--            #warning = function(w){;}, -->
 <!--            error = function(e){message = e;NULL}) -->
 <!-- } -->
 
 <!-- network_cmnt =  reactive({ -->
+
+<!--   nodes = nodes_reactive() -->
+<!--   edges = edges_reactive() -->
 
 <!--   # First validate if there are edges (Ties) selected -->
 <!--   validate( -->
@@ -2658,7 +2730,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   # ids in nodes are es required to export to Pajek format. Just in case! -->
 <!--   V(g)$id = V(g)$name -->
 
-<!--   # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges  -->
+<!--   # ids in edges are requiered for visUpdateNodes / visRemoveNodes / visUpdateEdges / visRemoveEdges -->
 <!--   E(g)$id = seq(1:length(E(g))) -->
 
 <!--   # Subsetting according to edges selected -->
@@ -2671,23 +2743,23 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   setColour = function(x) {substr(node_colours[x],1,nchar(node_colours[x])-2)} -->
 
 <!--   validate( -->
-<!--     need(try(!is.null(cluster)),  -->
+<!--     need(try(!is.null(cluster)), -->
 <!--          paste("The algorithm ", -->
 <!--                input$cmnt_dtc_alg, -->
 <!--                " could not identify communities given the current Phylosophers and Relations"," . ",  message) -->
 <!--          ) -->
 <!--   ) -->
 
-<!--   # This code is on hold until the requirement for bridges detection is  -->
+<!--   # This code is on hold until the requirement for bridges detection is -->
 <!--   # addressed -->
 <!--   #if (input$cmnt_dtc_alg == "Cluster Edge Betweenness") { -->
-<!--     #Print in console the id's of the edges identified as bridges  -->
+<!--     #Print in console the id's of the edges identified as bridges -->
 <!--     #print(cluster$bridges) -->
 <!--     #e = length(E(g_)$id) -->
 <!--     #e_bool = sapply(seq(1:e), function(x) x %in% cluster$bridges) + 1 -->
 <!--     #print(e_bool) -->
-<!--     #bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool]   -->
-<!--   #} else  -->
+<!--     #bridges_edge_col = c("#b8f3ff","#ff00fb")[e_bool] -->
+<!--   #} else -->
 
 <!--   # In the meanwhile overwriting the default behaviour -->
 <!--   bridges_edge_col  = c("#030000","#ff0400")[igraph::crossing(cluster, g_) + 1] -->
@@ -2746,7 +2818,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--         data$edges$color.color = case_when( -->
 <!--           data$edges$Relation == "is teacher of" ~ '#0000FF', -->
 <!--           data$edges$Relation == "is friend of" ~ '#228B22', -->
-<!--           data$edges$Relation == "is family of" ~ '#FF0000',  -->
+<!--           data$edges$Relation == "is family of" ~ '#FF0000', -->
 <!--           data$edges$Relation == "studied the work of" ~ '#ff01d9', -->
 <!--           data$edges$Relation == "sent letters to" ~ '#ffbf00', -->
 <!--           #data$edges$Relation == "is associated with" ~ '#14ff03', -->
@@ -2772,20 +2844,20 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--                            color = c("#FF6347", "#ffa500"), -->
 <!--                            id = 1:2) -->
 
-<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5)  -->
+<!--       if (directed) arrow = c("to", FALSE, FALSE, "to", "to") else  arrow = rep(as.character(FALSE),5) -->
 
 <!--       # edges data.frame for legend -->
 <!--       ledges <- data.frame(color = c("#0000FF", "#228B22", "#FF0000", '#ff01d9','#ffbf00'), -->
-<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"),  -->
-<!--                            arrows =arrow,  -->
+<!--                            label = c("is teacher of", "is friend of", "is family of", "studied the work of", "sent letters to"), -->
+<!--                            arrows =arrow, -->
 <!--                            font.align = "bottom") -->
 
 <!--       # Shows the name when hovering over the node -->
 <!--       data$nodes$title = paste0('<center><p style = "font-size:14px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                 data$nodes$color.background,  -->
+<!--                                 data$nodes$color.background, -->
 <!--                                 ';">', -->
 <!--                                 data$nodes$id, -->
-<!--                                 '</p></center>',  -->
+<!--                                 '</p></center>', -->
 <!--                                 '<center>Community N°: ', '<b>',data$nodes$community,'</b></center>' -->
 <!--                                 ) -->
 
@@ -2794,30 +2866,30 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--         # Shows the relation when hovering over the edge -->
 <!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
 <!--                                   data$edges$from, -->
-<!--                                   '</p></center>',  -->
+<!--                                   '</p></center>', -->
 <!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
+<!--                                   data$edges$color.color, -->
 <!--                                   ';">', -->
 <!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
+<!--                                   '</p></center>', -->
 <!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$to,  -->
+<!--                                   data$edges$to, -->
 <!--                                   '</p></center>' -->
-<!--                                   )   -->
+<!--                                   ) -->
 
 <!--       } else { -->
 
 <!--         # Shows the relation when hovering over the edge -->
 <!--         data$edges$title =  paste0('<center><p style = "font-size:14px;font-family:verdana;">', -->
 <!--                                   data$edges$to, -->
-<!--                                   '</p></center>',  -->
+<!--                                   '</p></center>', -->
 <!--                                   '<center><p style = "font-size:18px;font-weight:bold;font-family: verdana;color:', -->
-<!--                                   data$edges$color.color,  -->
+<!--                                   data$edges$color.color, -->
 <!--                                   ';">', -->
 <!--                                   data$edges$Relation, -->
-<!--                                   '</p></center>',  -->
+<!--                                   '</p></center>', -->
 <!--                                   '<center><p style = "font-size:14px;font-family:verdana;">', -->
-<!--                                   data$edges$from,  -->
+<!--                                   data$edges$from, -->
 <!--                                   '</p></center>' -->
 <!--                                   ) -->
 
@@ -2844,7 +2916,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--       }) -->
 <!--     }) -->
 <!--     return(visNetworkOutput(outputId="cmnt_vnw")) -->
-<!--   }  -->
+<!--   } -->
 
 <!--   if (input$cmnt_vsl_pck == "igraph") { -->
 
@@ -2873,7 +2945,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--         bridges_edge_col = case_when( -->
 <!--           data$edges$Relation == "is teacher of" ~ '#0000FF', -->
 <!--           data$edges$Relation == "is friend of" ~ '#228B22', -->
-<!--           data$edges$Relation == "is family of" ~ '#FF0000',  -->
+<!--           data$edges$Relation == "is family of" ~ '#FF0000', -->
 <!--           data$edges$Relation == "studied the work of" ~ '#ff01d9', -->
 <!--           data$edges$Relation == "sent letters to" ~ '#ffbf00', -->
 <!--           #data$edges$Relation == "is associated with" ~ '#14ff03', -->
@@ -2907,18 +2979,18 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--              y=g_, -->
 <!--              col = new_cols, -->
 <!--              vertext.frame.color = new_cols, -->
-<!--              main = subTitle,  -->
-<!--              layout = matrix(c(coords[,1], -coords[,2]),  -->
-<!--                              nrow = length(coords[,1]),  -->
-<!--                              ncol = 2,  -->
-<!--                              byrow = FALSE,  -->
-<!--                              dimnames = list()),  -->
+<!--              main = subTitle, -->
+<!--              layout = matrix(c(coords[,1], -coords[,2]), -->
+<!--                              nrow = length(coords[,1]), -->
+<!--                              ncol = 2, -->
+<!--                              byrow = FALSE, -->
+<!--                              dimnames = list()), -->
 <!--              edge.color = bridges_edge_col) -->
 <!--         }) -->
 <!--     }) -->
 <!--     return(plotOutput(outputId="cmnt_igp")) -->
 <!--   } -->
-<!-- })     -->
+<!-- }) -->
 
 <!-- output$graph_cmnt <- renderUI({ -->
 <!--   network_cmnt() -->
@@ -2928,7 +3000,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   if (input$cmnt_vsl_pck == "visNetwork") { -->
 <!--     if (!is.null(input$labelUI_vnw)) sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
 <!--     else sliderInput(inputId = "labelUI_vnw", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--   }  -->
+<!--   } -->
 <!-- }) -->
 
 <!-- output$nodeUI_vnw <- renderUI({ -->
@@ -2942,7 +3014,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   if (input$cmnt_vsl_pck == "igraph") { -->
 <!--     if (!is.null(input$labelUI_igp)) sliderInput(inputId = "labelUI_igp", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
 <!--     else sliderInput(inputId = "labelUI_igp", label = "Label Size",min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1) -->
-<!--   }  -->
+<!--   } -->
 <!-- }) -->
 
 <!-- output$nodeUI_igp <- renderUI({ -->
@@ -2954,15 +3026,20 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 
 <!-- uiOutput(outputId="graph_cmnt") -->
 
-<!-- ``` -->
+<!-- <!-- ``` --> -->
 
-<!-- Treemap View {data-navmenu="Communities"}  -->
-<!-- =====================================  -->
+<!-- Treemap View {data-navmenu="Communities"} -->
+<!-- ===================================== -->
 
 <!-- Inputs {.sidebar} -->
 <!-- ------------------------------------- -->
 
 <!-- ```{r} -->
+
+<!-- selectInput(inputId= "dataset_selection_tm", -->
+<!--             label = "Select a dataset", -->
+<!--             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"), -->
+<!--             selected = "diogenes") -->
 
 <!-- br() -->
 <!-- h4("Network Ties") -->
@@ -2993,9 +3070,9 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--                                                     #"Cluster Spinglass", -->
 <!--                                                     "Cluster Walktrap")) -->
 
-<!-- br() -->
+<!-- # br() -->
 
-<!-- div(message, style = "color:red") -->
+<!-- #div(message, style = "color:red") -->
 
 <!-- ``` -->
 
@@ -3005,7 +3082,6 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!-- ### Treemap View -->
 
 <!-- ```{r} -->
-
 <!-- # Community detection -->
 
 <!-- clustering = function(alg, graph){ -->
@@ -3019,13 +3095,27 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   #if (alg == "Cluster Spinglass") cluster <- cluster_spinglass(graph) -->
 <!--   if (alg == "Cluster Walktrap") cluster <- cluster_walktrap(graph) -->
 <!--   return(cluster) -->
-<!-- }  -->
+<!-- } -->
 
 <!-- handledClustering = function(alg, graph){ -->
-<!--   tryCatch(clustering(alg,graph),  -->
+<!--   tryCatch(clustering(alg,graph), -->
 <!--            #warning = function(w){;}, -->
 <!--            error = function(e){message = e;NULL}) -->
 <!-- } -->
+
+<!-- nodes_reactive_tm <- reactive ({ -->
+<!--   req(input$dataset_selection_tm) -->
+<!--   entrada <- input$dataset_selection_tm -->
+<!--   data <- sourceData(entrada) -->
+<!--   return (data$nodes) -->
+<!-- }) -->
+<!-- edges_reactive_tm <- reactive({ -->
+<!--   req(input$dataset_selection_tm) -->
+<!--   entrada <- input$dataset_selection_tm -->
+<!--   data <- sourceData(entrada) -->
+<!--   return (data$edges) -->
+<!-- }) -->
+
 
 <!-- output$cmnt_hch_tm <- renderHighchart({ -->
 
@@ -3038,7 +3128,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   #directed = is_directed(input$edges_select_comm) -->
 <!--   directed = FALSE -->
 
-<!--   try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE) -->
+<!--   try(g <- graph_from_data_frame(d = edges_reactive_tm(), directed=directed, vertices = nodes_reactive_tm()), silent = TRUE) -->
 
 <!--   # ids in nodes are es required to export to Pajek format. Just in case! -->
 <!--   V(g)$id = V(g)$name -->
@@ -3075,13 +3165,13 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 
 <!--   nodes_tb = as_tibble(data$nodes) -->
 
-<!--   # Example for hctreemap not working!!  -->
+<!--   # Example for hctreemap not working!! -->
 <!--   # Let it here just in case is required to use it in the future -->
 <!--   # It might be needed to migrate to hctreemap2 -->
 
 <!--   # hc = hctreemap2(data = nodes_tb, -->
-<!--   #                 group_vars = c("community", "label"),  -->
-<!--   #                 size_var = "degree",  -->
+<!--   #                 group_vars = c("community", "label"), -->
+<!--   #                 size_var = "degree", -->
 <!--   #                 color_var = "community", -->
 <!--   #                 layoutAlgorithm = "squarified", -->
 <!--   #                 levelIsConstant = FALSE, -->
@@ -3121,7 +3211,7 @@ fillCol(DT::DTOutput(outputId = 'table_centr_global'),
 <!--   #              Color Value: {point.colorValue:,.0f}") -->
 
 <!--   # edges_tb = as_tibble(data$edges) -->
-<!--   #  -->
+<!--   # -->
 <!--   withProgress(message = 'Creating graph', style = 'notification', value = 0.1, { -->
 <!--     Sys.sleep(0.25) -->
 <!--     incProgress(0.3, detail = paste("Running Treemap")) -->
