@@ -26,11 +26,10 @@ library(heatmaply)
 library(dplyr)
 library(treemap)
 library(highcharter)
+library(here)
 ```
 
 ```{r global, include=FALSE}
-#source("source_data.R")
-
 sourceData <- function(input){
 dataset <- read.csv('./../data/datasetList.csv',
                 header = TRUE,
@@ -167,6 +166,11 @@ sliderInput(inputId = "node_size_global", label = "Node Size", min = 0.0, max = 
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
+br()
+h5("Download current dataset")
+uiOutput("downloadDataUI")
+
+
 #div(message, style = "color:red")
 
 ```
@@ -248,6 +252,34 @@ is_directed = function(edges_selected) {
   return(directed)
 }
 
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUI <- renderUI( {
+  downloadButton("DownloadZip",  "Download", style = "width:100%;")
+})
+
+# Add download handling
+observe({
+  req(input$dataset_selection)
+
+  dataset <- read.csv('./../data/datasetList.csv',
+                header = TRUE,
+                sep=",",
+                col.names = c("name","path","type"),
+                encoding = "UTF-8")
+
+  nodesPath <- dataset$path[input$dataset_selection == dataset$name & dataset$type == "nodes"]
+  edgesPath <- dataset$path[input$dataset_selection == dataset$name & dataset$type == "edges"]
+
+  output$DownloadZip <- downloadHandler(
+    filename = function() {"Data.zip"},
+    content = function(con) {
+      setwd(here::here())
+      filesToSave <- c(paste0("./data/", nodesPath), paste0("./data/", edgesPath))
+      zip(zipfile=con, files = filesToSave)
+    },
+    contentType = "application/zip"
+  )
+})
 
 # network stores an object rendered by renderVisnetwork
 output$global_network = renderVisNetwork({
@@ -261,9 +293,9 @@ output$global_network = renderVisNetwork({
   nodes = nodes_reactive()
   edges = edges_reactive()
 
-  print("en global")
-  print(head(nodes))
-  print(head(edges))
+  # print("en global")
+  # print(head(nodes))
+  # print(head(edges))
 
   try(g <- igraph::graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
