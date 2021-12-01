@@ -170,8 +170,8 @@ sliderInput(inputId = "node_size_global", label = "Node Size", min = 0.0, max = 
 
 br()
 h5("Download current dataset")
-uiOutput("downloadDataUI")
-br()
+# uiOutput("downloadDataUI")
+#br()
 uiOutput("downloadDataUI_2")
 
 
@@ -263,17 +263,16 @@ output$downloadDataUI_2 <- renderUI( {
   downloadButton("DownloadEdges",  "Download Edges File", style = "width:100%;")
 })
 
-# Add download handling
-nodesForDownlad <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath = 
+#Add download handling
+nodesForDownlad <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
 "./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
 
-edgesForDownlad <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath = 
+edgesForDownlad <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
 "./../data/diogenes_edges_graph.csv", readFunc = read.csv)
 
 observe({
-  
-  try(dataNodesDownload <- nodesForDownlad(), silent=TRUE)
-  try(dataEdgesDownload <- edgesForDownlad(), silent=TRUE)
+  try(dataNodesDownload <- nodesForDownlad()) 
+  try(dataEdgesDownload <- edgesForDownlad()) 
   
   output$DownloadNodes <- downloadHandler(
     filename = function() {"Horus Nodes Graph.csv"},
@@ -339,7 +338,7 @@ output$global_network = renderVisNetwork({
     return(dt)
   })
   
-  #print(head(dt()))
+  print(head(dt()))
 
   # Set node size
   if (is.null(input$node_size_global[1])) min_node = rescaled_value(20.0,30.0,4)
@@ -588,8 +587,8 @@ sliderInput(inputId = "node_size_global_m", label = "Node Size", min = 0.0, max 
 
 br()
 h5("Download current dataset")
-uiOutput("downloadDataUIgc")
-br()
+#uiOutput("downloadDataUIgc")
+#br()
 uiOutput("downloadDataUIgc_2")
 
 
@@ -634,8 +633,8 @@ edgesForDownladgc <- reactiveFileReader(intervalMillis = 1000, session = NULL, f
 "./../data/diogenes_edges_graph.csv", readFunc = read.csv)
 
 observe({
-  try(dataNodesDownloadgc <- nodesForDownladgc(), silent=TRUE)
-  try(dataEdgesDownloadgc <- edgesForDownladgc(), silent=TRUE)
+  try(dataNodesDownloadgc <- nodesForDownladgc())
+  try(dataEdgesDownloadgc <- edgesForDownladgc())
 
   output$DownloadNodesgc <- downloadHandler(
     filename = function() {"Horus Nodes Graph.csv"},
@@ -816,7 +815,7 @@ output$global_network_monitor = renderVisNetwork({
         write.csv(dt, "./../data/diogenes_edges_graph.csv")
         return(dt)
       })
-    #print(head(dt()))
+    print(head(dt()))
 
     min_deg = min(igraph::degree(g_))
     max_deg = max(igraph::degree(g_))
@@ -845,7 +844,7 @@ output$global_network_monitor = renderVisNetwork({
       data$nodes$Group == "Place" ~ '#ff0134',
       data$nodes$Group == "God" ~ '#ff4c05'
     )
-    
+
     if(input$showGendergc == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
@@ -1379,7 +1378,7 @@ output$global_network_monitor = renderVisNetwork({
     # Setting parameters straight in the data frame for visNetwork
     data$nodes$color.background = sapply(trunc(col_index_evc_data), FUN = returnColor_evc)
 
-    #print(col_index_evc_data)
+    print(col_index_evc_data)
 
     data$nodes$eigen = format(igraph::eigen_centrality(g_)$vector, digits = 3, nsmall = 3)
 
@@ -1600,8 +1599,8 @@ sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 1
 
 br()
 h5("Download current dataset")
-uiOutput("downloadDataUIln")
-br()
+#uiOutput("downloadDataUIln")
+#br()
 uiOutput("downloadDataUIln_2")
 
 #div(message, style = "color:red")
@@ -1645,8 +1644,8 @@ edgesForDownladln <- reactiveFileReader(intervalMillis = 1000, session = NULL, f
 "./../data/diogenes_edges_graph.csv", readFunc = read.csv)
 
 observe({
-  try(dataNodesDownloadln <- nodesForDownladln(), silent=TRUE)
-  try(dataEdgesDownloadln <- edgesForDownladln(), silent=TRUE)
+  try(dataNodesDownloadln <- nodesForDownladln())
+  try(dataEdgesDownloadln <- edgesForDownladln())
 
   output$DownloadNodesln <- downloadHandler(
     filename = function() {"Horus Nodes Graph.csv"},
@@ -1717,7 +1716,7 @@ output$local_network = renderVisNetwork({
         write.csv(dt, "./../data/diogenes_edges_graph.csv")
         return(dt)
       })
-    #print(head(dt()))
+    print(head(dt()))
 
     # Set node size
     if (is.null(input$node_size_local[1])) min_node = rescaled_value(10.0,30.0,4)
@@ -1769,7 +1768,7 @@ output$local_network = renderVisNetwork({
       #data$edges$Relation == "is associated with" ~ '#ff0314',
       data$edges$Relation == "is benefactor of" ~ '#e53cff'
     )
-    
+
     if(input$showGenderln == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
@@ -1984,8 +1983,8 @@ sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max =
 
 br()
 h5("Download current dataset")
-uiOutput("downloadDataUIln_gc")
-br()
+#uiOutput("downloadDataUIln_gc")
+#br()
 uiOutput("downloadDataUIln_gc_2")
 
 #div(message, style = "color:red")
@@ -2032,8 +2031,8 @@ edgesForDownladln_gc <- reactiveFileReader(intervalMillis = 1000, session = NULL
 "./../data/diogenes_edges_graph.csv", readFunc = read.csv)
 
 observe({
-  try(dataNodesDownloadln_gc <- nodesForDownladln_gc(), silent=TRUE)
-  try(dataEdgesDownloadln_gc <- edgesForDownladln_gc(), silent=TRUE)
+  dataNodesDownloadln_gc <- try(nodesForDownladln_gc())
+  dataEdgesDownloadln_gc <- try(edgesForDownladln_gc())
 
   output$DownloadNodesln_gc <- downloadHandler(
     filename = function() {"Horus Nodes Graph.csv"},
@@ -2263,7 +2262,7 @@ output$local_network_monitor = renderVisNetwork({
           write.csv(dt, "./../data/diogenes_edges_graph.csv")
           return(dt)
         })
-      #print(head(dt()))
+      print(head(dt()))
 
       # Set node size
       if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
@@ -2305,7 +2304,7 @@ output$local_network_monitor = renderVisNetwork({
         data$nodes$Group == "Place" ~ '#ff0134',
         data$nodes$Group == "God" ~ '#ff4c05'
       )
-      
+
       if(input$showGenderln_gc == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
@@ -2940,8 +2939,8 @@ uiOutput(outputId="nodeUI_igp")
 
 br()
 h5("Download current dataset")
-uiOutput("downloadDataUIcm")
-br()
+#uiOutput("downloadDataUIcm")
+#br()
 uiOutput("downloadDataUIcm_2")
 
 # div(message, style = "color:red")
@@ -2984,8 +2983,8 @@ edgesForDownladcm <- reactiveFileReader(intervalMillis = 1000, session = NULL, f
 "./../data/diogenes_edges_graph.csv", readFunc = read.csv)
 
 observe({
-  try(dataNodesDownloadcm <- nodesForDownladcm(), silent=TRUE)
-  try(dataEdgesDownloadcm <- edgesForDownladcm(), silent=TRUE)
+  dataNodesDownloadcm <- try(nodesForDownladcm())
+  dataEdgesDownloadcm <- try(edgesForDownladcm())
 
   output$DownloadNodescm <- downloadHandler(
     filename = function() {"Horus Nodes Graph.csv"},
@@ -3106,7 +3105,7 @@ network_cmnt =  reactive({
           write.csv(dt, "./../data/diogenes_edges_graph.csv")
           return(dt)
         })
-      #print(head(dt()))
+      print(head(dt()))
 
       # Set node size
       if (is.null(input$nodeUI_vnw[1])) min_node = rescaled_value(20.0,30.0,4)
@@ -3155,7 +3154,7 @@ network_cmnt =  reactive({
           data$edges$Relation == "is benefactor of" ~ '#e53cff'
         )
       }
-      
+
       if(input$showGendercm == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
@@ -3408,8 +3407,8 @@ selectInput("cmnt_dtc_alg_tm", "Algorithm", choices=c(
 
 br()
 h5("Download current dataset")
-uiOutput("downloadDataUIcm_tm")
-br()
+#uiOutput("downloadDataUIcm_tm")
+#br()
 uiOutput("downloadDataUIcm_tm_2")
 
 #div(message, style = "color:red")
@@ -3439,8 +3438,8 @@ edgesForDownladcm_tm <- reactiveFileReader(intervalMillis = 1000, session = NULL
 "./../data/diogenes_edges_graph.csv", readFunc = read.csv)
 
 observe({
-  try(dataNodesDownloadcm_tm <- nodesForDownladcm_tm(), silent=TRUE)
-  try(dataEdgesDownloadcm_tm <- edgesForDownladcm_tm(), silent=TRUE)
+  dataNodesDownloadcm_tm <- try(nodesForDownladcm_tm())
+  dataEdgesDownloadcm_tm <- try(edgesForDownladcm_tm())
 
   output$DownloadNodescm_tm <- downloadHandler(
     filename = function() {"Horus Nodes Graph.csv"},
@@ -3543,7 +3542,7 @@ output$cmnt_hch_tm <- renderHighchart({
       write.csv(dt, "./../data/diogenes_edges_graph.csv")
       return(dt)
     })
-  #print(head(dt()))
+  print(head(dt()))
 
   data$nodes$degree = igraph::degree(g_)
 
