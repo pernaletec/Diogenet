@@ -3549,6 +3549,7 @@ output$cmnt_hch_tm <- renderHighchart({
   #### Highcharter part!!!
 
   nodes_tb = as_tibble(data$nodes)
+  #print(nodes_tb, n=242)
 
   # Example for hctreemap not working!!
   # Let it here just in case is required to use it in the future
@@ -3601,7 +3602,7 @@ output$cmnt_hch_tm <- renderHighchart({
     Sys.sleep(0.25)
     incProgress(0.3, detail = paste("Running Treemap"))
 
-    tm = treemap(nodes_tb, index = c("community", "label"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
+    tm = treemap(nodes_tb, index = c("id"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
 
     incProgress(0.3, detail = paste("Running Highcharter"))
 
