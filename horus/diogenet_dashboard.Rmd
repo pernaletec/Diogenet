@@ -3602,7 +3602,7 @@ output$cmnt_hch_tm <- renderHighchart({
     Sys.sleep(0.25)
     incProgress(0.3, detail = paste("Running Treemap"))
 
-    tm = treemap(nodes_tb, index = c("community", "label"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
+    # tm = treemap(nodes_tb, index = c("community", "label"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
 
     incProgress(0.3, detail = paste("Running Highcharter"))
 
@@ -3611,14 +3611,18 @@ output$cmnt_hch_tm <- renderHighchart({
     #                           Degree: {point.value:,.0f}<br>
     #                           Community: {point.valuecolor:,.0f}")
 
-    hc = hctreemap(tm, allowDrillToNode = TRUE, layoutAlgorithm = "squarified") %>%
-      hc_tooltip(pointFormat = "<b>{point.name}</b>:<br>
-                              Degree: {point.value:,.0f}<br>")
+    # hc = hctreemap(tm, allowDrillToNode = TRUE, layoutAlgorithm = "squarified") %>%
+    #   hc_tooltip(pointFormat = "<b>{point.name}</b>:<br>
+    #                           Degree: {point.value:,.0f}<br>")
+    
+     hc = data_to_hierarchical(nodes_tb,
+                  c(community, label), degree)
 
   })
 
-  return(hc)
+  hchart(hc, type = "treemap")
 })
+
 
 highcharter::highchartOutput(outputId="cmnt_hch_tm")
 
