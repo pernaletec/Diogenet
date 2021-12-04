@@ -22,10 +22,10 @@ The description of the datasets and applications, includind **RMarkdown** web de
 
 |Data set|Description|
 |--------|--------|
-|`new_Edges.csv`|Edges list|
-|`new_Nodes.csv`|Nodes list|
-|`old_Edges.csv`|Raw edges list|
-|`old_Nodes.csv`|Raw nodes list|
+|`new_Edges.csv`|Edges list for Diogenes Laertius dataset|
+|`new_Nodes.csv`|Nodes list for Diogenes Laertius dataset|
+|`new_Edges_Life_of_Pythagoras_Iamblichus.csv`| Edges list for Life of Pythagoras Iamblichus dataset|
+|`new_Nodes_Life_of_Pythagoras_Iamblichus.csv`| Nodes list for Life of Pythagoras Iamblichus dataset|
 |`travels_blacklist.csv`|Persons involved in nonsense travels (i.e Homer travels to Hades)|
 |`all_places_graph.csv`|All places with identified location. Created at running time|
 |`travel_edges_graph.csv`|All edges with locations for source and target. Created at running time|
@@ -35,31 +35,12 @@ The description of the datasets and applications, includind **RMarkdown** web de
 |`locations_data.csv`|Ordered information about locations|
 |`travelers_not_in_is_from.txt`|Travelers with no origin place identified. Not considered in the map|
 
-The script `formatToIgraph.R` converts old nodes and edges into new nodes and edges.
-
 ## Scripts
 
 |Script|Description|
 |------|--------|
-|`travels_dahsboard.Rmd` |Main script for **Diogenet's Map**. It is based on R chunks embedded in a Markdown file|
+|`travels_dahsboard.Rmd` |Main script for **Dataset's Map**. It is based on R chunks embedded in a Markdown file|
 |`diogenet_dahsboard.Rmd`|Main script for **Horus, Intellectual Networks in Ancient Greece**.  It is based on R chunks embedded in a Markdown file|
-|`travels_data.R`|Creates the data frame required to plot the information in the map. Key script!|
-|`travels_map.R`|Isolated version of the map, not embedded in `travels_dashboard.Rmd`|
-|`nets_ancient.Rmd`|Seed version of Horus! Just a reference|
-|`source_data.R`|Test if every edge is composed by valid nodes. Auxiliary script|
-|`formatToIgraph.R`|Converts raw nodes and edges files into new and clean files|
-|`vnwGraphsToHTML.R`|Creates visnetwork graphs and then export them to HTML|
-
-In addition there are separate shiny scripts for each type of graph general network, the local network and the communities network. For each type of graph there is an implementation for `igraph` and for `visnetwork`.  
-
-|Shiny app|Description|
-|------|--------|
-|`community_igp` |Community graph using `igraph`|
-|`community_vnw` |Community graph using `visnetwork`|
-|`egograph_igp` |Local view graph using `igraph`|
-|`egograph_vnw` |Local view graph using `visnetwork`|
-|`network_igp` |Full graph using `igraph`|
-|`network_vnw` |Full graph using `visnetwork`|
 
 
 ## Dependencies

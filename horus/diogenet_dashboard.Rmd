@@ -26,11 +26,10 @@ library(heatmaply)
 library(dplyr)
 library(treemap)
 library(highcharter)
+library(here)
 ```
 
 ```{r global, include=FALSE}
-#source("source_data.R")
-
 sourceData <- function(input){
 dataset <- read.csv('./../data/datasetList.csv',
                 header = TRUE,
@@ -157,7 +156,9 @@ selectInput(inputId = "layout_global",
                           ),
             selected = "layout_nicely"
             )
-br()
+
+# Selection of gender that will appear in the visualization network icons
+checkboxInput("showGender","Differentiate Gender/Gods?", value = FALSE)
 
 # Plot Height
 h4("Appearence")
@@ -166,6 +167,15 @@ sliderInput(inputId = "label_size_global", label = "Label Size", min = 0.0, max 
 sliderInput(inputId = "node_size_global", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+br()
+h5("Download current dataset")
+# uiOutput("downloadDataUI")
+#br()
+uiOutput("downloadDataUI_2")
+
+
+
 
 #div(message, style = "color:red")
 
@@ -198,11 +208,6 @@ edges_reactive <- reactive({
   return (data$edges)
 })
 
-#observe({
-#  print(head(nodes_reactive()))
-#  print(head(edges_reactive()))
-#})
-
 
 subset_graph  = function(edges_selected, g){
 
@@ -227,6 +232,7 @@ subset_graph  = function(edges_selected, g){
     if (num_edge_sel > 1  & k == num_edge_sel) edge_rule = paste0(edge_rule, 'E(g)$Relation == ', '\'',edge,'\'',')')
   }
 
+  #print(eval(parse(text=edge_rule)))
   # ...and the subgraph is finally created
   # If there is only one edge selected and this edge is the number 1, keep directed edges
 
@@ -248,6 +254,36 @@ is_directed = function(edges_selected) {
   return(directed)
 }
 
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUI <- renderUI( {
+  downloadButton("DownloadNodes",  "Download Nodes File", style = "width:100%;")
+})
+
+output$downloadDataUI_2 <- renderUI( {
+  downloadButton("DownloadEdges",  "Download Edges File", style = "width:100%;")
+})
+
+#Add download handling
+nodesForDownlad <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
+
+edgesForDownlad <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_edges_graph.csv", readFunc = read.csv)
+
+observe({
+  try(dataNodesDownload <- nodesForDownlad()) 
+  try(dataEdgesDownload <- edgesForDownlad()) 
+  
+  output$DownloadNodes <- downloadHandler(
+    filename = function() {"Horus Nodes Graph.csv"},
+    content = function(file) {write.csv(dataNodesDownload, file, row.names = TRUE)}
+  )
+  
+  output$DownloadEdges <- downloadHandler(
+    filename = function() {"Horus Edges Graph.csv"},
+    content = function(file) {write.csv(dataEdgesDownload, file, row.names = TRUE)}
+  )
+})
 
 # network stores an object rendered by renderVisnetwork
 output$global_network = renderVisNetwork({
@@ -260,10 +296,13 @@ output$global_network = renderVisNetwork({
 
   nodes = nodes_reactive()
   edges = edges_reactive()
+  
+  write.csv(nodes, "./../data/diogenes_nodes_graph.csv")
+  
 
-  print("en global")
-  print(head(nodes))
-  print(head(edges))
+  # print("en global")
+  # print(head(nodes))
+  # print(head(edges))
 
   try(g <- igraph::graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
@@ -289,6 +328,17 @@ output$global_network = renderVisNetwork({
 
   # Funtion to convert igraph format to visNetwork format
   data <- toVisNetworkData(g_)
+  
+  dt <- reactive({
+    from <- data$edges$from
+    to <- data$edges$to
+    Relation<- data$edges$Relation
+    dt <- data.frame(from, to, Relation)
+    write.csv(dt, "./../data/diogenes_edges_graph.csv")
+    return(dt)
+  })
+  
+  print(head(dt()))
 
   # Set node size
   if (is.null(input$node_size_global[1])) min_node = rescaled_value(20.0,30.0,4)
@@ -308,6 +358,22 @@ output$global_network = renderVisNetwork({
     data$nodes$Group == "Place" ~ '#31e001',
     data$nodes$Group == "God" ~ '#05e2ff'
   )
+  
+  if(input$showGender == TRUE){
+      data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Place" ~ 'square',
+      data$nodes$Group == "God" ~ 'triangle'
+    )
+  } else if (input$showGender == FALSE) {
+    data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'dot',
+      data$nodes$Group == "Place" ~ 'dot',
+      data$nodes$Group == "God" ~ 'dot'
+    )
+  }
 
   # Setting group in visnetwork format
   data$nodes$group = data$nodes$Group
@@ -501,7 +567,8 @@ selectInput(inputId = "layout_global_m",
             selected = "layout_nicely"
             )
 
-br()
+# Selection of gender that will appear in the visualization network icons
+checkboxInput("showGendergc","Differentiate Gender/Gods?", value = FALSE)
 
 h4("Centrality Index")
 selectInput("variable_type_global_m", NULL,
@@ -518,6 +585,11 @@ h4("Appearence")
 sliderInput(inputId = "label_size_global_m", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 sliderInput(inputId = "node_size_global_m", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 
+br()
+h5("Download current dataset")
+#uiOutput("downloadDataUIgc")
+#br()
+uiOutput("downloadDataUIgc_2")
 
 
 
@@ -542,6 +614,37 @@ edges_reactive_gc <- reactive({
   entrada <- input$dataset_selection_gc
   data <- sourceData(entrada)
   return (data$edges)
+})
+
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUIgc <- renderUI( {
+  downloadButton("DownloadNodesgc",  "Download Nodes File", style = "width:100%;")
+})
+
+output$downloadDataUIgc_2 <- renderUI( {
+  downloadButton("DownloadEdgesgc",  "Download Edges File", style = "width:100%;")
+})
+
+# Add download handling
+nodesForDownladgc <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
+
+edgesForDownladgc <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_edges_graph.csv", readFunc = read.csv)
+
+observe({
+  try(dataNodesDownloadgc <- nodesForDownladgc())
+  try(dataEdgesDownloadgc <- edgesForDownladgc())
+
+  output$DownloadNodesgc <- downloadHandler(
+    filename = function() {"Horus Nodes Graph.csv"},
+    content = function(file) {write.csv(dataNodesDownloadgc, file, row.names = TRUE)}
+  )
+
+  output$DownloadEdgesgc <- downloadHandler(
+    filename = function() {"Horus Edges Graph.csv"},
+    content = function(file) {write.csv(dataEdgesDownloadgc, file, row.names = TRUE)}
+  )
 })
 
 
@@ -657,6 +760,8 @@ output$table_centr_global = DT::renderDataTable({datatable(centr_global(), selec
 ```{r, echo = FALSE}
 
 output$global_network_monitor = renderVisNetwork({
+  nodes = nodes_reactive_gc()
+  edges = edges_reactive_gc()
 
   validate(
     need(try(!is.null(input$edges_select_global_m)), "Please select at least one tie")
@@ -701,6 +806,16 @@ output$global_network_monitor = renderVisNetwork({
                         min_node, max_node)
 
     data$nodes$size = nodesize
+    write.csv(nodes, "./../data/diogenes_nodes_graph.csv")
+    dt <- reactive({
+        from <- data$edges$from
+        to <- data$edges$to
+        Relation<- data$edges$Relation
+        dt <- data.frame(from, to, Relation)
+        write.csv(dt, "./../data/diogenes_edges_graph.csv")
+        return(dt)
+      })
+    print(head(dt()))
 
     min_deg = min(igraph::degree(g_))
     max_deg = max(igraph::degree(g_))
@@ -729,6 +844,22 @@ output$global_network_monitor = renderVisNetwork({
       data$nodes$Group == "Place" ~ '#ff0134',
       data$nodes$Group == "God" ~ '#ff4c05'
     )
+
+    if(input$showGendergc == TRUE){
+      data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Place" ~ 'square',
+      data$nodes$Group == "God" ~ 'triangle'
+    )
+  } else if (input$showGendergc == FALSE) {
+    data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'dot',
+      data$nodes$Group == "Place" ~ 'dot',
+      data$nodes$Group == "God" ~ 'dot'
+    )
+  }
 
     # Setting parameters straight in the data frame for visNetwork
     data$edges$color.color = rep("gray",length(data$edges$Relation))
@@ -1446,7 +1577,7 @@ checkboxGroupInput("edges_select_local",
                                   "Is benefactor of" = 7),
                    selected = 1,
                    inline = FALSE)
-br()
+
 # Egonet configuration
 h4("Ego")
 # Node selection
@@ -1454,6 +1585,10 @@ uiOutput(outputId = "node_sel")
 #br()
 # Order
 sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
+
+# Selection of gender that will appear in the visualization network icons
+checkboxInput("showGenderln","Differentiate Gender/Gods?", value = FALSE)
+
 # Node and Label Size
 br()
 h4("Appearance")
@@ -1461,6 +1596,12 @@ sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.0, max =
 sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+br()
+h5("Download current dataset")
+#uiOutput("downloadDataUIln")
+#br()
+uiOutput("downloadDataUIln_2")
 
 #div(message, style = "color:red")
 ```
@@ -1484,6 +1625,37 @@ edges_reactive_ln <- reactive({
   entrada <- input$dataset_selection_ln
   data <- sourceData(entrada)
   return (data$edges)
+})
+
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUIln <- renderUI( {
+  downloadButton("DownloadNodesln",  "Download Nodes File", style = "width:100%;")
+})
+
+output$downloadDataUIln_2 <- renderUI( {
+  downloadButton("DownloadEdgesln",  "Download Edges File", style = "width:100%;")
+})
+
+# Add download handling
+nodesForDownladln <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
+
+edgesForDownladln <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_edges_graph.csv", readFunc = read.csv)
+
+observe({
+  try(dataNodesDownloadln <- nodesForDownladln())
+  try(dataEdgesDownloadln <- edgesForDownladln())
+
+  output$DownloadNodesln <- downloadHandler(
+    filename = function() {"Horus Nodes Graph.csv"},
+    content = function(file) {write.csv(dataNodesDownloadln, file, row.names = TRUE)}
+  )
+
+  output$DownloadEdgesln <- downloadHandler(
+    filename = function() {"Horus Edges Graph.csv"},
+    content = function(file) {write.csv(dataEdgesDownloadln, file, row.names = TRUE)}
+  )
 })
 
 output$local_network = renderVisNetwork({
@@ -1535,6 +1707,17 @@ output$local_network = renderVisNetwork({
 
     data <- toVisNetworkData(d[[1]])
 
+    write.csv(nodes, "./../data/diogenes_nodes_graph.csv")
+    dt <- reactive({
+        from <- data$edges$from
+        to <- data$edges$to
+        Relation<- data$edges$Relation
+        dt <- data.frame(from, to, Relation)
+        write.csv(dt, "./../data/diogenes_edges_graph.csv")
+        return(dt)
+      })
+    print(head(dt()))
+
     # Set node size
     if (is.null(input$node_size_local[1])) min_node = rescaled_value(10.0,30.0,4)
     else min_node = rescaled_value(10.0,30.0,input$node_size_local[1])
@@ -1585,6 +1768,22 @@ output$local_network = renderVisNetwork({
       #data$edges$Relation == "is associated with" ~ '#ff0314',
       data$edges$Relation == "is benefactor of" ~ '#e53cff'
     )
+
+    if(input$showGenderln == TRUE){
+      data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Place" ~ 'square',
+      data$nodes$Group == "God" ~ 'triangle'
+    )
+  } else if (input$showGenderln == FALSE) {
+    data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'dot',
+      data$nodes$Group == "Place" ~ 'dot',
+      data$nodes$Group == "God" ~ 'dot'
+    )
+  }
 
     # nodes data.frame for legend
     lnodes <- data.frame(label = c("Male", "Female"),
@@ -1761,6 +1960,10 @@ uiOutput(outputId = "node_sel_m")
 #br()
 # Order
 sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1)
+
+# Selection of gender that will appear in the visualization network icons
+checkboxInput("showGenderln_gc","Differentiate Gender/Gods?", value = FALSE)
+
 br()
 h4("Centrality Index")
 selectInput("variable_type", NULL,
@@ -1768,6 +1971,7 @@ selectInput("variable_type", NULL,
                   "Betweenness" = "betweenness",
                   "Closeness" = "closeness",
                   "Eigenvector" = "eigenvector"))
+
 # Node and Label Size
 br()
 h4("Appearance")
@@ -1776,6 +1980,12 @@ sliderInput(inputId = "node_size_local_m", label = "Node Size", min = 0.0, max =
 
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
+
+br()
+h5("Download current dataset")
+#uiOutput("downloadDataUIln_gc")
+#br()
+uiOutput("downloadDataUIln_gc_2")
 
 #div(message, style = "color:red")
 ```
@@ -1802,6 +2012,37 @@ edges_reactive_ln_gc <- reactive({
 
 directed = reactive({
   return(is_directed(input$edges_select_local_m))
+})
+
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUIln_gc <- renderUI( {
+  downloadButton("DownloadNodesln_gc",  "Download Nodes File", style = "width:100%;")
+})
+
+output$downloadDataUIln_gc_2 <- renderUI( {
+  downloadButton("DownloadEdgesln_gc",  "Download Edges File", style = "width:100%;")
+})
+
+# Add download handling
+nodesForDownladln_gc <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
+
+edgesForDownladln_gc <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_edges_graph.csv", readFunc = read.csv)
+
+observe({
+  dataNodesDownloadln_gc <- try(nodesForDownladln_gc())
+  dataEdgesDownloadln_gc <- try(edgesForDownladln_gc())
+
+  output$DownloadNodesln_gc <- downloadHandler(
+    filename = function() {"Horus Nodes Graph.csv"},
+    content = function(file) {write.csv(dataNodesDownloadln_gc, file, row.names = TRUE)}
+  )
+
+  output$DownloadEdgesln_gc <- downloadHandler(
+    filename = function() {"Horus Edges Graph.csv"},
+    content = function(file) {write.csv(dataEdgesDownloadln_gc, file, row.names = TRUE)}
+  )
 })
 
 d = reactive({
@@ -2011,6 +2252,18 @@ output$local_network_monitor = renderVisNetwork({
 
       data <- toVisNetworkData(d[[1]])
 
+      nodes = nodes_reactive_ln_gc()
+      write.csv(nodes, "./../data/diogenes_nodes_graph.csv")
+      dt <- reactive({
+          from <- data$edges$from
+          to <- data$edges$to
+          Relation<- data$edges$Relation
+          dt <- data.frame(from, to, Relation)
+          write.csv(dt, "./../data/diogenes_edges_graph.csv")
+          return(dt)
+        })
+      print(head(dt()))
+
       # Set node size
       if (is.null(input$node_size_local_m[1])) min_node = rescaled_value(10.0,30.0,4)
       else min_node = rescaled_value(10.0,30.0,input$node_size_local_m[1])
@@ -2052,6 +2305,21 @@ output$local_network_monitor = renderVisNetwork({
         data$nodes$Group == "God" ~ '#ff4c05'
       )
 
+      if(input$showGenderln_gc == TRUE){
+      data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Place" ~ 'square',
+      data$nodes$Group == "God" ~ 'triangle'
+    )
+  } else if (input$showGenderln_gc == FALSE) {
+    data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'dot',
+      data$nodes$Group == "Place" ~ 'dot',
+      data$nodes$Group == "God" ~ 'dot'
+    )
+  }
       # Setting parameters straight in the data frame for visNetwork
       data$edges$color.color = rep("gray",length(data$edges$Relation))
 
@@ -2646,6 +2914,9 @@ selectInput("cmnt_dtc_alg", "Algorithm", choices=c(
                                                     #"Cluster Spinglass",
                                                     "Cluster Walktrap"))
 
+# Selection of gender that will appear in the visualization network icons
+checkboxInput("showGendercm","Differentiate Gender/Gods?", value = FALSE)
+
 br()
 h4("Visualization")
 # Library for community visualization
@@ -2665,6 +2936,12 @@ uiOutput(outputId="nodeUI_vnw")
 uiOutput(outputId="nodeUI_igp")
 #hr()
 #helpText("Set size range of nodes and labels to scale according to the degree of the node, max values for higher degrees and min values for lower degrees")
+
+br()
+h5("Download current dataset")
+#uiOutput("downloadDataUIcm")
+#br()
+uiOutput("downloadDataUIcm_2")
 
 # div(message, style = "color:red")
 ```
@@ -2687,6 +2964,37 @@ edges_reactive_cm <- reactive({
   entrada <- input$dataset_selection_cm
   data <- sourceData(entrada)
   return (data$edges)
+})
+
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUIcm <- renderUI( {
+  downloadButton("DownloadNodescm",  "Download Nodes File", style = "width:100%;")
+})
+
+output$downloadDataUIcm_2 <- renderUI( {
+  downloadButton("DownloadEdgescm",  "Download Edges File", style = "width:100%;")
+})
+
+# Add download handling
+nodesForDownladcm <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
+
+edgesForDownladcm <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_edges_graph.csv", readFunc = read.csv)
+
+observe({
+  dataNodesDownloadcm <- try(nodesForDownladcm())
+  dataEdgesDownloadcm <- try(edgesForDownladcm())
+
+  output$DownloadNodescm <- downloadHandler(
+    filename = function() {"Horus Nodes Graph.csv"},
+    content = function(file) {write.csv(dataNodesDownloadcm, file, row.names = TRUE)}
+  )
+
+  output$DownloadEdgescm <- downloadHandler(
+    filename = function() {"Horus Edges Graph.csv"},
+    content = function(file) {write.csv(dataEdgesDownloadcm, file, row.names = TRUE)}
+  )
 })
 
 
@@ -2788,6 +3096,17 @@ network_cmnt =  reactive({
 
       data <- toVisNetworkData(g_)
 
+      write.csv(nodes, "./../data/diogenes_nodes_graph.csv")
+      dt <- reactive({
+          from <- data$edges$from
+          to <- data$edges$to
+          Relation<- data$edges$Relation
+          dt <- data.frame(from, to, Relation)
+          write.csv(dt, "./../data/diogenes_edges_graph.csv")
+          return(dt)
+        })
+      print(head(dt()))
+
       # Set node size
       if (is.null(input$nodeUI_vnw[1])) min_node = rescaled_value(20.0,30.0,4)
       else min_node = rescaled_value(20.0,30.0,input$nodeUI_vnw[1])
@@ -2835,6 +3154,22 @@ network_cmnt =  reactive({
           data$edges$Relation == "is benefactor of" ~ '#e53cff'
         )
       }
+
+      if(input$showGendercm == TRUE){
+      data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Place" ~ 'square',
+      data$nodes$Group == "God" ~ 'triangle'
+    )
+  } else if (input$showGendercm == FALSE) {
+    data$nodes$shape = case_when(
+      data$nodes$Group == "Male" ~ 'dot',
+      data$nodes$Group == "Female" ~ 'dot',
+      data$nodes$Group == "Place" ~ 'dot',
+      data$nodes$Group == "God" ~ 'dot'
+    )
+  }
 
 
 
@@ -3070,7 +3405,11 @@ selectInput("cmnt_dtc_alg_tm", "Algorithm", choices=c(
                                                     #"Cluster Spinglass",
                                                     "Cluster Walktrap"))
 
-# br()
+br()
+h5("Download current dataset")
+#uiOutput("downloadDataUIcm_tm")
+#br()
+uiOutput("downloadDataUIcm_tm_2")
 
 #div(message, style = "color:red")
 
@@ -3082,6 +3421,38 @@ Row
 ### Treemap View
 
 ```{r}
+# Create the actual downloadButton for nodes and edges data
+output$downloadDataUIcm_tm <- renderUI( {
+  downloadButton("DownloadNodescm_tm",  "Download Nodes File", style = "width:100%;")
+})
+
+output$downloadDataUIcm_tm_2 <- renderUI( {
+  downloadButton("DownloadEdgescm_tm",  "Download Edges File", style = "width:100%;")
+})
+
+# Add download handling
+nodesForDownladcm_tm <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_nodes_graph.csv", readFunc = read.csv)
+
+edgesForDownladcm_tm <- reactiveFileReader(intervalMillis = 1000, session = NULL, filePath =
+"./../data/diogenes_edges_graph.csv", readFunc = read.csv)
+
+observe({
+  dataNodesDownloadcm_tm <- try(nodesForDownladcm_tm())
+  dataEdgesDownloadcm_tm <- try(edgesForDownladcm_tm())
+
+  output$DownloadNodescm_tm <- downloadHandler(
+    filename = function() {"Horus Nodes Graph.csv"},
+    content = function(file) {write.csv(dataNodesDownloadcm_tm, file, row.names = TRUE)}
+  )
+
+  output$DownloadEdgescm_tm <- downloadHandler(
+    filename = function() {"Horus Edges Graph.csv"},
+    content = function(file) {write.csv(dataEdgesDownloadcm_tm, file, row.names = TRUE)}
+  )
+})
+
+
 # Community detection
 
 clustering = function(alg, graph){
@@ -3119,6 +3490,9 @@ edges_reactive_tm <- reactive({
 
 output$cmnt_hch_tm <- renderHighchart({
 
+  nodes <- nodes_reactive_tm()
+  edges <- edges_reactive_tm()
+
   # First validate if there are edges (Ties) selected
   validate(
     need(try(!is.null(input$edges_select_comm_tm)), "Please select at least one tie")
@@ -3128,7 +3502,7 @@ output$cmnt_hch_tm <- renderHighchart({
   #directed = is_directed(input$edges_select_comm)
   directed = FALSE
 
-  try(g <- graph_from_data_frame(d = edges_reactive_tm(), directed=directed, vertices = nodes_reactive_tm()), silent = TRUE)
+  try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
   # ids in nodes are es required to export to Pajek format. Just in case!
   V(g)$id = V(g)$name
@@ -3159,11 +3533,23 @@ output$cmnt_hch_tm <- renderHighchart({
 
   data <- toVisNetworkData(g_)
 
+  write.csv(nodes, "./../data/diogenes_nodes_graph.csv")
+  dt <- reactive({
+      from <- data$edges$from
+      to <- data$edges$to
+      Relation<- data$edges$Relation
+      dt <- data.frame(from, to, Relation)
+      write.csv(dt, "./../data/diogenes_edges_graph.csv")
+      return(dt)
+    })
+  print(head(dt()))
+
   data$nodes$degree = igraph::degree(g_)
 
   #### Highcharter part!!!
 
   nodes_tb = as_tibble(data$nodes)
+  #print(nodes_tb, n=242)
 
   # Example for hctreemap not working!!
   # Let it here just in case is required to use it in the future
@@ -3216,7 +3602,7 @@ output$cmnt_hch_tm <- renderHighchart({
     Sys.sleep(0.25)
     incProgress(0.3, detail = paste("Running Treemap"))
 
-    tm = treemap(nodes_tb, index = c("community", "label"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
+    tm = treemap(nodes_tb, index = c("id"), vSize = "degree", vColor = "community", type = "manual", fontsize.labels=c(0,10), palette = node_colours)
 
     incProgress(0.3, detail = paste("Running Highcharter"))
 
