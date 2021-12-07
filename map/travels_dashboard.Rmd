@@ -7,7 +7,7 @@ output:
         orientation: rows
         favicon: iah_classicalstudies_logo_fv_pq.png
         navbar:
-          - { icon: "fa-home", href: " http://diogenet.ucsd.edu", align: right }
+          - { icon: "fa-home", href: "https://diogenet.ucsd.edu/", align: right }
   
 ---
 
@@ -315,6 +315,7 @@ rescaled_value = function(a,b,x) {
 rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 
 # Dataset selection menu
+br()
 selectInput(inputId= "dataset_selection", 
             label = "Select a dataset", 
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "LOPI"),
