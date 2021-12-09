@@ -7,7 +7,7 @@ output:
         orientation: rows
         favicon: iah_classicalstudies_logo_fv_pq.png
         navbar:
-          - { icon: "fa-home", href: " http://diogenet.ucsd.edu", align: right }
+          - { icon: "fa-home", href: "https://diogenet.ucsd.edu/", align: right }
 
 ---
 ```{r setup, include=FALSE}
@@ -105,7 +105,7 @@ rescaled_value = function(a,b,x) {
 rescale <- function(x,a,b,c,d){c + (x-a)/(b-a)*(d-c)}
 
 # Dataset selection menu
-
+br()
 selectInput(inputId= "dataset_selection",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -158,7 +158,7 @@ selectInput(inputId = "layout_global",
             )
 
 # Selection of gender that will appear in the visualization network icons
-checkboxInput("showGender","Differentiate Gender/Gods?", value = FALSE)
+checkboxInput("showGender","Gender and Gods", value = FALSE)
 
 # Plot Height
 h4("Appearence")
@@ -260,7 +260,7 @@ output$downloadDataUI <- renderUI( {
 })
 
 output$downloadDataUI_2 <- renderUI( {
-  downloadButton("DownloadEdges",  "Download Edges File", style = "width:100%;")
+  downloadButton("DownloadEdges",  "Download Data", style = "width:100%;")
 })
 
 #Add download handling
@@ -362,9 +362,9 @@ output$global_network = renderVisNetwork({
   if(input$showGender == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
-      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Female" ~ 'triangle',
       data$nodes$Group == "Place" ~ 'square',
-      data$nodes$Group == "God" ~ 'triangle'
+      data$nodes$Group == "God" ~ 'star'
     )
   } else if (input$showGender == FALSE) {
     data$nodes$shape = case_when(
@@ -531,7 +531,7 @@ Inputs {.sidebar}
 ```{r}
 
 # Dataset selection menu
-
+br()
 selectInput(inputId= "dataset_selection_gc",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -568,7 +568,7 @@ selectInput(inputId = "layout_global_m",
             )
 
 # Selection of gender that will appear in the visualization network icons
-checkboxInput("showGendergc","Differentiate Gender/Gods?", value = FALSE)
+checkboxInput("showGendergc","Gender and Gods", value = FALSE)
 
 h4("Centrality Index")
 selectInput("variable_type_global_m", NULL,
@@ -622,7 +622,7 @@ output$downloadDataUIgc <- renderUI( {
 })
 
 output$downloadDataUIgc_2 <- renderUI( {
-  downloadButton("DownloadEdgesgc",  "Download Edges File", style = "width:100%;")
+  downloadButton("DownloadEdgesgc",  "Download Data", style = "width:100%;")
 })
 
 # Add download handling
@@ -848,9 +848,9 @@ output$global_network_monitor = renderVisNetwork({
     if(input$showGendergc == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
-      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Female" ~ 'triangle',
       data$nodes$Group == "Place" ~ 'square',
-      data$nodes$Group == "God" ~ 'triangle'
+      data$nodes$Group == "God" ~ 'star'
     )
   } else if (input$showGendergc == FALSE) {
     data$nodes$shape = case_when(
@@ -1558,7 +1558,7 @@ Inputs {.sidebar}
 ```{r}
 
 # Dataset selection menu
-
+br()
 selectInput(inputId= "dataset_selection_ln",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -1587,7 +1587,7 @@ uiOutput(outputId = "node_sel")
 sliderInput(inputId = "order", label = "Order", 1, 4, 2, step = 1)
 
 # Selection of gender that will appear in the visualization network icons
-checkboxInput("showGenderln","Differentiate Gender/Gods?", value = FALSE)
+checkboxInput("showGenderln","Gender and Gods", value = FALSE)
 
 # Node and Label Size
 br()
@@ -1633,7 +1633,7 @@ output$downloadDataUIln <- renderUI( {
 })
 
 output$downloadDataUIln_2 <- renderUI( {
-  downloadButton("DownloadEdgesln",  "Download Edges File", style = "width:100%;")
+  downloadButton("DownloadEdgesln",  "Download Data", style = "width:100%;")
 })
 
 # Add download handling
@@ -1772,9 +1772,9 @@ output$local_network = renderVisNetwork({
     if(input$showGenderln == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
-      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Female" ~ 'triangle',
       data$nodes$Group == "Place" ~ 'square',
-      data$nodes$Group == "God" ~ 'triangle'
+      data$nodes$Group == "God" ~ 'star'
     )
   } else if (input$showGenderln == FALSE) {
     data$nodes$shape = case_when(
@@ -1962,7 +1962,7 @@ uiOutput(outputId = "node_sel_m")
 sliderInput(inputId = "order_m", label = "Order", 1, 4, 2, step = 1)
 
 # Selection of gender that will appear in the visualization network icons
-checkboxInput("showGenderln_gc","Differentiate Gender/Gods?", value = FALSE)
+checkboxInput("showGenderln_gc","Gender and Gods", value = FALSE)
 
 br()
 h4("Centrality Index")
@@ -2020,7 +2020,7 @@ output$downloadDataUIln_gc <- renderUI( {
 })
 
 output$downloadDataUIln_gc_2 <- renderUI( {
-  downloadButton("DownloadEdgesln_gc",  "Download Edges File", style = "width:100%;")
+  downloadButton("DownloadEdgesln_gc",  "Download Data", style = "width:100%;")
 })
 
 # Add download handling
@@ -2308,9 +2308,9 @@ output$local_network_monitor = renderVisNetwork({
       if(input$showGenderln_gc == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
-      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Female" ~ 'triangle',
       data$nodes$Group == "Place" ~ 'square',
-      data$nodes$Group == "God" ~ 'triangle'
+      data$nodes$Group == "God" ~ 'star'
     )
   } else if (input$showGenderln_gc == FALSE) {
     data$nodes$shape = case_when(
@@ -2915,7 +2915,7 @@ selectInput("cmnt_dtc_alg", "Algorithm", choices=c(
                                                     "Cluster Walktrap"))
 
 # Selection of gender that will appear in the visualization network icons
-checkboxInput("showGendercm","Differentiate Gender/Gods?", value = FALSE)
+checkboxInput("showGendercm","Gender and Gods", value = FALSE)
 
 br()
 h4("Visualization")
@@ -2972,7 +2972,7 @@ output$downloadDataUIcm <- renderUI( {
 })
 
 output$downloadDataUIcm_2 <- renderUI( {
-  downloadButton("DownloadEdgescm",  "Download Edges File", style = "width:100%;")
+  downloadButton("DownloadEdgescm",  "Download Data", style = "width:100%;")
 })
 
 # Add download handling
@@ -3158,9 +3158,9 @@ network_cmnt =  reactive({
       if(input$showGendercm == TRUE){
       data$nodes$shape = case_when(
       data$nodes$Group == "Male" ~ 'dot',
-      data$nodes$Group == "Female" ~ 'star',
+      data$nodes$Group == "Female" ~ 'triangle',
       data$nodes$Group == "Place" ~ 'square',
-      data$nodes$Group == "God" ~ 'triangle'
+      data$nodes$Group == "God" ~ 'star'
     )
   } else if (input$showGendercm == FALSE) {
     data$nodes$shape = case_when(
@@ -3427,7 +3427,7 @@ output$downloadDataUIcm_tm <- renderUI( {
 })
 
 output$downloadDataUIcm_tm_2 <- renderUI( {
-  downloadButton("DownloadEdgescm_tm",  "Download Edges File", style = "width:100%;")
+  downloadButton("DownloadEdgescm_tm",  "Download Data", style = "width:100%;")
 })
 
 # Add download handling
