@@ -1933,7 +1933,7 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
+br()
 selectInput(inputId= "dataset_selection_ln_gc",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -2878,7 +2878,7 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
+br()
 selectInput(inputId= "dataset_selection_cm",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -3370,7 +3370,7 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
+br()
 selectInput(inputId= "dataset_selection_tm",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
