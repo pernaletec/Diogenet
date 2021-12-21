@@ -1592,8 +1592,8 @@ checkboxInput("showGenderln","Gender and Gods", value = FALSE)
 # Node and Label Size
 br()
 h4("Appearance")
-sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
-sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 6),ticks = TRUE, step = 1)
+sliderInput(inputId = "label_size_local", label = "Label Size", min = 0.0, max = 10.0, value = c(4, 5),ticks = TRUE, step = 1)
+sliderInput(inputId = "node_size_local", label = "Node Size", min = 0.0, max = 10.0, value = c(4, 5),ticks = TRUE, step = 1)
 #hr()
 #helpText("These parameters control de size range of nodes and labels. The minimum size is set to the nodes with the lowest degree, while the maximum size is set to nodes with the highest degree. The same applies for its labels")
 
@@ -1604,6 +1604,13 @@ h5("Download current dataset")
 uiOutput("downloadDataUIln_2")
 
 #div(message, style = "color:red")
+
+#Comment this line in deveploment for error show UI mode.
+tags$style(type="text/css",
+  ".shiny-output-error { visibility: hidden; }",
+  ".shiny-output-error:before { visibility: hidden; }"
+)
+          
 ```
 
 Row
@@ -1625,6 +1632,55 @@ edges_reactive_ln <- reactive({
   entrada <- input$dataset_selection_ln
   data <- sourceData(entrada)
   return (data$edges)
+})
+
+all_nodes_reactive_ln <-reactive({
+  validate(
+    need(try(!is.null(input$edges_select_local)), "Select at least one Tie")
+  )
+
+  all_nodes = c()
+
+  nodes = nodes_reactive_ln()
+  edges = edges_reactive_ln()
+
+  if (1 %in% input$edges_select_local){
+      all_nodes = c(all_nodes,
+                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
+                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
+      }
+
+  if (2 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
+                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
+    }
+
+  if (3 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "is family of")]),
+                  as.character(edges$Target[which(edges$Relation == "is family of")]))
+  }
+
+  if (4 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
+                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
+  }
+
+  if (5 %in% input$edges_select_local){
+    all_nodes = c(all_nodes,
+                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
+                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
+  }
+
+  if (7 %in% input$edges_select_local){
+  all_nodes = c(all_nodes,
+                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
+                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
+  }
+
+  return (all_nodes = sort(unique(all_nodes)))
 })
 
 # Create the actual downloadButton for nodes and edges data
@@ -1671,6 +1727,7 @@ output$local_network = renderVisNetwork({
 
     nodes = nodes_reactive_ln()
     edges = edges_reactive_ln()
+    all_nodes = all_nodes_reactive_ln()
 
     try(g <- graph_from_data_frame(d = edges, directed=directed, vertices = nodes), silent = TRUE)
 
@@ -1870,56 +1927,8 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
 # The options for nodes in the list depends on the edges selected
 
 output$node_sel <- renderUI({
-
-  validate(
-    need(try(!is.null(input$edges_select_local)), "Select at least one Tie")
-  )
-
-  all_nodes = c()
-
-  nodes = nodes_reactive_ln()
-  edges = edges_reactive_ln()
-
-  if (1 %in% input$edges_select_local){
-      all_nodes = c(all_nodes,
-                    as.character(edges$Source[which(edges$Relation == "is teacher of")]),
-                    as.character(edges$Target[which(edges$Relation == "is teacher of")]))
-      }
-
-  if (2 %in% input$edges_select_local){
-    all_nodes = c(all_nodes,
-                  as.character(edges$Source[which(edges$Relation == "is friend of")]),
-                  as.character(edges$Target[which(edges$Relation == "is friend of")]))
-    }
-
-  if (3 %in% input$edges_select_local){
-    all_nodes = c(all_nodes,
-                  as.character(edges$Source[which(edges$Relation == "is family of")]),
-                  as.character(edges$Target[which(edges$Relation == "is family of")]))
-  }
-
-  if (4 %in% input$edges_select_local){
-    all_nodes = c(all_nodes,
-                  as.character(edges$Source[which(edges$Relation == "studied the work of")]),
-                  as.character(edges$Target[which(edges$Relation == "studied the work of")]))
-  }
-
-  if (5 %in% input$edges_select_local){
-    all_nodes = c(all_nodes,
-                  as.character(edges$Source[which(edges$Relation == "sent letters to")]),
-                  as.character(edges$Target[which(edges$Relation == "sent letters to")]))
-  }
-
-  if (7 %in% input$edges_select_local){
-  all_nodes = c(all_nodes,
-                as.character(edges$Source[which(edges$Relation == "is benefactor of")]),
-                as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
-  }
-
-  all_nodes = sort(unique(all_nodes))
-
-  if (!is.null(input$node_sel)) selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = input$node_sel)
-  else selectInput(inputId = "node_sel", label = "Node", choices = all_nodes, selected = "Plato")
+    all_nodes <- all_nodes_reactive_ln()
+    selectInput(inputId = "node_sel", label = "Node", choices = all_nodes)
 })
 
 visNetworkOutput(outputId="local_network")
@@ -1933,7 +1942,7 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
+br()
 selectInput(inputId= "dataset_selection_ln_gc",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -2878,7 +2887,7 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
+br()
 selectInput(inputId= "dataset_selection_cm",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),
@@ -3370,7 +3379,7 @@ Inputs {.sidebar}
 -------------------------------------
 
 ```{r}
-
+br()
 selectInput(inputId= "dataset_selection_tm",
             label = "Select a dataset",
             choices = c("Diogenes Laertius" = "diogenes", "Iamblichus" = "iamblichus"),

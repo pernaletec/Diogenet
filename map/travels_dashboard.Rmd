@@ -603,7 +603,8 @@ output$travels_network = renderLeaflet({
   # This line is not requiered
   #m <- leaflet(avail_data_tb) %>% 
   m <- leaflet() %>% 
-    addTiles(urlTemplate = tcu_map, attribution = map_attr, options = list(maxZoom = 10, 
+    addTiles(urlTemplate = tcu_map, attribution = map_attr, options = list(minZoom = 3, 
+                                                                           maxZoom = 6,
                                                                            id = 'isawnyu.map-knmctlkh',
                                                                            accessToken =  'pk.eyJ1IjoiaXNhd255dSIsImEiOiJBWEh1dUZZIn0.SiiexWxHHESIegSmW8wedQ'))%>%
     setView(lng= 24.92, lat = 35.255, zoom = 5) 
