@@ -1604,6 +1604,12 @@ h5("Download current dataset")
 uiOutput("downloadDataUIln_2")
 
 #div(message, style = "color:red")
+
+tags$style(type="text/css",
+  ".shiny-output-error { visibility: hidden; }",
+  ".shiny-output-error:before { visibility: hidden; }"
+)
+          
 ```
 
 Row
