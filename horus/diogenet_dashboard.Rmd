@@ -1605,6 +1605,7 @@ uiOutput("downloadDataUIln_2")
 
 #div(message, style = "color:red")
 
+#Comment this line in deveploment for error show UI mode.
 tags$style(type="text/css",
   ".shiny-output-error { visibility: hidden; }",
   ".shiny-output-error:before { visibility: hidden; }"
