@@ -22,25 +22,25 @@ The description of the datasets and applications, includind **RMarkdown** web de
 
 |Data set|Description|
 |--------|--------|
-|`new_Edges.csv`|Edges list for Diogenes Laertius dataset|
-|`new_Nodes.csv`|Nodes list for Diogenes Laertius dataset|
-|`new_Edges_Life_of_Pythagoras_Iamblichus.csv`| Edges list for Life of Pythagoras Iamblichus dataset|
-|`new_Nodes_Life_of_Pythagoras_Iamblichus.csv`| Nodes list for Life of Pythagoras Iamblichus dataset|
-|`travels_blacklist.csv`|Persons involved in nonsense travels (i.e Homer travels to Hades)|
-|`all_places_graph.csv`|All places with identified location. Created at running time|
-|`travel_edges_graph.csv`|All edges with locations for source and target. Created at running time|
-|`full_travels_edges_from.csv`|All information about sources (Created in `travels_map.R`)|
-|`full_travels_edges_to.csv`|All information destinations (Created in `travels_map.R`)|
-|`locations.csv`|Raw information about locations|
-|`locations_data.csv`|Ordered information about locations|
-|`travelers_not_in_is_from.txt`|Travelers with no origin place identified. Not considered in the map|
+|`/data/new_Edges.csv`|Edges list for Diogenes Laertius dataset|
+|`/data/new_Nodes.csv`|Nodes list for Diogenes Laertius dataset|
+|`/data/new_Edges_Life_of_Pythagoras_Iamblichus.csv`| Edges list for Life of Pythagoras Iamblichus dataset|
+|`/data/new_Nodes_Life_of_Pythagoras_Iamblichus.csv`| Nodes list for Life of Pythagoras Iamblichus dataset|
+|`/data/travels_blacklist.csv`|Persons involved in nonsense travels (i.e Homer travels to Hades)|
+|`/data/all_places_graph.csv`|All places with identified location. Created at running time|
+|`/data/travel_edges_graph.csv`|All edges with locations for source and target. Created at running time|
+|`/data/full_travels_edges_from.csv`|All information about sources (Created in `travels_map.R`)|
+|`/data/full_travels_edges_to.csv`|All information destinations (Created in `travels_map.R`)|
+|`/data/locations.csv`|Raw information about locations|
+|`/data/locations_data.csv`|Ordered information about locations|
+|`/data/travelers_not_in_is_from.txt`|Travelers with no origin place identified. Not considered in the map|
 
 ## Scripts
 
 |Script|Description|
 |------|--------|
-|`travels_dahsboard.Rmd` |Main script for **Dataset's Map**. It is based on R chunks embedded in a Markdown file|
-|`diogenet_dahsboard.Rmd`|Main script for **Horus, Intellectual Networks in Ancient Greece**.  It is based on R chunks embedded in a Markdown file|
+|`map/travels_dahsboard.Rmd` |Main script for **Dataset's Map**. It is based on R chunks embedded in a Markdown file|
+|`horus/diogenet_dahsboard.Rmd`|Main script for **Horus, Intellectual Networks in Ancient Greece**.  It is based on R chunks embedded in a Markdown file|
 
 
 ## Dependencies
