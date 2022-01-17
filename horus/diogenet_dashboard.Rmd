@@ -1928,7 +1928,18 @@ visInteraction(tooltipStyle = 'position: fixed;visibility:hidden;padding: 5px;wh
 
 output$node_sel <- renderUI({
     all_nodes <- all_nodes_reactive_ln()
-    selectInput(inputId = "node_sel", label = "Node", choices = all_nodes)
+    req(input$dataset_selection_ln)
+    entrada <- input$dataset_selection_ln
+    selectInput(inputId = "node_sel", 
+                label = "Node", 
+                choices = all_nodes, 
+                if(entrada == 'diogenes'){
+                  Selected = 'Plato'})
+    
+})
+
+observe({
+  print(typeof(all_nodes_reactive_ln()))
 })
 
 visNetworkOutput(outputId="local_network")
@@ -2085,8 +2096,6 @@ d = reactive({
   }
 })
 
-
-
 values = reactive({
 
     validate(
@@ -2170,8 +2179,7 @@ output$table_centr = DT::renderDataTable({datatable(centr(), selection = 'none',
 # This function creates the selectInput object dynamically.
 # The options for nodes in the list depends on the edges selected
 
-output$node_sel_m <- renderUI({
-
+all_nodes_reactive_ln_gc <-reactive({
   validate(
     need(try(!is.null(input$edges_select_local_m)), "Select at least one Tie")
   )
@@ -2180,6 +2188,7 @@ output$node_sel_m <- renderUI({
 
   nodes = nodes_reactive_ln_gc()
   edges = edges_reactive_ln_gc()
+
 
   if (1 %in% input$edges_select_local_m){
       all_nodes = c(all_nodes,
@@ -2217,10 +2226,19 @@ output$node_sel_m <- renderUI({
                 as.character(edges$Target[which(edges$Relation == "is benefactor of")]))
   }
 
-  all_nodes = sort(unique(all_nodes))
+  return(all_nodes = sort(unique(all_nodes)))
+})
 
-  if (!is.null(input$node_sel_m)) selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = input$node_sel_m)
-  else selectInput(inputId = "node_sel_m", label = "Node", choices = all_nodes, selected = "Plato")
+output$node_sel_m <- renderUI({
+    all_nodes <- all_nodes_reactive_ln_gc()
+    req(input$dataset_selection_ln_gc)
+    entrada <- input$dataset_selection_ln_gc
+    selectInput(inputId = "node_sel_m", 
+                label = "Node", 
+                choices = all_nodes, 
+                if(entrada == 'diogenes'){
+                  Selected = 'Plato'})
+    
 })
 
 ```
